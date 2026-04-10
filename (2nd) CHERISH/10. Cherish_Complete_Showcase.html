@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Cherish — Complete Product Showcase</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:#fffaf7;color:#2c1a0a;}
+a{text-decoration:none;}
+
+/* NAV */
+.sidenav{position:fixed;left:0;top:0;bottom:0;width:220px;background:#2c1a0a;padding:24px 0;overflow-y:auto;z-index:100;}
+.sidenav-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#c84820;padding:0 20px 20px;border-bottom:1px solid rgba(255,255,255,0.08);}
+.sidenav-logo span{display:block;font-size:11px;color:rgba(255,255,255,0.4);font-family:'DM Sans',sans-serif;margin-top:2px;font-weight:400;}
+.nav-section{padding:16px 20px 6px;font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.3);}
+.nav-link{display:flex;align-items:center;gap:8px;padding:9px 20px;font-size:13px;color:rgba(255,255,255,0.65);cursor:pointer;transition:all 0.15s;border-left:3px solid transparent;}
+.nav-link:hover{color:white;background:rgba(255,255,255,0.05);}
+.nav-link.active{color:white;border-left-color:#c84820;background:rgba(200,72,32,0.12);}
+.nav-icon{font-size:14px;width:18px;text-align:center;}
+
+/* MAIN */
+.main{margin-left:220px;padding:40px 48px;max-width:960px;}
+
+/* SECTIONS */
+.section{margin-bottom:72px;scroll-margin-top:32px;}
+.section-eyebrow{font-size:11px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#c84820;margin-bottom:8px;}
+.section-title{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:#2c1a0a;margin-bottom:8px;letter-spacing:-0.5px;}
+.section-sub{font-size:15px;color:#8a6050;line-height:1.75;margin-bottom:32px;max-width:640px;}
+
+/* COVER */
+.cover{background:#c84820;border-radius:20px;padding:48px;margin-bottom:72px;position:relative;overflow:hidden;}
+.cover-logo{font-family:'Playfair Display',serif;font-size:52px;font-weight:700;color:white;margin-bottom:6px;}
+.cover-tag{font-family:'Playfair Display',serif;font-size:22px;font-style:italic;color:rgba(255,255,255,0.75);margin-bottom:20px;}
+.cover-desc{font-size:15px;color:rgba(255,255,255,0.8);line-height:1.75;max-width:560px;margin-bottom:28px;}
+.cover-chips{display:flex;flex-wrap:wrap;gap:8px;}
+.cover-chip{background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.25);border-radius:20px;padding:5px 14px;font-size:12px;font-weight:500;}
+.cover-date{position:absolute;top:28px;right:32px;font-size:12px;color:rgba(255,255,255,0.5);}
+
+/* SPEC CARDS */
+.spec-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px;margin-bottom:32px;}
+.spec-card{background:white;border:1px solid #f0ddd0;border-radius:14px;padding:20px;}
+.spec-icon{font-size:24px;margin-bottom:10px;}
+.spec-name{font-size:13px;font-weight:500;color:#2c1a0a;margin-bottom:4px;}
+.spec-val{font-size:12px;color:#9a7060;line-height:1.6;}
+
+/* SCREENS GRID */
+.screens-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;}
+.screen-card{background:white;border:1px solid #f0ddd0;border-radius:16px;overflow:hidden;transition:border-color 0.2s,transform 0.2s;}
+.screen-card:hover{border-color:#c84820;transform:translateY(-2px);}
+.screen-preview{height:200px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.screen-body{padding:16px;}
+.screen-name{font-size:15px;font-weight:500;color:#2c1a0a;margin-bottom:4px;}
+.screen-desc{font-size:12px;color:#9a7060;line-height:1.6;}
+.screen-tags{display:flex;gap:5px;margin-top:10px;flex-wrap:wrap;}
+.screen-tag{padding:2px 8px;border-radius:6px;font-size:10px;font-weight:500;}
+
+/* PHONE MOCKUP (mini) */
+.mini-phone{width:100px;height:180px;border-radius:16px;border:4px solid #1a1a1a;overflow:hidden;display:flex;flex-direction:column;position:relative;}
+.mini-notch{width:40px;height:10px;background:#1a1a1a;border-radius:0 0 6px 6px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:5;}
+.mini-screen{flex:1;display:flex;flex-direction:column;padding:14px 8px 8px;}
+
+/* FEATURE TABLE */
+.feat-table{width:100%;border-collapse:collapse;margin-bottom:24px;}
+.feat-table th{background:#c84820;color:white;padding:10px 14px;font-size:12px;font-weight:500;text-align:left;}
+.feat-table th:first-child{border-radius:8px 0 0 0;}
+.feat-table th:last-child{border-radius:0 8px 0 0;}
+.feat-table td{padding:10px 14px;font-size:13px;color:#6a5040;border-bottom:1px solid #f5ece0;}
+.feat-table tr:nth-child(even) td{background:#fffaf7;}
+.feat-table tr:last-child td:first-child{border-radius:0 0 0 8px;}
+.feat-table tr:last-child td:last-child{border-radius:0 0 8px 0;}
+.phase-badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:10px;font-weight:500;}
+.p1{background:#faece7;color:#993c1d;}
+.p2{background:#eaf3de;color:#3b6d11;}
+.p3{background:#eeedfe;color:#3c3489;}
+.pri-high{color:#c84820;font-weight:500;}
+.pri-med{color:#ba7517;}
+.pri-crit{color:#a32d2d;font-weight:500;}
+
+/* TECH STACK */
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-bottom:24px;}
+.tech-card{background:white;border:1px solid #f0ddd0;border-radius:12px;padding:14px;}
+.tech-layer{font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:6px;}
+.tech-items{display:flex;flex-direction:column;gap:4px;}
+.tech-item{font-size:12px;color:#5a3020;display:flex;align-items:center;gap:6px;}
+.tech-dot{width:6px;height:6px;border-radius:50%;background:#c84820;flex-shrink:0;}
+
+/* PHASE BOXES */
+.phase-box{border-radius:14px;padding:20px 22px;margin-bottom:16px;}
+.phase-label{font-size:10px;font-weight:500;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px;}
+.phase-title{font-size:18px;font-weight:500;margin-bottom:4px;}
+.phase-time{font-size:12px;margin-bottom:14px;font-style:italic;}
+.phase-items{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.phase-item{font-size:12px;display:flex;align-items:flex-start;gap:6px;line-height:1.5;}
+.phase-bullet{width:5px;height:5px;border-radius:50%;flex-shrink:0;margin-top:5px;}
+
+/* PRICING TABLE */
+.price-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:24px;}
+.price-card{border-radius:14px;padding:20px;}
+.price-tier{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:4px;}
+.price-amount{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;margin-bottom:2px;}
+.price-per{font-size:11px;margin-bottom:12px;}
+.price-div{height:1px;margin:10px 0;}
+.price-features{font-size:11px;line-height:1.9;}
+
+/* STORY SECTION */
+.story-box{border-radius:16px;padding:28px 32px;margin-bottom:24px;position:relative;}
+.story-mark{font-family:'Playfair Display',serif;font-size:60px;line-height:0.5;margin-bottom:16px;display:block;}
+.story-text{font-family:'Playfair Display',serif;font-size:18px;font-style:italic;line-height:1.75;margin-bottom:16px;}
+.story-attr{font-size:13px;}
+
+/* NEXT STEPS */
+.steps-list{display:flex;flex-direction:column;gap:12px;}
+.step-item{background:white;border:1px solid #f0ddd0;border-radius:12px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start;}
+.step-num{width:28px;height:28px;border-radius:50%;background:#c84820;color:white;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'Playfair Display',serif;}
+.step-info{}
+.step-title{font-size:14px;font-weight:500;color:#2c1a0a;margin-bottom:3px;}
+.step-desc{font-size:12px;color:#9a7060;line-height:1.6;}
+
+/* FOOTER */
+.doc-footer{background:#2c1a0a;border-radius:16px;padding:28px 32px;margin-top:48px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#c84820;}
+.footer-txt{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6;}
+
+@media(max-width:700px){
+  .sidenav{display:none;}
+  .main{margin-left:0;padding:20px;}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDE NAV -->
+<nav class="sidenav">
+  <div class="sidenav-logo">Cherish.<span>Complete product showcase</span></div>
+  <div class="nav-section">Overview</div>
+  <div class="nav-link active" onclick="scrollTo('cover')"><span class="nav-icon">🏠</span>Cover</div>
+  <div class="nav-link" onclick="scrollTo('vision')"><span class="nav-icon">💡</span>The vision</div>
+  <div class="nav-link" onclick="scrollTo('story')"><span class="nav-icon">🧡</span>Founder story</div>
+  <div class="nav-section">Screens</div>
+  <div class="nav-link" onclick="scrollTo('onboarding')"><span class="nav-icon">👋</span>Onboarding</div>
+  <div class="nav-link" onclick="scrollTo('home')"><span class="nav-icon">🏡</span>Home screen</div>
+  <div class="nav-link" onclick="scrollTo('quicksnap')"><span class="nav-icon">⚡</span>Quick snap</div>
+  <div class="nav-link" onclick="scrollTo('voice')"><span class="nav-icon">🎙</span>Voice capture</div>
+  <div class="nav-link" onclick="scrollTo('journal')"><span class="nav-icon">📖</span>Journal & diary</div>
+  <div class="nav-link" onclick="scrollTo('scrapbook')"><span class="nav-icon">🎨</span>Scrapbook builder</div>
+  <div class="nav-link" onclick="scrollTo('visionboard')"><span class="nav-icon">🌀</span>Vision board</div>
+  <div class="nav-link" onclick="scrollTo('library')"><span class="nav-icon">📚</span>Library</div>
+  <div class="nav-link" onclick="scrollTo('timeline')"><span class="nav-icon">🕐</span>Timeline</div>
+  <div class="nav-link" onclick="scrollTo('circle')"><span class="nav-icon">👨‍👩‍👧</span>Family circle</div>
+  <div class="nav-section">Specification</div>
+  <div class="nav-link" onclick="scrollTo('features')"><span class="nav-icon">✅</span>Feature list</div>
+  <div class="nav-link" onclick="scrollTo('techstack')"><span class="nav-icon">⚙️</span>Tech stack</div>
+  <div class="nav-link" onclick="scrollTo('phases')"><span class="nav-icon">🗓</span>Build phases</div>
+  <div class="nav-link" onclick="scrollTo('pricing')"><span class="nav-icon">💰</span>Pricing model</div>
+  <div class="nav-link" onclick="scrollTo('nextsteps')"><span class="nav-icon">🚀</span>Next steps</div>
+</nav>
+
+<div class="main">
+
+  <!-- COVER -->
+  <div class="cover" id="cover">
+    <div class="cover-date">April 2026 · Version 1.0</div>
+    <div class="cover-logo">Cherish.</div>
+    <div class="cover-tag">The moments pass. The memories don't have to.</div>
+    <div class="cover-desc">Cherish is a privacy-first digital memory keeping app combining scrapbooking, journaling, voice capture, vision boards, and family sharing into one beautiful experience. Built for families, creatives, bloggers, writers, and anyone who has ever let a moment slip away undocumented.</div>
+    <div class="cover-chips">
+      <div class="cover-chip">Complete prototype</div>
+      <div class="cover-chip">9 interactive screens</div>
+      <div class="cover-chip">Full product spec</div>
+      <div class="cover-chip">3-phase build plan</div>
+      <div class="cover-chip">Ready for development</div>
+    </div>
+  </div>
+
+  <!-- THE VISION -->
+  <div class="section" id="vision">
+    <div class="section-eyebrow">The problem</div>
+    <div class="section-title">Nobody has solved this yet.</div>
+    <div class="section-sub">People go on meaningful trips, experience important milestones, and live through profound moments — then forget the details. Physical scrapbooking is too time-consuming. Social media is too public. Journal apps lack design tools. No single product combines all three.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">⚡</div><div class="spec-name">Capture in 60 seconds</div><div class="spec-val">Quick snap with photo, note, location, voice memo, star rating and who was there — before the moment fades.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎨</div><div class="spec-name">Design it beautifully</div><div class="spec-val">Full scrapbook canvas with drag-and-drop layouts, stickers, frames, ribbons, and caption boxes.</div></div>
+      <div class="spec-card"><div class="spec-icon">📖</div><div class="spec-name">Tell the whole story</div><div class="spec-val">6 journal templates with writing prompts. With or without photos. Handwritten Caveat font for warmth.</div></div>
+      <div class="spec-card"><div class="spec-icon">🌀</div><div class="spec-name">Create freely</div><div class="spec-val">Vision board, magazine collage, free canvas, photo collage, creative writing board, goal board.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎙</div><div class="spec-name">Speak it instead</div><div class="spec-val">Voice capture with real-time transcription via OpenAI Whisper. Audio + text both saved. For anyone whose hands can't keep up.</div></div>
+      <div class="spec-card"><div class="spec-icon">📚</div><div class="spec-name">Keep it forever</div><div class="spec-val">Cloud backup, PDF export, print-to-bind hardcover book ordering, family circle sharing.</div></div>
+      <div class="spec-card"><div class="spec-icon">🔒</div><div class="spec-name">Private by default</div><div class="spec-val">Private, family circle, link sharing, or public — user controls every memory individually.</div></div>
+      <div class="spec-card"><div class="spec-icon">✨</div><div class="spec-name">Four themes</div><div class="spec-val">Minimal, Journal, Playful, Premium — selectable per memory book so every project feels different.</div></div>
+    </div>
+  </div>
+
+  <!-- FOUNDER STORY -->
+  <div class="section" id="story">
+    <div class="section-eyebrow">The founder</div>
+    <div class="section-title">Why Cherish exists.</div>
+    <div class="section-sub">Two real stories. Both true. Both the reason this app is being built.</div>
+
+    <div class="story-box" style="background:#fff5f0;border:1px solid #f5c4b3;">
+      <span class="story-mark" style="color:#f5c4b3;">"</span>
+      <div class="story-text" style="color:#4a2010;">Last Spring Break we packed three days in Atlanta — the Zoo, the Aquarium, Fernbank, World of Coca-Cola, a Stranger Things tour, and Vampire Diaries filming locations in Covington. It was one of the best trips our family has ever taken. I was so busy living every moment that I ended up texting my husband and daughter photos with locations and dates just so I could document it later. I still haven't. I built Cherish because I needed it that week — not someday.</div>
+      <div class="story-attr" style="color:#9a6050;"><strong style="color:#5a2010;font-weight:500;">Ashtin, mom & founder of Cherish</strong> — inspired by one very packed Spring Break</div>
+    </div>
+
+    <div class="story-box" style="background:#f5f0ff;border:1px solid #d0b0f0;">
+      <span class="story-mark" style="color:#d0b0f0;">"</span>
+      <div class="story-text" style="color:#2a1050;">During my first pregnancy I was diagnosed with Guillain-Barré syndrome. By the time I delivered, I couldn't write. Not a journal entry. Not a single note. I was living through one of the most profound experiences of my life and I had no way to document any of it. My voice was still there — but there was nothing to speak into. I built the voice transcription feature in Cherish because of those months. So that no one — whether they're in a hospital bed, in recovery, holding a newborn with one hand, or simply can't find the words to write — ever has to let a moment disappear just because their hands won't cooperate. Speak it. Cherish will do the rest.</div>
+      <div class="story-attr" style="color:#7050a0;"><strong style="color:#3a1070;font-weight:500;">Ashtin, mom & founder of Cherish</strong> — this feature exists because of a story I almost couldn't tell</div>
+    </div>
+  </div>
+
+  <!-- SCREENS -->
+  <div class="section" id="onboarding">
+    <div class="section-eyebrow">Screen 1 of 9</div>
+    <div class="section-title">Onboarding flow</div>
+    <div class="section-sub">The first experience every new user sees. Splash screen → sign up → 3 intro slides showing capture, design, and keep → theme picker → welcome screen with first memory book auto-created.</div>
+    <div class="screens-grid">
+      <div class="screen-card"><div class="screen-preview" style="background:#c84820;flex-direction:column;gap:6px;"><div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:white;">Cherish.</div><div style="font-family:'Playfair Display',serif;font-size:13px;font-style:italic;color:rgba(255,255,255,0.75);">The moments pass.</div><div style="display:flex;flex-direction:column;gap:6px;width:140px;margin-top:10px;"><div style="background:white;color:#c84820;border-radius:8px;padding:7px;text-align:center;font-size:12px;font-weight:500;">Create a free account</div><div style="background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.4);color:white;border-radius:8px;padding:7px;text-align:center;font-size:12px;">Sign in</div></div></div><div class="screen-body"><div class="screen-name">Splash screen</div><div class="screen-desc">First impression. Brand, tagline, two clear CTAs.</div><div class="screen-tags"><span class="screen-tag" style="background:#faece7;color:#993c1d;">Entry point</span></div></div></div>
+      <div class="screen-card"><div class="screen-preview" style="background:#f5f0ff;flex-direction:column;gap:8px;padding:16px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;width:180px;"><div style="background:#fff3ef;border:1.5px solid #c84820;border-radius:8px;padding:8px;text-align:center;"><div style="font-size:16px;">📔</div><div style="font-size:9px;font-weight:500;color:#5a2010;margin-top:3px;">Journal</div></div><div style="background:white;border:1.5px solid #e8d0c0;border-radius:8px;padding:8px;text-align:center;"><div style="font-size:16px;">◻</div><div style="font-size:9px;font-weight:500;color:#444;margin-top:3px;">Minimal</div></div><div style="background:white;border:1.5px solid #e8d0c0;border-radius:8px;padding:8px;text-align:center;"><div style="font-size:16px;">🎨</div><div style="font-size:9px;font-weight:500;color:#444;margin-top:3px;">Playful</div></div><div style="background:white;border:1.5px solid #e8d0c0;border-radius:8px;padding:8px;text-align:center;"><div style="font-size:16px;">✦</div><div style="font-size:9px;font-weight:500;color:#444;margin-top:3px;">Premium</div></div></div></div><div class="screen-body"><div class="screen-name">Theme picker + personalization</div><div class="screen-desc">4 themes, use-case chips, sets up the entire app experience.</div><div class="screen-tags"><span class="screen-tag" style="background:#f5f0ff;color:#5a1880;">Personalization</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="section" id="home">
+    <div class="section-eyebrow">Screen 2 of 9</div>
+    <div class="section-title">Home screen</div>
+    <div class="section-sub">The daily entry point. Five creation mode cards, streak counter, smart nudge reminding user of in-progress memory books, and bottom navigation to all main sections.</div>
+    <div class="screens-grid">
+      <div class="screen-card"><div class="screen-preview" style="background:#fffaf7;flex-direction:column;padding:16px;gap:6px;align-items:flex-start;"><div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#c84820;margin-bottom:4px;">Cherish.</div><div style="display:flex;flex-direction:column;gap:5px;width:100%;">
+        <div style="background:#fff3e8;border:1px solid #f5d5b5;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;">⚡</span><div><div style="font-size:10px;font-weight:500;color:#7a3010;">Quick snap</div><div style="font-size:9px;color:#9a5020;">60 seconds</div></div></div>
+        <div style="background:#f0f4ff;border:1px solid #c8d5f5;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;">📖</span><div><div style="font-size:10px;font-weight:500;color:#1a3880;">Journal or diary</div><div style="font-size:9px;color:#2a4890;">Templates</div></div></div>
+        <div style="background:#f0faf2;border:1px solid #b8e8c5;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;">🎨</span><div><div style="font-size:10px;font-weight:500;color:#1a5a30;">Scrapbook page</div><div style="font-size:9px;color:#2a6a40;">Design canvas</div></div></div>
+        <div style="background:#fff8e8;border:1px solid #f0d890;border-radius:8px;padding:6px 8px;display:flex;align-items:center;gap:6px;"><span style="font-size:14px;">🌀</span><div><div style="font-size:10px;font-weight:500;color:#6a4a00;">Vision board</div><div style="font-size:9px;color:#8a6a10;">Free canvas</div></div><span style="margin-left:auto;background:#e8a020;color:white;font-size:8px;padding:1px 4px;border-radius:4px;font-weight:500;">NEW</span></div>
+      </div></div><div class="screen-body"><div class="screen-name">Home screen — 5 creation modes</div><div class="screen-desc">Quick Snap, Journal, Scrapbook, Full Memory, Vision Board & Collage, Creative Studio.</div><div class="screen-tags"><span class="screen-tag" style="background:#fff3ef;color:#993c1d;">Updated v2</span><span class="screen-tag" style="background:#f0fff5;color:#1a5a30;">Navigation hub</span></div></div></div>
+    </div>
+  </div>
+
+  <div class="section" id="quicksnap">
+    <div class="section-eyebrow">Screen 3 of 9</div>
+    <div class="section-title">Quick snap capture</div>
+    <div class="section-sub">The fastest path to saving a memory. Photo + note + location + voice memo + who was there + star rating. Designed to complete in under 60 seconds on a phone with one hand.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">📷</div><div class="spec-name">Photo upload</div><div class="spec-val">Camera or gallery. Loads instantly, fills the top of the screen.</div></div>
+      <div class="spec-card"><div class="spec-icon">✍️</div><div class="spec-name">Quick note</div><div class="spec-val">Caveat handwritten font. Feels like scribbling in a real diary.</div></div>
+      <div class="spec-card"><div class="spec-icon">📍</div><div class="spec-name">Auto location</div><div class="spec-val">One tap to tag current location. Shows city name, not coordinates.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎙</div><div class="spec-name">Voice memo</div><div class="spec-val">Records audio + transcribes in real time via Whisper AI.</div></div>
+      <div class="spec-card"><div class="spec-icon">👥</div><div class="spec-name">Who was there</div><div class="spec-val">Tap name chips from your saved contacts. Partner, kids, family.</div></div>
+      <div class="spec-card"><div class="spec-icon">⭐</div><div class="spec-name">Star rating</div><div class="spec-val">1-5 stars. Surfaced in timeline to find your best moments fast.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="voice">
+    <div class="section-eyebrow">Screen 4 of 9</div>
+    <div class="section-title">Voice capture & transcription</div>
+    <div class="section-sub">Speak freely — Cherish records, transcribes, and timestamps every word in real time. Available in Quick Snap, Journal, Creative Studio, Full Memory, and Vision Board. Powered by OpenAI Whisper.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">🎙</div><div class="spec-name">Real-time transcription</div><div class="spec-val">Words appear on screen as you speak. Handles accents, background noise, babies crying.</div></div>
+      <div class="spec-card"><div class="spec-icon">💾</div><div class="spec-name">Dual save</div><div class="spec-val">Both the original audio recording AND the full text transcript are saved separately.</div></div>
+      <div class="spec-card"><div class="spec-icon">🕐</div><div class="spec-name">Timestamps</div><div class="spec-val">Long recordings are segmented with timestamps so you can jump to any moment.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎵</div><div class="spec-name">Song / melody mode</div><div class="spec-val">Hum a tune or sing a lyric idea. Whisper captures musical phrases with ♪ notation.</div></div>
+      <div class="spec-card"><div class="spec-icon">♿</div><div class="spec-name">Accessibility first</div><div class="spec-val">Designed for anyone whose hands can't keep up — illness, injury, new parenthood, disability.</div></div>
+      <div class="spec-card"><div class="spec-icon">💰</div><div class="spec-name">Cost</div><div class="spec-val">OpenAI Whisper API: ~$0.006/minute of audio. Negligible at scale.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="journal">
+    <div class="section-eyebrow">Screen 5 of 9</div>
+    <div class="section-title">Journal & diary</div>
+    <div class="section-sub">Writing-first experience with 6 pre-designed templates, mood picker, writing prompts, and optional photo attachment. Available with or without photos. Private by default.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">✈️</div><div class="spec-name">Travel day</div><div class="spec-val">Where we went · What we did · Favorite moment · Who was there · I want to come back because</div></div>
+      <div class="spec-card"><div class="spec-icon">🌙</div><div class="spec-name">Daily reflection</div><div class="spec-val">How today felt · Three things grateful for · Something that surprised me · Tomorrow I want to</div></div>
+      <div class="spec-card"><div class="spec-icon">🏆</div><div class="spec-name">Big milestone</div><div class="spec-val">What happened · How I felt · Why this matters · What comes next</div></div>
+      <div class="spec-card"><div class="spec-icon">👨‍👩‍👧‍👦</div><div class="spec-name">Family moment</div><div class="spec-val">Who was there · What we did · The moment I want to remember · What I love about these people</div></div>
+      <div class="spec-card"><div class="spec-icon">🙏</div><div class="spec-name">Gratitude</div><div class="spec-val">Three things I'm grateful for · Something small I noticed · A person I appreciate right now</div></div>
+      <div class="spec-card"><div class="spec-icon">💭</div><div class="spec-name">Free write</div><div class="spec-val">No prompts, no structure. Blank canvas with Caveat font. Just you and the page.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="scrapbook">
+    <div class="section-eyebrow">Screen 6 of 9</div>
+    <div class="section-title">Scrapbook page builder</div>
+    <div class="section-sub">Full drag-and-drop canvas with 6 photo layouts, 48+ stickers, frames, ribbons, caption boxes, handwritten text, and background colors. Organized, intentional, beautiful.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">🖼</div><div class="spec-name">6 photo layouts</div><div class="spec-val">One big · Side by side · Top + 2 · 2 + bottom · Grid of 4 · Left + 2 panel</div></div>
+      <div class="spec-card"><div class="spec-icon">🎭</div><div class="spec-name">Sticker library</div><div class="spec-val">Travel, nature, emotions, food, celebration — 48+ stickers across 4 categories. Click to place.</div></div>
+      <div class="spec-card"><div class="spec-icon">🖊</div><div class="spec-name">Caption boxes</div><div class="spec-val">Favorite Memory · Best Moment · Trip Details · We Laughed When — pre-labeled editable boxes.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎀</div><div class="spec-name">Decor elements</div><div class="spec-val">Ribbon banners, photo frames, handwritten text overlays. All draggable and rotatable.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎨</div><div class="spec-name">Backgrounds</div><div class="spec-val">10 warm background colors. From cream to blush to soft lavender.</div></div>
+      <div class="spec-card"><div class="spec-icon">📄</div><div class="spec-name">Canvas data</div><div class="spec-val">All element positions saved as JSON. Fully reconstructable for PDF export and editing.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="visionboard">
+    <div class="section-eyebrow">Screen 7 of 9</div>
+    <div class="section-title">Vision board & collage + Creative Studio</div>
+    <div class="section-sub">Free canvas with no grid, no rules, no structure. Six canvas types serving memory keepers, goal setters, bloggers, songwriters, and anyone with a creative idea to capture.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">🌀</div><div class="spec-name">Free canvas</div><div class="spec-val">Blank page. Anything goes. Elements drop at random angles. Pure creative chaos — like cutting from magazines as a kid.</div></div>
+      <div class="spec-card"><div class="spec-icon">🌟</div><div class="spec-name">Vision board</div><div class="spec-val">Goals, dreams, power words, images. Where you're going. New Year's, new chapter, new you.</div></div>
+      <div class="spec-card"><div class="spec-icon">✂️</div><div class="spec-name">Magazine collage</div><div class="spec-val">Cut-and-paste energy. Overlapping photos, washi tape, text clippings. Messy and alive.</div></div>
+      <div class="spec-card"><div class="spec-icon">✍️</div><div class="spec-name">Creative Studio</div><div class="spec-val">Blog post drafting, short story planning, book mood board, song lyric writing with voice capture.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎯</div><div class="spec-name">Goal board</div><div class="spec-val">Intentions, affirmations, milestones. Set it, see it every day, track it.</div></div>
+      <div class="spec-card"><div class="spec-icon">🎵</div><div class="spec-name">Song idea board</div><div class="spec-val">Hum a melody, write lyric fragments, attach chord notes. For musicians who catch ideas at 2am.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="library">
+    <div class="section-eyebrow">Screen 8 of 9</div>
+    <div class="section-title">Library</div>
+    <div class="section-sub">The home shelf for all memory books. Horizontal scrolling book covers with title, page count, and date. Recent captures list below. Tap any book to open its detail view with page grid, stats, and actions.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">📚</div><div class="spec-name">Book covers</div><div class="spec-val">Color covers with title, page count, date tag. Horizontal scroll shelf. New book card at the end.</div></div>
+      <div class="spec-card"><div class="spec-icon">📋</div><div class="spec-name">Recent captures</div><div class="spec-val">Last 4 entries across all books. Color coded by type — snap, journal, scrapbook, creative.</div></div>
+      <div class="spec-card"><div class="spec-icon">📊</div><div class="spec-name">Book detail</div><div class="spec-val">Pages grid, photo count, entry count, add page, export PDF, share buttons.</div></div>
+      <div class="spec-card"><div class="spec-icon">🔥</div><div class="spec-name">Streak counter</div><div class="spec-val">Daily capture streak displayed prominently. Drives daily habit and retention.</div></div>
+    </div>
+  </div>
+
+  <div class="section" id="timeline">
+    <div class="section-eyebrow">Screen 9 of 9</div>
+    <div class="section-title">Timeline & Family Circle</div>
+    <div class="section-sub">Every memory across all books in one chronological scroll. Filter by type. On This Day banner surfaces memories from one year ago. Family Circle shows shared memories and reactions from invited family members only.</div>
+    <div class="spec-grid">
+      <div class="spec-card"><div class="spec-icon">🕐</div><div class="spec-name">Chronological timeline</div><div class="spec-val">Newest at top. Year dividers. Month groups. Colored left border per type. Location, stars, who tags.</div></div>
+      <div class="spec-card"><div class="spec-icon">🔁</div><div class="spec-name">On This Day</div><div class="spec-val">Surfaces a memory from exactly one year ago at the top of every timeline visit. Most emotionally powerful feature in the app.</div></div>
+      <div class="spec-card"><div class="spec-icon">🔍</div><div class="spec-name">Type filters</div><div class="spec-val">All · Quick snap · Journal · Scrapbook · Creative · Full memory. Instant filter, no reload.</div></div>
+      <div class="spec-card"><div class="spec-icon">👨‍👩‍👧</div><div class="spec-name">Family circle</div><div class="spec-val">Invite-only sharing. Shared feed with Love and Comment reactions. Privacy modal with 4 clear options.</div></div>
+    </div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="features">
+    <div class="section-eyebrow">Product specification</div>
+    <div class="section-title">Full feature list</div>
+    <div class="section-sub">All features across three build phases. Phase 1 is the MVP — a complete, shippable product. Phases 2 and 3 add revenue and growth.</div>
+    <table class="feat-table">
+      <thead><tr><th>Feature</th><th>Description</th><th>Phase</th><th>Priority</th></tr></thead>
+      <tbody>
+        <tr><td>User accounts</td><td>Email + Google OAuth, profile, theme preference</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Memory Books</td><td>Named collections of pages with cover photo</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Quick Snap</td><td>Photo + note + location + who + stars in 60s</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Voice transcription</td><td>Record + transcribe via Whisper. Audio + text saved.</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Journal templates</td><td>6 templates with section prompts, mood picker</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Scrapbook canvas</td><td>Drag-drop builder, 6 layouts, stickers, decor</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Vision board & collage</td><td>Free canvas, 6 modes, words, shapes, washi tape</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Creative Studio</td><td>Blog drafting, story planning, song lyric writing</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Privacy controls</td><td>Private / family circle / link / public per entry</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Cloud storage</td><td>Auto-save, cross-device sync, Supabase Storage</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Library screen</td><td>Book shelf, recent captures, book detail view</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Timeline view</td><td>Chronological scroll, type filters, On This Day</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Streak tracker</td><td>Daily capture streak counter on home screen</td><td><span class="phase-badge p1">Phase 1</span></td><td class="pri-med">Medium</td></tr>
+        <tr><td>PDF export</td><td>Print-ready PDF of any memory book</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Print-to-bind</td><td>Order a real hardcover book via print partner</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>Subscription billing</td><td>Stripe: Free (10 pages) / Pro $7.99 / Family $9.99</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-crit">Critical</td></tr>
+        <tr><td>4 visual themes</td><td>Minimal, Journal, Playful, Premium — per book</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-high">High</td></tr>
+        <tr><td>On This Day notifications</td><td>Daily push notification with a memory from a year ago</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Family Circle</td><td>Invite-only sharing with reactions and comments</td><td><span class="phase-badge p2">Phase 2</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Native iOS app</td><td>React Native + Expo with camera integration</td><td><span class="phase-badge p3">Phase 3</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Native Android app</td><td>React Native + Expo, Google Play submission</td><td><span class="phase-badge p3">Phase 3</span></td><td class="pri-high">High</td></tr>
+        <tr><td>Collaborative books</td><td>Multiple contributors add pages to one book</td><td><span class="phase-badge p3">Phase 3</span></td><td class="pri-med">Medium</td></tr>
+        <tr><td>Referral program</td><td>Share with a friend, both get a free month</td><td><span class="phase-badge p3">Phase 3</span></td><td class="pri-med">Medium</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- TECH STACK -->
+  <div class="section" id="techstack">
+    <div class="section-eyebrow">Technical specification</div>
+    <div class="section-title">Recommended tech stack</div>
+    <div class="section-sub">Optimized for a small team (1-3 developers) building web-first with mobile to follow. Prioritizes speed of development and low infrastructure overhead.</div>
+    <div class="tech-grid">
+      <div class="tech-card"><div class="tech-layer">Frontend</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>React + Next.js</div><div class="tech-item"><div class="tech-dot"></div>Tailwind CSS</div><div class="tech-item"><div class="tech-dot"></div>Fabric.js (canvas)</div><div class="tech-item"><div class="tech-dot"></div>React DnD</div></div></div>
+      <div class="tech-card"><div class="tech-layer">Backend & database</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>Supabase (Postgres)</div><div class="tech-item"><div class="tech-dot"></div>Supabase Auth</div><div class="tech-item"><div class="tech-dot"></div>Supabase Storage</div><div class="tech-item"><div class="tech-dot"></div>Row Level Security</div></div></div>
+      <div class="tech-card"><div class="tech-layer">AI & voice</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>OpenAI Whisper API</div><div class="tech-item"><div class="tech-dot"></div>~$0.006/min audio</div><div class="tech-item"><div class="tech-dot"></div>Real-time transcription</div><div class="tech-item"><div class="tech-dot"></div>Timestamp segments</div></div></div>
+      <div class="tech-card"><div class="tech-layer">Infrastructure</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>Vercel (hosting)</div><div class="tech-item"><div class="tech-dot"></div>Stripe (billing)</div><div class="tech-item"><div class="tech-dot"></div>Puppeteer (PDF export)</div><div class="tech-item"><div class="tech-dot"></div>Resend (email)</div></div></div>
+      <div class="tech-card"><div class="tech-layer">Mobile (Phase 3)</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>React Native + Expo</div><div class="tech-item"><div class="tech-dot"></div>Expo Camera</div><div class="tech-item"><div class="tech-dot"></div>Push notifications</div><div class="tech-item"><div class="tech-dot"></div>App Store + Play Store</div></div></div>
+      <div class="tech-card"><div class="tech-layer">No-code alternative</div><div class="tech-items"><div class="tech-item"><div class="tech-dot"></div>Bubble.io</div><div class="tech-item"><div class="tech-dot"></div>~$25-50/month</div><div class="tech-item"><div class="tech-dot"></div>Good for Phase 1</div><div class="tech-item"><div class="tech-dot"></div>Canvas needs plugin</div></div></div>
+    </div>
+  </div>
+
+  <!-- BUILD PHASES -->
+  <div class="section" id="phases">
+    <div class="section-eyebrow">Roadmap</div>
+    <div class="section-title">Phased build plan</div>
+    <div class="section-sub">Each phase ships a usable, valuable product. Phase 1 alone is enough to launch, acquire users, and validate the business model.</div>
+
+    <div class="phase-box" style="background:#fff5f0;border:1px solid #f5c4b3;">
+      <div class="phase-label" style="color:#c84820;">Phase 1 — MVP</div>
+      <div class="phase-title" style="color:#2c1a0a;">Get it in users' hands</div>
+      <div class="phase-time" style="color:#9a6050;">3-4 months · 1-2 developers · $20k-$40k or Bubble.io ~$200</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>User auth + profiles</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Quick Snap with voice</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Journal + 6 templates</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Scrapbook canvas</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Vision board + collage</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Creative Studio</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Memory Books + Library</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Timeline view</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Cloud save + privacy</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#c84820;"></div>Streak counter</div>
+      </div>
+    </div>
+
+    <div class="phase-box" style="background:#f0fff5;border:1px solid #90d8b0;">
+      <div class="phase-label" style="color:#1a7a40;">Phase 2 — Revenue</div>
+      <div class="phase-title" style="color:#2c1a0a;">Make it sustainable</div>
+      <div class="phase-time" style="color:#4a8a60;">2-3 months · $10k-$36k</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>PDF export + print ordering</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>Stripe subscription billing</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>4 visual themes</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>Family Circle sharing</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>On This Day notifications</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>More sticker packs</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>Page templates</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#1a7a40;"></div>Full Memory combined flow</div>
+      </div>
+    </div>
+
+    <div class="phase-box" style="background:#f0f0ff;border:1px solid #c0b0f0;">
+      <div class="phase-label" style="color:#3c3489;">Phase 3 — Growth</div>
+      <div class="phase-title" style="color:#2c1a0a;">Scale the user base</div>
+      <div class="phase-time" style="color:#5a4890;">2-3 months · $15k-$48k</div>
+      <div class="phase-items">
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>Native iOS app</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>Native Android app</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>Collaborative books</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>Public sharing + profiles</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>Referral program</div>
+        <div class="phase-item"><div class="phase-bullet" style="background:#3c3489;"></div>App Store submissions</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="section" id="pricing">
+    <div class="section-eyebrow">Business model</div>
+    <div class="section-title">Pricing & revenue</div>
+    <div class="section-sub">Subscription-first with print-on-demand as a high-margin secondary revenue stream. Founding member pricing drives waitlist conversion.</div>
+    <div class="price-grid">
+      <div class="price-card" style="background:white;border:1px solid #f0ddd0;">
+        <div class="price-tier" style="color:#9a7060;">Free</div>
+        <div class="price-amount" style="color:#2c1a0a;font-family:'Playfair Display',serif;">$0</div>
+        <div class="price-per" style="color:#b09080;">forever</div>
+        <div class="price-div" style="background:#f0ddd0;"></div>
+        <div class="price-features" style="color:#8a6050;">10 pages/month<br>1 memory book<br>Basic stickers<br>Private entries<br>Cloud backup</div>
+      </div>
+      <div class="price-card" style="background:#fff5f0;border:2px solid #c84820;">
+        <div class="price-tier" style="color:#c84820;">Pro — founding member</div>
+        <div class="price-amount" style="color:#c84820;font-family:'Playfair Display',serif;">$4.79</div>
+        <div class="price-per" style="color:#9a7060;">/month locked in for life<br><span style="text-decoration:line-through;color:#c0a090;">normally $7.99</span></div>
+        <div class="price-div" style="background:#f5c4b3;"></div>
+        <div class="price-features" style="color:#7a4030;">Unlimited pages & books<br>All stickers & themes<br>PDF export & print<br>Voice memos<br>Family Circle<br>On This Day</div>
+      </div>
+      <div class="price-card" style="background:white;border:1px solid #f0ddd0;">
+        <div class="price-tier" style="color:#9a7060;">Family</div>
+        <div class="price-amount" style="color:#2c1a0a;font-family:'Playfair Display',serif;">$9.99</div>
+        <div class="price-per" style="color:#b09080;">/month · up to 5 members</div>
+        <div class="price-div" style="background:#f0ddd0;"></div>
+        <div class="price-features" style="color:#8a6050;">Everything in Pro<br>5 family accounts<br>Shared memory books<br>Collaborative pages<br>Family Circle</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEXT STEPS -->
+  <div class="section" id="nextsteps">
+    <div class="section-eyebrow">What happens next</div>
+    <div class="section-title">Recommended next steps</div>
+    <div class="section-sub">In order of priority. The first three are free and can be done this week.</div>
+    <div class="steps-list">
+      <div class="step-item"><div class="step-num">1</div><div class="step-info"><div class="step-title">Get the landing page live today</div><div class="step-desc">Go to netlify.com/drop, drag the HTML file in, get a shareable URL in 5 minutes. Free. Post on social media with your real story.</div></div></div>
+      <div class="step-item"><div class="step-num">2</div><div class="step-info"><div class="step-title">Create a Bubble.io account</div><div class="step-desc">bubble.io — free account, start with their tutorials. Good for building Phase 1 without a developer. Canvas will need a plugin.</div></div></div>
+      <div class="step-item"><div class="step-num">3</div><div class="step-info"><div class="step-title">Show this document to your developer friend</div><div class="step-desc">Everything they need is in here — all 9 screens, full spec, tech stack, build phases, data model. This is your pitch deck and product brief combined.</div></div></div>
+      <div class="step-item"><div class="step-num">4</div><div class="step-info"><div class="step-title">Register the business + grab the domain</div><div class="step-desc">Alabama Secretary of State: register Cherish LLC (~$200). Namecheap: buy getcherish.app or trycherish.com (~$12/year).</div></div></div>
+      <div class="step-item"><div class="step-num">5</div><div class="step-info"><div class="step-title">Apply for grants</div><div class="step-desc">IFundWomen.com (women founder grants), Alabama Launchpad (up to $50k), Hello Alice (regular small business grants). All free to apply.</div></div></div>
+      <div class="step-item"><div class="step-num">6</div><div class="step-info"><div class="step-title">File a provisional patent</div><div class="step-desc">~$1,500-$3,000 with an IP attorney. Gives you 12 months of "patent pending" status. Do this before wide developer outreach.</div></div></div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="doc-footer">
+    <div><div class="footer-logo">Cherish.</div><div style="font-size:12px;color:rgba(255,255,255,0.4);margin-top:4px;">Complete product showcase · April 2026</div></div>
+    <div class="footer-txt">Built by Ashtin.<br>Prototype designed and documented in one session.<br>Ready for development.</div>
+  </div>
+
+</div>
+
+<script>
+function scrollTo(id){
+  const el=document.getElementById(id);
+  if(el)el.scrollIntoView({behavior:'smooth',block:'start'});
+  document.querySelectorAll('.nav-link').forEach(l=>l.classList.remove('active'));
+  const links=document.querySelectorAll('.nav-link');
+  links.forEach(l=>{if(l.getAttribute('onclick')&&l.getAttribute('onclick').includes(id))l.classList.add('active');});
+}
+window.addEventListener('scroll',()=>{
+  const sections=['cover','vision','story','onboarding','home','quicksnap','voice','journal','scrapbook','visionboard','library','timeline','circle','features','techstack','phases','pricing','nextsteps'];
+  let current='cover';
+  sections.forEach(id=>{
+    const el=document.getElementById(id);
+    if(el&&el.getBoundingClientRect().top<120)current=id;
+  });
+  document.querySelectorAll('.nav-link').forEach(l=>{
+    const active=l.getAttribute('onclick')&&l.getAttribute('onclick').includes("'"+current+"'");
+    l.classList.toggle('active',active);
+  });
+});
+</script>
+</body>
+</html>

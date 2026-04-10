@@ -1,0 +1,335 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;gap:28px;justify-content:center;align-items:flex-start;padding:1rem 0 2rem;flex-wrap:wrap;font-family:'DM Sans',sans-serif;}
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;background:#fffaf7;flex-shrink:0;position:relative;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;}
+.screen{min-height:620px;background:#fffaf7;display:flex;flex-direction:column;padding:34px 16px 16px;}
+
+.top-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.logo{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#c84820;}
+.icons{display:flex;gap:8px;}
+.icon-btn{width:32px;height:32px;border-radius:50%;background:#fff3ef;border:0.5px solid #f5c4b3;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;}
+
+.greeting{margin-bottom:6px;}
+.hi{font-size:12px;color:#b07050;font-weight:500;}
+.name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2c1a0a;line-height:1.2;}
+
+.streak{display:inline-flex;align-items:center;gap:5px;background:#fff3ef;border:0.5px solid #f5c4b3;border-radius:20px;padding:4px 11px;margin-bottom:16px;}
+.streak span{font-size:11px;color:#993c1d;font-weight:500;}
+
+.create-lbl{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#c09070;margin-bottom:10px;}
+
+.modes{display:flex;flex-direction:column;gap:8px;flex:1;}
+
+.mcard{border-radius:16px;padding:12px 14px;cursor:pointer;border:1.5px solid transparent;transition:all 0.18s;display:flex;align-items:center;gap:12px;}
+.mcard:active{transform:scale(0.98);}
+.mcard:hover{transform:translateY(-1px);}
+.mcard-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.mcard-text{flex:1;}
+.mcard-name{font-size:14px;font-weight:500;margin-bottom:1px;}
+.mcard-desc{font-size:11px;line-height:1.4;opacity:0.8;}
+.mcard-arr{font-size:16px;opacity:0.35;flex-shrink:0;}
+.mcard-new{font-size:9px;font-weight:500;padding:2px 6px;border-radius:6px;margin-left:6px;vertical-align:middle;}
+
+.mc-snap{background:#fff3e8;border-color:#f5d5b5;}
+.mc-snap .mcard-icon{background:#fde8d0;}
+.mc-snap .mcard-name{color:#7a3010;}
+.mc-snap .mcard-desc{color:#9a5020;}
+
+.mc-journal{background:#f0f4ff;border-color:#c8d5f5;}
+.mc-journal .mcard-icon{background:#dce6ff;}
+.mc-journal .mcard-name{color:#1a3880;}
+.mc-journal .mcard-desc{color:#2a4890;}
+
+.mc-scrap{background:#f0faf2;border-color:#b8e8c5;}
+.mc-scrap .mcard-icon{background:#d0f0d8;}
+.mc-scrap .mcard-name{color:#1a5a30;}
+.mc-scrap .mcard-desc{color:#2a6a40;}
+
+.mc-full{background:#fdf0ff;border-color:#e0c0f0;}
+.mc-full .mcard-icon{background:#efd8ff;}
+.mc-full .mcard-name{color:#5a1880;}
+.mc-full .mcard-desc{color:#6a2890;}
+
+.mc-vision{background:#fff8e8;border-color:#f0d890;}
+.mc-vision .mcard-icon{background:#fdefc0;}
+.mc-vision .mcard-name{color:#6a4a00;}
+.mc-vision .mcard-desc{color:#7a5a10;}
+.mc-vision{position:relative;overflow:hidden;}
+.mc-vision:after{content:'NEW';position:absolute;top:8px;right:10px;background:#e8a020;color:white;font-size:9px;font-weight:700;padding:2px 6px;border-radius:6px;letter-spacing:0.5px;}
+
+.streak-bar{display:flex;align-items:center;gap:8px;margin-top:10px;background:rgba(200,72,32,0.07);border-radius:12px;padding:8px 11px;}
+.streak-txt{font-size:11px;color:#8a5a30;flex:1;line-height:1.4;}
+
+.bottom-nav{display:flex;border-top:0.5px solid #f0ddd0;background:white;padding:8px 0 4px;margin:12px -16px -16px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;}
+.nav-icon{font-size:18px;}
+.nav-lbl{font-size:9px;color:#b09080;font-weight:500;}
+
+/* DETAIL SCREENS */
+.detail{display:none;flex-direction:column;min-height:620px;padding:34px 16px 16px;}
+
+.back-btn{display:flex;align-items:center;gap:4px;font-size:12px;color:#b07050;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:14px;}
+.det-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2c1a0a;margin-bottom:3px;}
+.det-sub{font-size:12px;color:#a07050;margin-bottom:20px;line-height:1.5;}
+.tpl-grid{display:flex;flex-direction:column;gap:8px;flex:1;}
+.tcard{border-radius:12px;padding:11px 13px;cursor:pointer;border:1.5px solid transparent;transition:all 0.18s;display:flex;align-items:center;gap:10px;}
+.tcard:hover{transform:translateY(-1px);}
+.tcard.on{border-width:2px;}
+.tcard-icon{font-size:20px;width:34px;text-align:center;flex-shrink:0;}
+.tcard-info{flex:1;}
+.tcard-name{font-size:13px;font-weight:500;}
+.tcard-hint{font-size:10px;margin-top:1px;opacity:0.75;}
+.start-btn{padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;margin-top:14px;transition:all 0.2s;}
+.start-btn:active{transform:scale(0.98);}
+</style>
+
+<div class="wrap">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <!-- HOME -->
+    <div class="screen" id="s-home" style="display:flex;">
+      <div class="top-row">
+        <div class="logo">Cherish.</div>
+        <div class="icons">
+          <div class="icon-btn">🔍</div>
+          <div class="icon-btn">🔔</div>
+        </div>
+      </div>
+
+      <div class="greeting">
+        <div class="hi">Good afternoon,</div>
+        <div class="name">What will you<br>create today?</div>
+      </div>
+
+      <div class="streak">
+        <span style="font-size:14px;">🔥</span>
+        <span>7-day streak — you're on a roll!</span>
+      </div>
+
+      <div class="create-lbl">Choose your experience</div>
+
+      <div class="modes">
+        <div class="mcard mc-snap" onclick="goTo('s-snap')">
+          <div class="mcard-icon">⚡</div>
+          <div class="mcard-text">
+            <div class="mcard-name">Quick snap</div>
+            <div class="mcard-desc">Photo + note in 60 seconds. For right now.</div>
+          </div>
+          <div class="mcard-arr">›</div>
+        </div>
+
+        <div class="mcard mc-journal" onclick="goTo('s-journal')">
+          <div class="mcard-icon">📖</div>
+          <div class="mcard-text">
+            <div class="mcard-name">Journal or diary</div>
+            <div class="mcard-desc">Templates, prompts, writing-first experience.</div>
+          </div>
+          <div class="mcard-arr">›</div>
+        </div>
+
+        <div class="mcard mc-scrap" onclick="goTo('s-scrap')">
+          <div class="mcard-icon">🎨</div>
+          <div class="mcard-text">
+            <div class="mcard-name">Scrapbook page</div>
+            <div class="mcard-desc">Layouts, stickers, captions, photos. Organized.</div>
+          </div>
+          <div class="mcard-arr">›</div>
+        </div>
+
+        <div class="mcard mc-full" onclick="goTo('s-full')">
+          <div class="mcard-icon">✨</div>
+          <div class="mcard-text">
+            <div class="mcard-name">Full memory</div>
+            <div class="mcard-desc">Scrapbook + journal together. The whole story.</div>
+          </div>
+          <div class="mcard-arr">›</div>
+        </div>
+
+        <div class="mcard mc-vision" onclick="goTo('s-vision')">
+          <div class="mcard-icon">🌀</div>
+          <div class="mcard-text">
+            <div class="mcard-name">Vision board & collage</div>
+            <div class="mcard-desc">Free canvas. No rules. Pure creative chaos.</div>
+          </div>
+          <div class="mcard-arr">›</div>
+        </div>
+      </div>
+
+      <div class="streak-bar">
+        <span style="font-size:16px;">📚</span>
+        <div class="streak-txt"><strong style="font-weight:500;">Spring Break Atlanta</strong> is waiting — you have 3 quick snaps ready to turn into pages.</div>
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">🏠</div><div class="nav-lbl" style="color:#c84820;">Home</div></div>
+        <div class="nav-item"><div class="nav-icon">📚</div><div class="nav-lbl">Library</div></div>
+        <div class="nav-item"><div class="nav-icon">🕐</div><div class="nav-lbl">Timeline</div></div>
+        <div class="nav-item"><div class="nav-icon">👨‍👩‍👧</div><div class="nav-lbl">Circle</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-lbl">Profile</div></div>
+      </div>
+    </div>
+
+    <!-- VISION BOARD DETAIL -->
+    <div class="detail" id="s-vision">
+      <button class="back-btn" onclick="goTo('s-home')">‹ Home</button>
+      <div class="det-title">Vision board & collage</div>
+      <div class="det-sub">Your creative space. No grid, no rules, no judgment. Just you and a blank canvas.</div>
+      <div class="tpl-grid">
+        <div class="tcard" style="background:#fff8e8;border-color:#f0d890;" onclick="selectVision(this)">
+          <div class="tcard-icon">🌀</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#6a4a00;">Free canvas</div><div class="tcard-hint" style="color:#8a6a20;">Blank page, anything goes. Total chaos.</div></div>
+        </div>
+        <div class="tcard" style="background:#f5f0ff;border-color:#d0b0f0;" onclick="selectVision(this)">
+          <div class="tcard-icon">🌟</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#5a2080;">Vision board</div><div class="tcard-hint" style="color:#7a40a0;">Goals, dreams, words, images. Where you're going.</div></div>
+        </div>
+        <div class="tcard" style="background:#fff0f8;border-color:#f0b0d8;" onclick="selectVision(this)">
+          <div class="tcard-icon">✂️</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#8a1050;">Magazine collage</div><div class="tcard-hint" style="color:#a03060;">Cut and paste energy. Overlapping, layered, raw.</div></div>
+        </div>
+        <div class="tcard" style="background:#f0fff8;border-color:#90e0b8;" onclick="selectVision(this)">
+          <div class="tcard-icon">📸</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#0a5a30;">Photo collage</div><div class="tcard-hint" style="color:#2a7a50;">Photos at wild angles. Messy, alive, real.</div></div>
+        </div>
+        <div class="tcard" style="background:#fff8f0;border-color:#f0c8a0;" onclick="selectVision(this)">
+          <div class="tcard-icon">✍️</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#7a3800;">Creative writing board</div><div class="tcard-hint" style="color:#9a5820;">Story planning, blog mood board, writing inspiration.</div></div>
+        </div>
+        <div class="tcard" style="background:#f0f8ff;border-color:#a0c8f0;" onclick="selectVision(this)">
+          <div class="tcard-icon">🎯</div>
+          <div class="tcard-info"><div class="tcard-name" style="color:#0a3870;">Goal board</div><div class="tcard-hint" style="color:#2a5890;">New year, new chapter, new you. Set intentions.</div></div>
+        </div>
+      </div>
+      <button class="start-btn" style="background:#e8a020;color:white;" onclick="sendPrompt('This is looking amazing! The vision board feature is perfect. What should we build or refine next?')">Open canvas →</button>
+    </div>
+
+    <!-- QUICK SNAP -->
+    <div class="detail" id="s-snap" style="background:#fff8f0;">
+      <button class="back-btn" onclick="goTo('s-home')">‹ Home</button>
+      <div class="det-title">Quick snap</div>
+      <div class="det-sub">Capture before the moment fades. Photo, note, location, done.</div>
+      <div style="border-radius:14px;background:#fde8d0;height:130px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:12px;flex-direction:column;gap:5px;" onclick="this.innerHTML='<img src=https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400 style=width:100%;height:130px;object-fit:cover;border-radius:14px; />'">
+        <div style="font-size:26px;">📷</div>
+        <div style="font-size:11px;color:#c08060;font-weight:500;">Tap to add photo</div>
+      </div>
+      <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c08060;margin-bottom:5px;">What's happening?</div>
+      <textarea style="border-radius:10px;border:1.5px solid #f0d0b0;background:#fff8f3;padding:9px 11px;font-family:'Caveat',cursive;font-size:17px;color:#3a1800;resize:none;outline:none;margin-bottom:10px;line-height:1.5;width:100%;" rows="3" placeholder="Just a few words..."></textarea>
+      <div style="display:flex;gap:7px;margin-bottom:12px;">
+        <button style="flex:1;border-radius:10px;padding:8px;background:#fde8d0;border:none;font-size:11px;font-weight:500;color:#8a4010;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="this.style.background='#f5b080';this.textContent='📍 Destin, FL'">📍 Location</button>
+        <button style="flex:1;border-radius:10px;padding:8px;background:#fde8d0;border:none;font-size:11px;font-weight:500;color:#8a4010;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="this.style.background='#f5b080';this.textContent='🎙 Recording…'">🎙 Voice</button>
+      </div>
+      <button style="padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#D85A30;color:white;" onclick="goTo('s-home')">Save ⚡</button>
+    </div>
+
+    <!-- JOURNAL -->
+    <div class="detail" id="s-journal" style="background:#f5f0ff;">
+      <button class="back-btn" style="color:#7050c0;" onclick="goTo('s-home')">‹ Home</button>
+      <div class="det-title" style="color:#3a1060;">Journal or diary</div>
+      <div class="det-sub" style="color:#9060c0;">Choose a template and tell your story.</div>
+      <div class="tpl-grid">
+        <div class="tcard" style="background:#fff8f0;border-color:#f0d8b8;" onclick="this.classList.toggle('on');this.style.borderColor='#d08030'"><div class="tcard-icon">✈️</div><div class="tcard-info"><div class="tcard-name" style="color:#7a4010;">Travel day</div><div class="tcard-hint" style="color:#9a5020;">Where we went · What we did · Favorite moment</div></div></div>
+        <div class="tcard" style="background:#f0f8ff;border-color:#c0d8f8;" onclick="this.classList.toggle('on');this.style.borderColor='#3060c0'"><div class="tcard-icon">🌙</div><div class="tcard-info"><div class="tcard-name" style="color:#1a3070;">Daily reflection</div><div class="tcard-hint" style="color:#3050a0;">How today felt · Grateful for · Tomorrow</div></div></div>
+        <div class="tcard" style="background:#f8fff0;border-color:#c0e8b0;" onclick="this.classList.toggle('on');this.style.borderColor='#408030'"><div class="tcard-icon">🏆</div><div class="tcard-info"><div class="tcard-name" style="color:#1a5010;">Big milestone</div><div class="tcard-hint" style="color:#306020;">What happened · How I felt · Why it matters</div></div></div>
+        <div class="tcard" style="background:#fff0f8;border-color:#f0c0e0;" onclick="this.classList.toggle('on');this.style.borderColor='#c03080'"><div class="tcard-icon">👨‍👩‍👧‍👦</div><div class="tcard-info"><div class="tcard-name" style="color:#701040;">Family moment</div><div class="tcard-hint" style="color:#901860;">Who was there · Memory to keep</div></div></div>
+        <div class="tcard" style="background:#f8f0ff;border-color:#d0b0f0;" onclick="this.classList.toggle('on');this.style.borderColor='#7030c0'"><div class="tcard-icon">🙏</div><div class="tcard-info"><div class="tcard-name" style="color:#3a1070;">Gratitude</div><div class="tcard-hint" style="color:#5a20a0;">3 things I'm grateful for today</div></div></div>
+      </div>
+      <button class="start-btn" style="background:#7050c0;color:white;" onclick="goTo('s-home')">Start writing →</button>
+    </div>
+
+    <!-- SCRAPBOOK -->
+    <div class="detail" id="s-scrap" style="background:#f0faf2;">
+      <button class="back-btn" style="color:#2a6a30;" onclick="goTo('s-home')">‹ Home</button>
+      <div class="det-title" style="color:#1a4020;">Scrapbook page</div>
+      <div class="det-sub" style="color:#609050;">Choose a layout and start designing.</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;" id="scrap-layouts"></div>
+      <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#609050;margin-bottom:8px;">Add to memory book</div>
+      <div style="border-radius:10px;background:#d0f0d8;border:1.5px solid #90d0a0;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+        <span style="font-size:16px;">📚</span>
+        <div><div style="font-size:12px;font-weight:500;color:#1a5020;">Spring Break Atlanta</div><div style="font-size:10px;color:#4a8050;">8 pages</div></div>
+      </div>
+      <button class="start-btn" style="background:#3a8040;color:white;margin-top:auto;" onclick="goTo('s-home')">Open page builder 🎨</button>
+    </div>
+
+    <!-- FULL MEMORY -->
+    <div class="detail" id="s-full" style="background:#fdf0ff;">
+      <button class="back-btn" style="color:#7040b0;" onclick="goTo('s-home')">‹ Home</button>
+      <div class="det-title" style="color:#3a1060;">Full memory</div>
+      <div class="det-sub" style="color:#9060c0;">The complete experience — scrapbook + journal together.</div>
+      <div style="display:flex;flex-direction:column;gap:9px;flex:1;">
+        <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;cursor:pointer;" onclick="this.style.borderColor='#9040e0';this.style.borderWidth='2px'">
+          <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 1</div>
+          <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">🎨 Build your scrapbook page</div>
+          <div style="font-size:11px;color:#7050a0;">Photos, stickers, frames, captions</div>
+        </div>
+        <div style="text-align:center;font-size:18px;color:#c090e0;">↓</div>
+        <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;cursor:pointer;" onclick="this.style.borderColor='#9040e0';this.style.borderWidth='2px'">
+          <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 2</div>
+          <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">📖 Write your journal entry</div>
+          <div style="font-size:11px;color:#7050a0;">Choose a template and tell the story</div>
+        </div>
+        <div style="text-align:center;font-size:18px;color:#c090e0;">↓</div>
+        <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;">
+          <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 3</div>
+          <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">✨ Save to your memory book</div>
+          <div style="font-size:11px;color:#7050a0;">Export, print, or share with family</div>
+        </div>
+      </div>
+      <button class="start-btn" style="background:#8040d0;color:white;" onclick="goTo('s-home')">Let's create ✨</button>
+    </div>
+
+  </div>
+
+  <div style="max-width:220px;">
+    <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.75;">
+      <strong style="font-size:14px;color:var(--color-text-primary);display:block;margin-bottom:10px;">Updated home screen</strong>
+      All five creation modes are now on the home screen. Tap each card to explore that experience.<br><br>
+      The <span style="color:#e8a020;font-weight:500;">Vision board & collage</span> card has a NEW badge and its own detail screen with 6 canvas types — Free Canvas, Vision Board, Magazine Collage, Photo Collage, Creative Writing Board, and Goal Board.<br><br>
+      The bottom nav now has 5 items — Home, Library, Timeline, Circle, Profile.
+    </div>
+  </div>
+</div>
+
+<script>
+function goTo(id){
+  document.querySelectorAll('.screen,.detail').forEach(s=>{s.style.display='none';});
+  const t=document.getElementById(id);
+  t.style.display='flex';
+  t.style.flexDirection='column';
+}
+
+function selectVision(el){
+  document.querySelectorAll('#s-vision .tcard').forEach(c=>{
+    c.style.borderWidth='1.5px';
+    c.style.opacity='1';
+  });
+  el.style.borderWidth='2.5px';
+}
+
+function buildScrapLayouts(){
+  const cont=document.getElementById('scrap-layouts');
+  if(!cont)return;
+  [[1],[2],[3]].forEach((_, i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='border-radius:8px;border:1.5px solid #b0d8b8;background:white;padding:5px;cursor:pointer;aspect-ratio:1;transition:border-color 0.15s;';
+    wrap.onclick=()=>{document.querySelectorAll('#scrap-layouts > div').forEach(d=>d.style.borderColor='#b0d8b8');wrap.style.borderColor='#3a8040';};
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;gap:2px;height:100%;';
+    if(i===0){grid.style.gridTemplateColumns='1fr';}
+    else if(i===1){grid.style.gridTemplateColumns='1fr 1fr';}
+    else{grid.style.cssText+='grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;';}
+    const count=i===0?1:i===1?2:4;
+    for(let j=0;j<count;j++){
+      const c=document.createElement('div');
+      c.style.cssText='background:#a0d8b0;border-radius:3px;';
+      grid.appendChild(c);
+    }
+    wrap.appendChild(grid);cont.appendChild(wrap);
+  });
+}
+
+buildScrapLayouts();
+</script>

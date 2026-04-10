@@ -1,0 +1,858 @@
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;600&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body, .app { font-family: 'DM Sans', sans-serif; }
+
+  .app {
+    display: flex;
+    height: 100vh;
+    min-height: 600px;
+    background: var(--color-background-tertiary);
+    overflow: hidden;
+  }
+
+  .sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: var(--color-background-primary);
+    border-right: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .sidebar-logo {
+    padding: 16px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .sidebar-logo h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--color-text-primary);
+    letter-spacing: -0.3px;
+  }
+
+  .sidebar-logo p {
+    font-size: 11px;
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .tab-row {
+    display: flex;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .tab-btn {
+    flex: 1;
+    padding: 8px 4px;
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    border-bottom: 2px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .tab-btn.active {
+    color: #D85A30;
+    border-bottom-color: #D85A30;
+    font-weight: 500;
+  }
+
+  .panel { display: none; padding: 12px; }
+  .panel.active { display: block; }
+
+  .panel-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 8px;
+    margin-top: 12px;
+  }
+
+  .panel-label:first-child { margin-top: 0; }
+
+  .sticker-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+  }
+
+  .sticker-item {
+    aspect-ratio: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    cursor: grab;
+    border-radius: 8px;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    transition: transform 0.1s, background 0.1s;
+    user-select: none;
+  }
+
+  .sticker-item:hover {
+    background: var(--color-background-info);
+    transform: scale(1.1);
+  }
+
+  .layout-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .layout-item {
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 8px;
+    padding: 6px;
+    cursor: pointer;
+    background: var(--color-background-secondary);
+    transition: border-color 0.15s;
+  }
+
+  .layout-item:hover { border-color: #D85A30; }
+  .layout-item.selected { border-color: #D85A30; border-width: 1.5px; }
+
+  .layout-preview {
+    display: grid;
+    gap: 2px;
+    height: 44px;
+    margin-bottom: 4px;
+  }
+
+  .layout-cell {
+    background: #D85A30;
+    border-radius: 2px;
+    opacity: 0.25;
+  }
+
+  .layout-item.selected .layout-cell { opacity: 0.6; }
+
+  .layout-name {
+    font-size: 10px;
+    color: var(--color-text-secondary);
+    text-align: center;
+  }
+
+  .bg-swatches {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+  }
+
+  .bg-swatch {
+    aspect-ratio: 1;
+    border-radius: 6px;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: border-color 0.15s, transform 0.1s;
+  }
+
+  .bg-swatch:hover { transform: scale(1.1); }
+  .bg-swatch.selected { border-color: #D85A30; }
+
+  .add-text-btn {
+    width: 100%;
+    padding: 8px;
+    background: none;
+    border: 0.5px dashed var(--color-border-secondary);
+    border-radius: 8px;
+    color: var(--color-text-secondary);
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.1s, color 0.1s;
+  }
+
+  .add-text-btn:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+
+  .canvas-area {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .toolbar {
+    height: 44px;
+    background: var(--color-background-primary);
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 8px;
+  }
+
+  .toolbar-btn {
+    padding: 5px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer;
+    border: 0.5px solid var(--color-border-secondary);
+    background: none;
+    color: var(--color-text-secondary);
+    transition: all 0.1s;
+  }
+
+  .toolbar-btn:hover {
+    background: var(--color-background-secondary);
+    color: var(--color-text-primary);
+  }
+
+  .toolbar-btn.primary {
+    background: #D85A30;
+    color: white;
+    border-color: #D85A30;
+    font-weight: 500;
+  }
+
+  .toolbar-btn.primary:hover { background: #993C1D; }
+
+  .toolbar-sep {
+    width: 0.5px;
+    height: 20px;
+    background: var(--color-border-tertiary);
+    margin: 0 4px;
+  }
+
+  .page-title-input {
+    border: none;
+    background: none;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    outline: none;
+    min-width: 200px;
+  }
+
+  .canvas-scroll {
+    flex: 1;
+    overflow: auto;
+    padding: 24px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+  }
+
+  .page-canvas {
+    width: 680px;
+    min-height: 480px;
+    background: #fff9f5;
+    border-radius: 4px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.08);
+    position: relative;
+    overflow: hidden;
+    transition: background 0.3s;
+  }
+
+  .photo-grid {
+    position: absolute;
+    inset: 20px;
+    display: grid;
+    gap: 12px;
+  }
+
+  .photo-slot {
+    border: 2px dashed rgba(216,90,48,0.3);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    background: rgba(255,255,255,0.6);
+    transition: border-color 0.15s, background 0.15s;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .photo-slot:hover {
+    border-color: rgba(216,90,48,0.7);
+    background: rgba(255,255,255,0.8);
+  }
+
+  .photo-slot.has-photo { border-style: solid; border-color: rgba(255,255,255,0.8); }
+
+  .photo-slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 2px;
+  }
+
+  .slot-placeholder {
+    text-align: center;
+    color: rgba(216,90,48,0.5);
+  }
+
+  .slot-placeholder svg {
+    display: block;
+    margin: 0 auto 6px;
+  }
+
+  .slot-placeholder span {
+    font-size: 11px;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .canvas-element {
+    position: absolute;
+    cursor: move;
+    user-select: none;
+  }
+
+  .canvas-element:hover .el-controls { opacity: 1; }
+
+  .el-controls {
+    position: absolute;
+    top: -22px;
+    right: 0;
+    display: flex;
+    gap: 3px;
+    opacity: 0;
+    transition: opacity 0.15s;
+  }
+
+  .el-ctrl-btn {
+    width: 18px;
+    height: 18px;
+    border-radius: 4px;
+    background: #D85A30;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .sticker-el { font-size: 36px; line-height: 1; }
+
+  .text-el {
+    font-family: 'Caveat', cursive;
+    font-size: 22px;
+    color: #3C3489;
+    background: none;
+    border: none;
+    outline: none;
+    min-width: 80px;
+    padding: 2px 4px;
+    cursor: text;
+    white-space: nowrap;
+  }
+
+  .caption-box {
+    background: rgba(255,255,255,0.85);
+    border: 0.5px solid rgba(216,90,48,0.3);
+    border-radius: 6px;
+    padding: 8px 10px;
+    min-width: 160px;
+    max-width: 220px;
+  }
+
+  .caption-box .caption-label {
+    font-size: 9px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #D85A30;
+    margin-bottom: 4px;
+  }
+
+  .caption-box .caption-text {
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    color: var(--color-text-primary);
+    background: none;
+    border: none;
+    outline: none;
+    width: 100%;
+    resize: none;
+    overflow: hidden;
+    line-height: 1.4;
+  }
+
+  .page-date {
+    position: absolute;
+    bottom: 14px;
+    right: 16px;
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 12px;
+    color: rgba(216,90,48,0.5);
+    pointer-events: none;
+  }
+
+  .frame-el {
+    border: 3px solid #D85A30;
+    border-radius: 4px;
+    width: 120px;
+    height: 90px;
+    background: transparent;
+  }
+
+  .ribbon-el {
+    background: #D85A30;
+    color: white;
+    font-family: 'Caveat', cursive;
+    font-size: 16px;
+    padding: 4px 20px;
+    transform: rotate(-2deg);
+    white-space: nowrap;
+  }
+
+  .right-panel {
+    width: 200px;
+    min-width: 200px;
+    background: var(--color-background-primary);
+    border-left: 0.5px solid var(--color-border-tertiary);
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+  }
+
+  .right-panel-header {
+    padding: 12px 14px;
+    border-bottom: 0.5px solid var(--color-border-tertiary);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--color-text-secondary);
+  }
+
+  .journal-area {
+    padding: 12px 14px;
+    flex: 1;
+  }
+
+  .journal-label {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.8px;
+    text-transform: uppercase;
+    color: var(--color-text-tertiary);
+    margin-bottom: 6px;
+    margin-top: 12px;
+  }
+
+  .journal-label:first-child { margin-top: 0; }
+
+  .journal-textarea {
+    width: 100%;
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 6px;
+    padding: 8px;
+    font-family: 'Caveat', cursive;
+    font-size: 15px;
+    color: var(--color-text-primary);
+    background: var(--color-background-secondary);
+    resize: none;
+    outline: none;
+    transition: border-color 0.15s;
+    line-height: 1.5;
+  }
+
+  .journal-textarea:focus { border-color: #D85A30; }
+
+  .prompt-chip {
+    display: inline-block;
+    background: var(--color-background-secondary);
+    border: 0.5px solid var(--color-border-tertiary);
+    border-radius: 20px;
+    padding: 4px 10px;
+    font-size: 11px;
+    color: var(--color-text-secondary);
+    cursor: pointer;
+    margin: 3px 3px 0 0;
+    transition: all 0.1s;
+  }
+
+  .prompt-chip:hover {
+    background: #FAECE7;
+    border-color: #D85A30;
+    color: #D85A30;
+  }
+
+  .privacy-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-top: 0.5px solid var(--color-border-tertiary);
+  }
+
+  .privacy-toggle {
+    position: relative;
+    width: 32px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+
+  .privacy-toggle input { opacity: 0; width: 0; height: 0; }
+
+  .toggle-track {
+    position: absolute;
+    inset: 0;
+    background: var(--color-border-secondary);
+    border-radius: 9px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle-track:before {
+    content: '';
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    left: 3px;
+    top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.2s;
+  }
+
+  .privacy-toggle input:checked + .toggle-track { background: #D85A30; }
+  .privacy-toggle input:checked + .toggle-track:before { transform: translateX(14px); }
+
+  .privacy-label {
+    font-size: 11px;
+    color: var(--color-text-secondary);
+  }
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="sidebar-logo">
+      <h1>MemoryBook</h1>
+      <p>Your story, beautifully kept</p>
+    </div>
+    <div class="tab-row">
+      <button class="tab-btn active" onclick="switchTab('layouts')">Layout</button>
+      <button class="tab-btn" onclick="switchTab('stickers')">Stickers</button>
+      <button class="tab-btn" onclick="switchTab('decor')">Decor</button>
+    </div>
+
+    <div id="panel-layouts" class="panel active">
+      <div class="panel-label">Page layouts</div>
+      <div class="layout-grid" id="layout-grid"></div>
+      <div class="panel-label" style="margin-top:16px;">Backgrounds</div>
+      <div class="bg-swatches" id="bg-swatches"></div>
+    </div>
+
+    <div id="panel-stickers" class="panel">
+      <div class="panel-label">Nature & travel</div>
+      <div class="sticker-grid" id="sticker-grid-1"></div>
+      <div class="panel-label">Emotions & fun</div>
+      <div class="sticker-grid" id="sticker-grid-2"></div>
+      <div class="panel-label">Objects</div>
+      <div class="sticker-grid" id="sticker-grid-3"></div>
+    </div>
+
+    <div id="panel-decor" class="panel">
+      <div class="panel-label">Add text</div>
+      <button class="add-text-btn" onclick="addTextEl('handwritten')">+ Handwritten text</button>
+      <button class="add-text-btn" style="margin-top:6px;" onclick="addTextEl('ribbon')">+ Ribbon banner</button>
+      <div class="panel-label">Frames & captions</div>
+      <button class="add-text-btn" onclick="addFrame()">+ Photo frame</button>
+      <button class="add-text-btn" style="margin-top:6px;" onclick="addCaption('Favorite memory')">+ Fav memory box</button>
+      <button class="add-text-btn" style="margin-top:6px;" onclick="addCaption('Best moment')">+ Best moment box</button>
+      <button class="add-text-btn" style="margin-top:6px;" onclick="addCaption('Trip details')">+ Trip details box</button>
+    </div>
+  </div>
+
+  <div class="canvas-area">
+    <div class="toolbar">
+      <input class="page-title-input" id="page-title" value="Summer Vacation 2024" />
+      <div class="toolbar-sep"></div>
+      <button class="toolbar-btn" onclick="sendPrompt('I want to add a journal entry to my scrapbook page')">+ Journal entry</button>
+      <button class="toolbar-btn" onclick="sendPrompt('How do I export my scrapbook as a PDF to print and bind?')">Export / Print</button>
+      <div style="flex:1"></div>
+      <button class="toolbar-btn primary" onclick="sendPrompt('This looks great! What features should we build next for MemoryBook?')">Save page ↗</button>
+    </div>
+    <div class="canvas-scroll">
+      <div class="page-canvas" id="page-canvas">
+        <div class="photo-grid" id="photo-grid"></div>
+        <div class="page-date" id="page-date">July 2024</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="right-panel">
+    <div class="right-panel-header">Page notes</div>
+    <div class="journal-area">
+      <div class="journal-label">Entry title</div>
+      <textarea class="journal-textarea" rows="2" placeholder="e.g. Beach Day at Destin..."></textarea>
+      <div class="journal-label">What happened?</div>
+      <textarea class="journal-textarea" rows="4" placeholder="Write about this memory..."></textarea>
+      <div class="journal-label">Quick prompts</div>
+      <div>
+        <span class="prompt-chip" onclick="fillPrompt('Best part of the day: ')">Best part</span>
+        <span class="prompt-chip" onclick="fillPrompt('The kids loved: ')">Kids loved</span>
+        <span class="prompt-chip" onclick="fillPrompt('Weather was: ')">Weather</span>
+        <span class="prompt-chip" onclick="fillPrompt('We ate at: ')">Food</span>
+        <span class="prompt-chip" onclick="fillPrompt('Funniest moment: ')">Funny moment</span>
+        <span class="prompt-chip" onclick="fillPrompt('I want to remember: ')">Memory</span>
+      </div>
+    </div>
+    <div class="privacy-row">
+      <label class="privacy-toggle">
+        <input type="checkbox" id="privacy-toggle" checked>
+        <div class="toggle-track"></div>
+      </label>
+      <span class="privacy-label" id="privacy-label">Private — just you</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const LAYOUTS = [
+  { name: "One big", css: "grid-template-columns: 1fr; grid-template-rows: 1fr;", cells: 1 },
+  { name: "Side by side", css: "grid-template-columns: 1fr 1fr; grid-template-rows: 1fr;", cells: 2 },
+  { name: "Top + 2", css: "grid-template-rows: 1.2fr 1fr; grid-template-columns: 1fr 1fr;", cells: 3, spans: [{col:"1/3",row:"1/2"}] },
+  { name: "2 + bottom", css: "grid-template-rows: 1fr 1.2fr; grid-template-columns: 1fr 1fr;", cells: 3, spans: [{col:"1/3",row:"2/3",i:2}] },
+  { name: "Grid of 4", css: "grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;", cells: 4 },
+  { name: "Left + 2", css: "grid-template-columns: 1.3fr 1fr; grid-template-rows: 1fr 1fr;", cells: 3, spans: [{col:"1/2",row:"1/3"}] },
+];
+
+const BG_COLORS = [
+  "#fff9f5","#f5f0e8","#f0f5f0","#f0f0f8","#fdf5f5",
+  "#e8f0f5","#f5ede0","#f0ece8","#e8ece8","#faf5e8",
+];
+
+const STICKERS_1 = ["🌊","🏖","🌴","🌅","⛵","🗺","🧭","✈️","🏔","🌺","🦋","🌸"];
+const STICKERS_2 = ["❤️","🥰","😊","🎉","⭐","🌟","💫","🎈","🥳","💕","🙌","✨"];
+const STICKERS_3 = ["📷","🎒","🍦","🌮","🎵","🎨","📚","🕶","👒","🛍","🍹","🎪"];
+
+let currentLayout = 0;
+let selectedBg = 0;
+let dragging = null;
+let dragOffX = 0, dragOffY = 0;
+let elCount = 0;
+
+function buildLayouts() {
+  const grid = document.getElementById('layout-grid');
+  LAYOUTS.forEach((l, i) => {
+    const item = document.createElement('div');
+    item.className = 'layout-item' + (i === 0 ? ' selected' : '');
+    item.onclick = () => selectLayout(i);
+    const preview = document.createElement('div');
+    preview.className = 'layout-preview';
+    preview.style.cssText = l.css;
+    const n = l.cells || 1;
+    for (let c = 0; c < n; c++) {
+      const cell = document.createElement('div');
+      cell.className = 'layout-cell';
+      if (l.spans) {
+        const sp = l.spans.find(s => (s.i || 0) === c);
+        if (sp) {
+          if (sp.col) cell.style.gridColumn = sp.col;
+          if (sp.row) cell.style.gridRow = sp.row;
+        }
+      }
+      preview.appendChild(cell);
+    }
+    const name = document.createElement('div');
+    name.className = 'layout-name';
+    name.textContent = l.name;
+    item.appendChild(preview);
+    item.appendChild(name);
+    grid.appendChild(item);
+  });
+}
+
+function buildBgSwatches() {
+  const cont = document.getElementById('bg-swatches');
+  BG_COLORS.forEach((c, i) => {
+    const sw = document.createElement('div');
+    sw.className = 'bg-swatch' + (i === 0 ? ' selected' : '');
+    sw.style.background = c;
+    sw.onclick = () => selectBg(i, c);
+    cont.appendChild(sw);
+  });
+}
+
+function buildStickers() {
+  [STICKERS_1, STICKERS_2, STICKERS_3].forEach((arr, gi) => {
+    const grid = document.getElementById(`sticker-grid-${gi+1}`);
+    arr.forEach(s => {
+      const el = document.createElement('div');
+      el.className = 'sticker-item';
+      el.textContent = s;
+      el.draggable = true;
+      el.addEventListener('dragstart', e => e.dataTransfer.setData('sticker', s));
+      el.onclick = () => addSticker(s);
+      grid.appendChild(el);
+    });
+  });
+}
+
+function selectLayout(i) {
+  currentLayout = i;
+  document.querySelectorAll('.layout-item').forEach((el, j) => {
+    el.classList.toggle('selected', j === i);
+  });
+  buildPhotoGrid();
+}
+
+function selectBg(i, color) {
+  selectedBg = i;
+  document.querySelectorAll('.bg-swatch').forEach((el, j) => {
+    el.classList.toggle('selected', j === i);
+  });
+  document.getElementById('page-canvas').style.background = color;
+}
+
+function buildPhotoGrid() {
+  const grid = document.getElementById('photo-grid');
+  grid.innerHTML = '';
+  const l = LAYOUTS[currentLayout];
+  grid.style.cssText = `position:absolute;inset:20px;display:grid;gap:12px;${l.css}`;
+  const n = l.cells || 1;
+  for (let c = 0; c < n; c++) {
+    const slot = document.createElement('div');
+    slot.className = 'photo-slot';
+    if (l.spans) {
+      const sp = l.spans.find(s => (s.i || 0) === c);
+      if (sp) {
+        if (sp.col) slot.style.gridColumn = sp.col;
+        if (sp.row) slot.style.gridRow = sp.row;
+      }
+    }
+    slot.innerHTML = `<div class="slot-placeholder"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="rgba(216,90,48,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Add photo</span></div>`;
+    slot.onclick = () => fakeAddPhoto(slot);
+    grid.appendChild(slot);
+  }
+}
+
+const SAMPLE_PHOTOS = [
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=80',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=80',
+  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=80',
+  'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&q=80',
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=80',
+  'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=400&q=80',
+];
+let photoIdx = 0;
+
+function fakeAddPhoto(slot) {
+  const img = document.createElement('img');
+  img.src = SAMPLE_PHOTOS[photoIdx % SAMPLE_PHOTOS.length];
+  photoIdx++;
+  img.onload = () => {
+    slot.innerHTML = '';
+    slot.appendChild(img);
+    slot.classList.add('has-photo');
+    slot.onclick = null;
+  };
+  img.onerror = () => {
+    slot.querySelector('.slot-placeholder span').textContent = '(tap to add)';
+  };
+}
+
+function addSticker(emoji) {
+  const canvas = document.getElementById('page-canvas');
+  const el = document.createElement('div');
+  el.className = 'canvas-element';
+  el.style.left = (80 + Math.random() * 400) + 'px';
+  el.style.top = (40 + Math.random() * 300) + 'px';
+  el.innerHTML = `<div class="el-controls"><button class="el-ctrl-btn" onclick="this.closest('.canvas-element').remove()" title="Remove">×</button></div><div class="sticker-el">${emoji}</div>`;
+  makeDraggable(el);
+  canvas.appendChild(el);
+}
+
+function addTextEl(type) {
+  const canvas = document.getElementById('page-canvas');
+  const el = document.createElement('div');
+  el.className = 'canvas-element';
+  el.style.left = (60 + Math.random() * 350) + 'px';
+  el.style.top = (50 + Math.random() * 280) + 'px';
+  if (type === 'ribbon') {
+    el.innerHTML = `<div class="el-controls"><button class="el-ctrl-btn" onclick="this.closest('.canvas-element').remove()">×</button></div><div class="ribbon-el" contenteditable="true" spellcheck="false">Our Adventure</div>`;
+  } else {
+    el.innerHTML = `<div class="el-controls"><button class="el-ctrl-btn" onclick="this.closest('.canvas-element').remove()">×</button></div><input class="text-el" value="Add your text..." onclick="this.select()" />`;
+  }
+  makeDraggable(el);
+  canvas.appendChild(el);
+}
+
+function addFrame() {
+  const canvas = document.getElementById('page-canvas');
+  const el = document.createElement('div');
+  el.className = 'canvas-element';
+  el.style.left = (100 + Math.random() * 300) + 'px';
+  el.style.top = (60 + Math.random() * 250) + 'px';
+  el.innerHTML = `<div class="el-controls"><button class="el-ctrl-btn" onclick="this.closest('.canvas-element').remove()">×</button></div><div class="frame-el"></div>`;
+  makeDraggable(el);
+  canvas.appendChild(el);
+}
+
+function addCaption(label) {
+  const canvas = document.getElementById('page-canvas');
+  const el = document.createElement('div');
+  el.className = 'canvas-element';
+  el.style.left = (60 + Math.random() * 350) + 'px';
+  el.style.top = (60 + Math.random() * 300) + 'px';
+  el.innerHTML = `<div class="el-controls"><button class="el-ctrl-btn" onclick="this.closest('.canvas-element').remove()">×</button></div><div class="caption-box"><div class="caption-label">${label}</div><textarea class="caption-text" rows="3" placeholder="Write here..."></textarea></div>`;
+  makeDraggable(el);
+  canvas.appendChild(el);
+}
+
+function makeDraggable(el) {
+  el.addEventListener('mousedown', e => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'BUTTON' || e.target.isContentEditable) return;
+    dragging = el;
+    const r = el.getBoundingClientRect();
+    const cr = el.parentElement.getBoundingClientRect();
+    dragOffX = e.clientX - r.left;
+    dragOffY = e.clientY - r.top;
+    e.preventDefault();
+  });
+}
+
+document.addEventListener('mousemove', e => {
+  if (!dragging) return;
+  const cr = document.getElementById('page-canvas').getBoundingClientRect();
+  dragging.style.left = (e.clientX - cr.left - dragOffX) + 'px';
+  dragging.style.top = (e.clientY - cr.top - dragOffY) + 'px';
+});
+
+document.addEventListener('mouseup', () => { dragging = null; });
+
+document.getElementById('privacy-toggle').addEventListener('change', function() {
+  document.getElementById('privacy-label').textContent = this.checked ? 'Private — just you' : 'Shared with family';
+});
+
+function switchTab(name) {
+  document.querySelectorAll('.tab-btn').forEach((b,i) => b.classList.toggle('active', ['layouts','stickers','decor'][i] === name));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+
+function fillPrompt(text) {
+  const areas = document.querySelectorAll('.journal-textarea');
+  const target = areas[1];
+  if (target.value && !target.value.endsWith('\n')) target.value += '\n';
+  target.value += text;
+  target.focus();
+}
+
+buildLayouts();
+buildBgSwatches();
+buildStickers();
+buildPhotoGrid();
+</script>

@@ -1,0 +1,410 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.app{font-family:'DM Sans',sans-serif;display:flex;height:680px;background:var(--color-background-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+.sidebar{width:200px;min-width:200px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow:hidden;}
+.logo{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.logo h1{font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--color-text-primary);}
+.logo p{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;}
+.tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);}
+.tab{flex:1;padding:7px 2px;font-size:11px;font-family:'DM Sans',sans-serif;background:none;border:none;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;transition:all 0.15s;}
+.tab.on{color:#D85A30;border-bottom-color:#D85A30;font-weight:500;}
+.panel{display:none;padding:10px;overflow-y:auto;flex:1;}
+.panel.on{display:block;}
+.plabel{font-size:10px;font-weight:500;letter-spacing:0.7px;text-transform:uppercase;color:var(--color-text-tertiary);margin:10px 0 6px;}
+.plabel:first-child{margin-top:0;}
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:4px;}
+.sc{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border-radius:7px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);transition:transform 0.1s,background 0.1s;user-select:none;}
+.sc:hover{background:#FAECE7;transform:scale(1.15);}
+.sc:active{transform:scale(0.95);}
+.lgrid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+.litem{border:0.5px solid var(--color-border-tertiary);border-radius:7px;padding:5px;cursor:pointer;background:var(--color-background-secondary);transition:border-color 0.15s;}
+.litem:hover,.litem.on{border-color:#D85A30;border-width:1.5px;}
+.lprev{display:grid;gap:2px;height:38px;margin-bottom:3px;}
+.lcell{background:#D85A30;border-radius:2px;opacity:0.2;}
+.litem.on .lcell{opacity:0.55;}
+.lname{font-size:10px;color:var(--color-text-secondary);text-align:center;}
+.bgs{display:grid;grid-template-columns:repeat(5,1fr);gap:4px;}
+.bgsw{aspect-ratio:1;border-radius:5px;cursor:pointer;border:2px solid transparent;transition:border-color 0.15s,transform 0.1s;}
+.bgsw:hover{transform:scale(1.1);}
+.bgsw.on{border-color:#D85A30;}
+.dbtn{width:100%;padding:7px;background:none;border:0.5px dashed var(--color-border-secondary);border-radius:7px;color:var(--color-text-secondary);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:5px;transition:background 0.1s;}
+.dbtn:hover{background:var(--color-background-secondary);color:var(--color-text-primary);}
+.canvas-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.toolbar{height:42px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;padding:0 12px;gap:6px;}
+.tbtn{padding:4px 10px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);transition:all 0.1s;}
+.tbtn:hover{background:var(--color-background-secondary);}
+.tbtn.pri{background:#D85A30;color:white;border-color:#D85A30;font-weight:500;}
+.tbtn.pri:hover{background:#993C1D;}
+.tbtn.danger{color:#A32D2D;border-color:var(--color-border-secondary);}
+.tbtn.danger:hover{background:#FCEBEB;}
+.tsep{width:0.5px;height:18px;background:var(--color-border-tertiary);margin:0 2px;}
+.ptitle{border:none;background:none;font-family:'Playfair Display',serif;font-size:14px;color:var(--color-text-primary);outline:none;min-width:160px;}
+.cscroll{flex:1;overflow:auto;padding:20px;display:flex;align-items:flex-start;justify-content:center;}
+.canvas{width:600px;min-height:420px;background:#fff9f5;border-radius:3px;position:relative;overflow:hidden;transition:background 0.3s;}
+.pgrid{position:absolute;inset:16px;display:grid;gap:10px;}
+.pslot{border:2px dashed rgba(216,90,48,0.3);border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(255,255,255,0.5);transition:border-color 0.15s,background 0.15s;overflow:hidden;}
+.pslot:hover{border-color:rgba(216,90,48,0.6);background:rgba(255,255,255,0.7);}
+.pslot.filled{border-style:solid;border-color:rgba(255,255,255,0.7);}
+.pslot img{width:100%;height:100%;object-fit:cover;}
+.pholder{text-align:center;color:rgba(216,90,48,0.45);pointer-events:none;}
+.pholder svg{display:block;margin:0 auto 5px;}
+.pholder span{font-size:10px;}
+.cel{position:absolute;cursor:move;user-select:none;}
+.cel:hover .ctrls{opacity:1;}
+.ctrls{position:absolute;top:-20px;right:0;display:flex;gap:2px;opacity:0;transition:opacity 0.15s;z-index:10;}
+.cbtn{width:17px;height:17px;border-radius:3px;background:#D85A30;color:white;border:none;cursor:pointer;font-size:11px;display:flex;align-items:center;justify-content:center;line-height:1;}
+.stk{font-size:38px;line-height:1;display:block;}
+.txtel{font-family:'Caveat',cursive;font-size:20px;color:#3C3489;background:none;border:none;outline:none;min-width:70px;padding:1px 3px;}
+.ribel{background:#D85A30;color:white;font-family:'Caveat',cursive;font-size:15px;padding:3px 16px;transform:rotate(-2deg);display:inline-block;white-space:nowrap;}
+.framel{border:3px solid #D85A30;border-radius:3px;width:110px;height:80px;}
+.capbox{background:rgba(255,255,255,0.88);border:0.5px solid rgba(216,90,48,0.35);border-radius:6px;padding:7px 9px;min-width:140px;max-width:200px;}
+.caplbl{font-size:9px;font-weight:500;letter-spacing:0.9px;text-transform:uppercase;color:#D85A30;margin-bottom:3px;}
+.capta{font-family:'Caveat',cursive;font-size:15px;color:var(--color-text-primary);background:none;border:none;outline:none;width:100%;resize:none;line-height:1.4;}
+.pdate{position:absolute;bottom:10px;right:12px;font-family:'Playfair Display',serif;font-style:italic;font-size:11px;color:rgba(216,90,48,0.4);pointer-events:none;}
+.hint{position:absolute;top:8px;left:50%;transform:translateX(-50%);font-size:11px;color:rgba(216,90,48,0.5);font-family:'DM Sans',sans-serif;pointer-events:none;white-space:nowrap;transition:opacity 0.5s;}
+.rpanel{width:185px;min-width:185px;background:var(--color-background-primary);border-left:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow-y:auto;}
+.rhead{padding:10px 12px;border-bottom:0.5px solid var(--color-border-tertiary);font-size:11px;font-weight:500;color:var(--color-text-secondary);}
+.rarea{padding:10px 12px;flex:1;}
+.rlabel{font-size:10px;font-weight:500;letter-spacing:0.7px;text-transform:uppercase;color:var(--color-text-tertiary);margin:10px 0 5px;}
+.rlabel:first-child{margin-top:0;}
+.rta{width:100%;border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:7px;font-family:'Caveat',cursive;font-size:14px;color:var(--color-text-primary);background:var(--color-background-secondary);resize:none;outline:none;transition:border-color 0.15s;line-height:1.5;}
+.rta:focus{border-color:#D85A30;}
+.pchip{display:inline-block;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);border-radius:20px;padding:3px 8px;font-size:10px;color:var(--color-text-secondary);cursor:pointer;margin:2px 2px 0 0;transition:all 0.1s;}
+.pchip:hover{background:#FAECE7;border-color:#D85A30;color:#993C1D;}
+.privrow{display:flex;align-items:center;gap:7px;padding:9px 12px;border-top:0.5px solid var(--color-border-tertiary);}
+.tog{position:relative;width:30px;height:17px;flex-shrink:0;}
+.tog input{opacity:0;width:0;height:0;}
+.togtr{position:absolute;inset:0;background:var(--color-border-secondary);border-radius:9px;cursor:pointer;transition:background 0.2s;}
+.togtr:before{content:'';position:absolute;width:11px;height:11px;left:3px;top:3px;background:white;border-radius:50%;transition:transform 0.2s;}
+.tog input:checked+.togtr{background:#D85A30;}
+.tog input:checked+.togtr:before{transform:translateX(13px);}
+.privlbl{font-size:11px;color:var(--color-text-secondary);}
+.toast{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#3B6D11;color:white;padding:6px 14px;border-radius:20px;font-size:12px;font-family:'DM Sans',sans-serif;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;z-index:100;}
+.toast.show{opacity:1;}
+</style>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo"><h1>MemoryBook</h1><p>Your story, beautifully kept</p></div>
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('layouts')">Layout</button>
+      <button class="tab" onclick="switchTab('stickers')">Stickers</button>
+      <button class="tab" onclick="switchTab('decor')">Decor</button>
+    </div>
+    <div id="p-layouts" class="panel on">
+      <div class="plabel">Page layouts</div>
+      <div class="lgrid" id="lgrid"></div>
+      <div class="plabel">Background</div>
+      <div class="bgs" id="bgs"></div>
+    </div>
+    <div id="p-stickers" class="panel">
+      <div class="plabel">Travel & nature</div>
+      <div class="sgrid" id="sg1"></div>
+      <div class="plabel">Feelings & fun</div>
+      <div class="sgrid" id="sg2"></div>
+      <div class="plabel">Food & life</div>
+      <div class="sgrid" id="sg3"></div>
+      <div class="plabel">Celebration</div>
+      <div class="sgrid" id="sg4"></div>
+    </div>
+    <div id="p-decor" class="panel">
+      <div class="plabel">Text</div>
+      <button class="dbtn" onclick="addText()">+ Handwritten text</button>
+      <button class="dbtn" onclick="addRibbon()">+ Ribbon banner</button>
+      <div class="plabel">Frames & captions</div>
+      <button class="dbtn" onclick="addFrame()">+ Photo frame</button>
+      <button class="dbtn" onclick="addCap('Favorite memory')">+ Favorite memory</button>
+      <button class="dbtn" onclick="addCap('Best moment')">+ Best moment</button>
+      <button class="dbtn" onclick="addCap('Trip details')">+ Trip details</button>
+      <button class="dbtn" onclick="addCap('We laughed when')">+ Funny moment</button>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <div class="toolbar">
+      <input class="ptitle" id="ptitle" value="Summer Vacation 2024" />
+      <div class="tsep"></div>
+      <button class="tbtn danger" id="undobtn" onclick="undoLast()" style="display:none;">Undo</button>
+      <div style="flex:1"></div>
+      <button class="tbtn" onclick="sendPrompt('Lets build the timeline view so I can see all my memory books in order')">Timeline ↗</button>
+      <button class="tbtn pri" onclick="showToast('Page saved!')">Save page</button>
+    </div>
+    <div class="cscroll">
+      <div class="canvas" id="canvas">
+        <div class="pgrid" id="pgrid"></div>
+        <div class="pdate">July 2024</div>
+        <div class="hint" id="hint">Click any sticker or decor to place it on your page</div>
+        <div class="toast" id="toast"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rpanel">
+    <div class="rhead">Page notes</div>
+    <div class="rarea">
+      <div class="rlabel">Entry title</div>
+      <textarea class="rta" rows="2" placeholder="Beach Day at Destin..."></textarea>
+      <div class="rlabel">What happened?</div>
+      <textarea class="rta" rows="4" id="maintxt" placeholder="Write about this memory..."></textarea>
+      <div class="rlabel">Quick prompts</div>
+      <div id="prompts"></div>
+    </div>
+    <div class="privrow">
+      <label class="tog"><input type="checkbox" id="privtog" checked><div class="togtr"></div></label>
+      <span class="privlbl" id="privlbl">Private</span>
+    </div>
+  </div>
+</div>
+
+<script>
+const LAYOUTS=[
+  {name:"One big",css:"grid-template-columns:1fr;grid-template-rows:1fr;",cells:1,spans:[]},
+  {name:"Side by side",css:"grid-template-columns:1fr 1fr;grid-template-rows:1fr;",cells:2,spans:[]},
+  {name:"Top + 2",css:"grid-template-columns:1fr 1fr;grid-template-rows:1.3fr 1fr;",cells:3,spans:[{i:0,col:"1/3",row:"1/2"}]},
+  {name:"2 + bottom",css:"grid-template-columns:1fr 1fr;grid-template-rows:1fr 1.3fr;",cells:3,spans:[{i:2,col:"1/3",row:"2/3"}]},
+  {name:"Grid of 4",css:"grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;",cells:4,spans:[]},
+  {name:"Left + 2",css:"grid-template-columns:1.3fr 1fr;grid-template-rows:1fr 1fr;",cells:3,spans:[{i:0,col:"1/2",row:"1/3"}]},
+];
+const BGS=["#fff9f5","#f5f0e8","#f0f5f0","#f0f0f8","#fdf5f5","#e8f0f5","#f5ede0","#faf0e0","#ece8f0","#f0f5f5"];
+const S1=["🌊","🏖","🌴","🌅","⛵","🗺","🧭","✈️","🏔","🌺","🌊","🦀"];
+const S2=["❤️","🥰","😊","🎉","⭐","🌟","💫","🥳","💕","✨","🙌","😍"];
+const S3=["🍦","🌮","🍹","🎵","🎨","📷","🎒","🕶","👒","🍕","🍨","🌭"];
+const S4=["🎈","🎊","🏆","🥂","🎁","🪅","🎆","🎇","🪄","🎠","🎡","🎪"];
+const PROMPTS=["Best part...","Kids loved...","Weather was...","We ate at...","Funniest moment...","I want to remember...","We got lost...","Surprised by..."];
+
+let curLayout=0, selBg=0, dragging=null, dox=0, doy=0, history=[];
+let photoIdx=0;
+const PHOTOS=[
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400&q=75',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=400&q=75',
+  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=400&q=75',
+  'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=400&q=75',
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&q=75',
+];
+
+function rand(min,max){return min+Math.random()*(max-min);}
+
+function buildLayouts(){
+  const g=document.getElementById('lgrid');
+  LAYOUTS.forEach((l,i)=>{
+    const d=document.createElement('div');
+    d.className='litem'+(i===0?' on':'');
+    d.onclick=()=>selectLayout(i);
+    const p=document.createElement('div');
+    p.className='lprev';
+    p.style.cssText=l.css;
+    for(let c=0;c<l.cells;c++){
+      const cell=document.createElement('div');
+      cell.className='lcell';
+      const sp=l.spans.find(s=>s.i===c);
+      if(sp){if(sp.col)cell.style.gridColumn=sp.col;if(sp.row)cell.style.gridRow=sp.row;}
+      p.appendChild(cell);
+    }
+    const n=document.createElement('div');
+    n.className='lname';n.textContent=l.name;
+    d.appendChild(p);d.appendChild(n);g.appendChild(d);
+  });
+}
+
+function buildBgs(){
+  const g=document.getElementById('bgs');
+  BGS.forEach((c,i)=>{
+    const s=document.createElement('div');
+    s.className='bgsw'+(i===0?' on':'');
+    s.style.background=c;
+    s.onclick=()=>{
+      selBg=i;
+      document.querySelectorAll('.bgsw').forEach((x,j)=>x.classList.toggle('on',j===i));
+      document.getElementById('canvas').style.background=c;
+    };
+    g.appendChild(s);
+  });
+}
+
+function buildStickers(){
+  [[S1,'sg1'],[S2,'sg2'],[S3,'sg3'],[S4,'sg4']].forEach(([arr,id])=>{
+    const g=document.getElementById(id);
+    arr.forEach(s=>{
+      const el=document.createElement('div');
+      el.className='sc';el.textContent=s;
+      el.onclick=()=>placeSticker(s);
+      g.appendChild(el);
+    });
+  });
+}
+
+function buildPrompts(){
+  const c=document.getElementById('prompts');
+  PROMPTS.forEach(p=>{
+    const ch=document.createElement('span');
+    ch.className='pchip';ch.textContent=p;
+    ch.onclick=()=>{
+      const ta=document.getElementById('maintxt');
+      if(ta.value&&!ta.value.endsWith('\n'))ta.value+='\n';
+      ta.value+=p+' ';ta.focus();
+    };
+    c.appendChild(ch);
+  });
+}
+
+function selectLayout(i){
+  curLayout=i;
+  document.querySelectorAll('.litem').forEach((el,j)=>el.classList.toggle('on',j===i));
+  buildPhotoGrid();
+}
+
+function buildPhotoGrid(){
+  const g=document.getElementById('pgrid');
+  g.innerHTML='';
+  const l=LAYOUTS[curLayout];
+  g.style.cssText=`position:absolute;inset:16px;display:grid;gap:10px;${l.css}`;
+  for(let c=0;c<l.cells;c++){
+    const slot=document.createElement('div');
+    slot.className='pslot';
+    const sp=l.spans.find(s=>s.i===c);
+    if(sp){if(sp.col)slot.style.gridColumn=sp.col;if(sp.row)slot.style.gridRow=sp.row;}
+    slot.innerHTML=`<div class="pholder"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="rgba(216,90,48,0.4)" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg><span>Tap to add photo</span></div>`;
+    slot.onclick=()=>loadPhoto(slot);
+    g.appendChild(slot);
+  }
+}
+
+function loadPhoto(slot){
+  const img=new Image();
+  img.crossOrigin='anonymous';
+  img.src=PHOTOS[photoIdx%PHOTOS.length];
+  photoIdx++;
+  img.onload=()=>{
+    slot.innerHTML='';
+    slot.appendChild(img);
+    slot.classList.add('filled');
+    slot.onclick=null;
+    hideHint();
+    showToast('Photo added!');
+  };
+  img.onerror=()=>showToast('Photo loaded!');
+}
+
+function makeEl(inner, extraStyle){
+  const canvas=document.getElementById('canvas');
+  const el=document.createElement('div');
+  el.className='cel';
+  el.style.left=rand(60,420)+'px';
+  el.style.top=rand(40,320)+'px';
+  if(extraStyle)el.style.cssText+=extraStyle;
+  el.innerHTML=`<div class="ctrls"><button class="cbtn" onclick="removeEl(this)" title="Remove">×</button></div>${inner}`;
+  makeDraggable(el);
+  canvas.appendChild(el);
+  history.push(el);
+  document.getElementById('undobtn').style.display='';
+  hideHint();
+  return el;
+}
+
+function placeSticker(emoji){
+  makeEl(`<span class="stk">${emoji}</span>`);
+  showToast(emoji+' placed! Drag it anywhere');
+}
+
+function addText(){
+  makeEl(`<input class="txtel" value="Add your text..." onclick="this.select()" />`);
+  showToast('Text added — click to edit');
+}
+
+function addRibbon(){
+  makeEl(`<div class="ribel" contenteditable="true" spellcheck="false">Our Adventure</div>`);
+  showToast('Ribbon added — click to edit');
+}
+
+function addFrame(){
+  makeEl(`<div class="framel"></div>`);
+  showToast('Frame added!');
+}
+
+function addCap(label){
+  makeEl(`<div class="capbox"><div class="caplbl">${label}</div><textarea class="capta" rows="2" placeholder="Write here..."></textarea></div>`);
+  showToast('"'+label+'" box added');
+}
+
+function removeEl(btn){
+  const el=btn.closest('.cel');
+  const idx=history.indexOf(el);
+  if(idx>-1)history.splice(idx,1);
+  el.remove();
+  if(history.length===0)document.getElementById('undobtn').style.display='none';
+}
+
+function undoLast(){
+  if(history.length===0)return;
+  const last=history.pop();
+  last.remove();
+  if(history.length===0)document.getElementById('undobtn').style.display='none';
+  showToast('Undone');
+}
+
+function makeDraggable(el){
+  el.addEventListener('mousedown',e=>{
+    const t=e.target;
+    if(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='BUTTON'||t.isContentEditable)return;
+    dragging=el;
+    const r=el.getBoundingClientRect();
+    dox=e.clientX-r.left;doy=e.clientY-r.top;
+    e.preventDefault();
+  });
+  el.addEventListener('touchstart',e=>{
+    const t=e.target;
+    if(t.tagName==='INPUT'||t.tagName==='TEXTAREA'||t.tagName==='BUTTON'||t.isContentEditable)return;
+    dragging=el;
+    const touch=e.touches[0];
+    const r=el.getBoundingClientRect();
+    dox=touch.clientX-r.left;doy=touch.clientY-r.top;
+  },{passive:true});
+}
+
+document.addEventListener('mousemove',e=>{
+  if(!dragging)return;
+  const cr=document.getElementById('canvas').getBoundingClientRect();
+  dragging.style.left=(e.clientX-cr.left-dox)+'px';
+  dragging.style.top=(e.clientY-cr.top-doy)+'px';
+});
+document.addEventListener('mouseup',()=>{dragging=null;});
+document.addEventListener('touchmove',e=>{
+  if(!dragging)return;
+  const touch=e.touches[0];
+  const cr=document.getElementById('canvas').getBoundingClientRect();
+  dragging.style.left=(touch.clientX-cr.left-dox)+'px';
+  dragging.style.top=(touch.clientY-cr.top-doy)+'px';
+},{passive:true});
+document.addEventListener('touchend',()=>{dragging=null;});
+
+document.getElementById('privtog').addEventListener('change',function(){
+  document.getElementById('privlbl').textContent=this.checked?'Private':'Shared';
+});
+
+function switchTab(name){
+  document.querySelectorAll('.tab').forEach((b,i)=>b.classList.toggle('on',['layouts','stickers','decor'][i]===name));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('on'));
+  document.getElementById('p-'+name).classList.add('on');
+}
+
+let hintGone=false;
+function hideHint(){
+  if(hintGone)return;
+  hintGone=true;
+  const h=document.getElementById('hint');
+  h.style.opacity='0';
+  setTimeout(()=>h.remove(),600);
+}
+
+let toastTimer=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+buildLayouts();buildBgs();buildStickers();buildPrompts();buildPhotoGrid();
+</script>

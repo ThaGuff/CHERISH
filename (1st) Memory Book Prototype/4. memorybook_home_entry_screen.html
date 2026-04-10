@@ -1,0 +1,417 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body,div{font-family:'DM Sans',sans-serif;}
+
+.outer{display:flex;gap:32px;justify-content:center;align-items:flex-start;padding:1rem 0 2rem;flex-wrap:wrap;}
+
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;position:relative;background:#fff9f5;flex-shrink:0;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:20;}
+
+.screen{display:flex;flex-direction:column;min-height:600px;background:#fff9f5;transition:all 0.3s;}
+
+/* HOME SCREEN */
+.home{padding:34px 18px 18px;flex:1;display:flex;flex-direction:column;}
+.home-top{margin-bottom:18px;}
+.greeting{font-size:12px;color:#b07050;font-weight:500;letter-spacing:0.5px;margin-bottom:2px;}
+.home-title{font-family:'Playfair Display',serif;font-size:22px;color:#3a2a1a;font-weight:600;line-height:1.2;}
+.home-sub{font-size:12px;color:#a09080;margin-top:4px;}
+
+.create-label{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#c09070;margin-bottom:10px;}
+
+.mode-cards{display:flex;flex-direction:column;gap:9px;flex:1;}
+
+.mcard{border-radius:16px;padding:13px 14px;cursor:pointer;border:1.5px solid transparent;transition:all 0.2s;display:flex;align-items:center;gap:12px;position:relative;overflow:hidden;}
+.mcard:active{transform:scale(0.98);}
+
+.mcard-icon{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.mcard-text{flex:1;}
+.mcard-name{font-size:14px;font-weight:500;margin-bottom:1px;}
+.mcard-desc{font-size:11px;line-height:1.4;opacity:0.75;}
+.mcard-arrow{font-size:14px;opacity:0.4;flex-shrink:0;}
+
+.mc-snap{background:#fff3e8;border-color:#f5d5b5;}
+.mc-snap .mcard-icon{background:#fde8d0;}
+.mc-snap .mcard-name{color:#8a4010;}
+.mc-snap .mcard-desc{color:#8a4010;}
+
+.mc-journal{background:#f0f4ff;border-color:#c8d5f5;}
+.mc-journal .mcard-icon{background:#dce6ff;}
+.mc-journal .mcard-name{color:#2a3880;}
+.mc-journal .mcard-desc{color:#2a3880;}
+
+.mc-scrap{background:#f0faf2;border-color:#b8e8c5;}
+.mc-scrap .mcard-icon{background:#d0f0d8;}
+.mc-scrap .mcard-name{color:#1a5a30;}
+.mc-scrap .mcard-desc{color:#1a5a30;}
+
+.mc-full{background:#fdf0ff;border-color:#e0c0f0;}
+.mc-full .mcard-icon{background:#efd8ff;}
+.mc-full .mcard-name{color:#5a1880;}
+.mc-full .mcard-desc{color:#5a1880;}
+
+.streak-bar{display:flex;align-items:center;gap:8px;margin-top:12px;background:rgba(180,120,60,0.1);border-radius:12px;padding:8px 11px;}
+.streak-icon{font-size:16px;}
+.streak-txt{font-size:11px;color:#8a5a30;flex:1;}
+.streak-txt strong{font-weight:500;}
+
+/* JOURNAL TEMPLATE SCREEN */
+.jscreen{padding:34px 16px 16px;flex:1;display:flex;flex-direction:column;background:#f5f0ff;}
+.back-btn{display:flex;align-items:center;gap:5px;font-size:12px;color:#7050c0;cursor:pointer;margin-bottom:14px;background:none;border:none;font-family:'DM Sans',sans-serif;}
+.jscreen-title{font-family:'Playfair Display',serif;font-size:19px;color:#3a1a60;margin-bottom:3px;}
+.jscreen-sub{font-size:11px;color:#9070c0;margin-bottom:14px;}
+.tpl-label{font-size:9px;font-weight:500;letter-spacing:1px;text-transform:uppercase;color:#9070c0;margin-bottom:8px;}
+.tpl-list{display:flex;flex-direction:column;gap:7px;margin-bottom:14px;}
+.tcard{border-radius:12px;padding:10px 13px;cursor:pointer;border:1.5px solid transparent;transition:all 0.18s;display:flex;align-items:center;gap:10px;}
+.tcard:hover{transform:translateY(-1px);}
+.tcard.on{border-width:2px;}
+.tcard-icon{font-size:18px;width:34px;text-align:center;flex-shrink:0;}
+.tcard-info{flex:1;}
+.tcard-name{font-size:13px;font-weight:500;}
+.tcard-hint{font-size:10px;margin-top:1px;opacity:0.7;}
+
+.tc1{background:#fff8f0;border-color:#f0d8b8;}.tc1.on{border-color:#d08030;background:#fff3e0;}
+.tc1 .tcard-name{color:#7a4010;}.tc1 .tcard-hint{color:#9a5020;}
+.tc2{background:#f0f8ff;border-color:#c0d8f8;}.tc2.on{border-color:#3060c0;background:#e8f0ff;}
+.tc2 .tcard-name{color:#1a3070;}.tc2 .tcard-hint{color:#3050a0;}
+.tc3{background:#f8fff0;border-color:#c0e8b0;}.tc3.on{border-color:#408030;background:#f0ffe8;}
+.tc3 .tcard-name{color:#1a5010;}.tc3 .tcard-hint{color:#306020;}
+.tc4{background:#fff0f8;border-color:#f0c0e0;}.tc4.on{border-color:#c03080;background:#ffe8f5;}
+.tc4 .tcard-name{color:#701040;}.tc4 .tcard-hint{color:#901860;}
+.tc5{background:#f8f0ff;border-color:#d0b0f0;}.tc5.on{border-color:#7030c0;background:#f0e8ff;}
+.tc5 .tcard-name{color:#3a1070;}.tc5 .tcard-hint{color:#5a20a0;}
+.tc6{background:#fff8f0;border-color:#e8d0b0;}.tc6.on{border-color:#906020;background:#fff3e0;}
+.tc6 .tcard-name{color:#5a3010;}.tc6 .tcard-hint{color:#7a4820;}
+
+.with-without{display:flex;gap:7px;margin-bottom:14px;}
+.ww-btn{flex:1;padding:8px;border-radius:10px;border:1.5px solid #d0b8f0;background:white;font-size:12px;font-family:'DM Sans',sans-serif;cursor:pointer;color:#7050c0;font-weight:500;transition:all 0.2s;}
+.ww-btn.on{background:#7050c0;color:white;border-color:#7050c0;}
+
+.start-btn{padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#7050c0;color:white;transition:all 0.2s;margin-top:auto;}
+.start-btn:active{transform:scale(0.98);}
+
+/* ENTRY PREVIEW */
+.escreen{padding:34px 16px 16px;flex:1;display:flex;flex-direction:column;}
+.entry-header{margin-bottom:10px;}
+.entry-tpl-badge{display:inline-block;padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;margin-bottom:6px;}
+.entry-title-input{width:100%;border:none;background:none;font-family:'Playfair Display',serif;font-size:19px;color:#2a1a0a;outline:none;padding:2px 0;}
+.entry-date{font-size:11px;color:#a09080;margin-top:2px;}
+.entry-divider{height:0.5px;background:rgba(180,120,60,0.2);margin:8px 0;}
+.prompt-sections{display:flex;flex-direction:column;gap:10px;flex:1;}
+.ps-block{}
+.ps-dot-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.ps-dot{width:7px;height:7px;border-radius:50%;background:#D85A30;opacity:0.5;flex-shrink:0;}
+.ps-lbl{font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#D85A30;opacity:0.8;}
+.ps-ta{width:100%;border:0.5px solid rgba(216,90,48,0.2);border-radius:8px;padding:7px 9px;font-family:'Caveat',cursive;font-size:16px;color:#3a2010;background:rgba(255,249,245,0.8);resize:none;outline:none;line-height:1.5;}
+.ps-ta:focus{border-color:rgba(216,90,48,0.5);}
+.entry-save{padding:12px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#D85A30;color:white;margin-top:10px;}
+</style>
+
+<div class="outer">
+  <div class="phone">
+    <div class="notch"></div>
+
+    <!-- HOME SCREEN -->
+    <div class="screen" id="s-home">
+      <div class="home">
+        <div class="home-top">
+          <div class="greeting">Good afternoon, Sarah 👋</div>
+          <div class="home-title">What would you like<br>to create today?</div>
+          <div class="home-sub">Every moment deserves to be remembered</div>
+        </div>
+
+        <div class="create-label">Choose your experience</div>
+
+        <div class="mode-cards">
+          <div class="mcard mc-snap" onclick="goTo('s-snap')">
+            <div class="mcard-icon">⚡</div>
+            <div class="mcard-text">
+              <div class="mcard-name">Quick snap</div>
+              <div class="mcard-desc">Photo + note in 60 seconds. Perfect for right now.</div>
+            </div>
+            <div class="mcard-arrow">›</div>
+          </div>
+
+          <div class="mcard mc-journal" onclick="goTo('s-journal')">
+            <div class="mcard-icon">📖</div>
+            <div class="mcard-text">
+              <div class="mcard-name">Journal or diary</div>
+              <div class="mcard-desc">Writing-first. Pick a template and pour it out.</div>
+            </div>
+            <div class="mcard-arrow">›</div>
+          </div>
+
+          <div class="mcard mc-scrap" onclick="goTo('s-scrap')">
+            <div class="mcard-icon">🎨</div>
+            <div class="mcard-text">
+              <div class="mcard-name">Scrapbook page</div>
+              <div class="mcard-desc">Design a beautiful page with photos and stickers.</div>
+            </div>
+            <div class="mcard-arrow">›</div>
+          </div>
+
+          <div class="mcard mc-full" onclick="goTo('s-full')">
+            <div class="mcard-icon">✨</div>
+            <div class="mcard-text">
+              <div class="mcard-name">Full memory</div>
+              <div class="mcard-desc">Scrapbook + journal together. The whole story.</div>
+            </div>
+            <div class="mcard-arrow">›</div>
+          </div>
+        </div>
+
+        <div class="streak-bar">
+          <div class="streak-icon">🔥</div>
+          <div class="streak-txt"><strong>7-day streak!</strong> You've captured something every day this week.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- JOURNAL TEMPLATE SCREEN -->
+    <div class="screen" id="s-journal" style="display:none;background:#f5f0ff;">
+      <div class="jscreen">
+        <button class="back-btn" onclick="goTo('s-home')">‹ Back</button>
+        <div class="jscreen-title">Journal or diary</div>
+        <div class="jscreen-sub">Choose a template to get started</div>
+
+        <div class="tpl-label">With or without photos?</div>
+        <div class="with-without">
+          <button class="ww-btn on" id="ww-photo" onclick="setWW('photo')">With photos</button>
+          <button class="ww-btn" id="ww-words" onclick="setWW('words')">Words only</button>
+        </div>
+
+        <div class="tpl-label">Choose a template</div>
+        <div class="tpl-list">
+          <div class="tcard tc1" onclick="selectTpl(this,'Travel day','Where we went • What we did • Favorite moment')">
+            <div class="tcard-icon">✈️</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Travel day</div>
+              <div class="tcard-hint">Where we went • What we did • Favorite moment</div>
+            </div>
+          </div>
+          <div class="tcard tc2" onclick="selectTpl(this,'Daily reflection','How today felt • What I\'m grateful for • Tomorrow')">
+            <div class="tcard-icon">🌙</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Daily reflection</div>
+              <div class="tcard-hint">How today felt • Grateful for • Tomorrow</div>
+            </div>
+          </div>
+          <div class="tcard tc3" onclick="selectTpl(this,'Big milestone','What happened • How I felt • Why it matters')">
+            <div class="tcard-icon">🏆</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Big milestone</div>
+              <div class="tcard-hint">What happened • How I felt • Why it matters</div>
+            </div>
+          </div>
+          <div class="tcard tc4" onclick="selectTpl(this,'Family moment','Who was there • What we did • Memory to keep')">
+            <div class="tcard-icon">👨‍👩‍👧‍👦</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Family moment</div>
+              <div class="tcard-hint">Who was there • What we did • Memory to keep</div>
+            </div>
+          </div>
+          <div class="tcard tc5" onclick="selectTpl(this,'Just a thought','Free writing — no prompts, just you')">
+            <div class="tcard-icon">💭</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Just a thought</div>
+              <div class="tcard-hint">Free writing — no prompts, just you</div>
+            </div>
+          </div>
+          <div class="tcard tc6" onclick="selectTpl(this,'Gratitude','3 things I\'m grateful for today')">
+            <div class="tcard-icon">🙏</div>
+            <div class="tcard-info">
+              <div class="tcard-name">Gratitude</div>
+              <div class="tcard-hint">3 things I'm grateful for today</div>
+            </div>
+          </div>
+        </div>
+
+        <button class="start-btn" id="start-btn" onclick="startEntry()">Start writing →</button>
+      </div>
+    </div>
+
+    <!-- ENTRY WRITING SCREEN -->
+    <div class="screen" id="s-entry" style="display:none;background:#fff9f5;">
+      <div class="escreen">
+        <button class="back-btn" style="color:#b07050;" onclick="goTo('s-journal')">‹ Templates</button>
+        <div class="entry-header">
+          <div class="entry-tpl-badge" id="etpl-badge" style="background:#fff3e0;color:#8a4010;">✈️ Travel day</div>
+          <input class="entry-title-input" id="etitle" placeholder="Give this entry a title..." />
+          <div class="entry-date" id="edate"></div>
+        </div>
+        <div class="entry-divider"></div>
+        <div class="prompt-sections" id="prompt-sections"></div>
+        <button class="entry-save" onclick="goTo('s-home')">Save entry ✓</button>
+      </div>
+    </div>
+
+    <!-- QUICK SNAP SCREEN -->
+    <div class="screen" id="s-snap" style="display:none;background:#fff8f0;">
+      <div style="padding:34px 16px 16px;flex:1;display:flex;flex-direction:column;">
+        <button class="back-btn" style="color:#b07050;" onclick="goTo('s-home')">‹ Back</button>
+        <div style="font-family:'Playfair Display',serif;font-size:19px;color:#4a2010;margin-bottom:3px;">Quick snap</div>
+        <div style="font-size:11px;color:#a07050;margin-bottom:14px;">Capture the moment before it fades</div>
+        <div style="border-radius:14px;background:#fde8d0;height:140px;display:flex;align-items:center;justify-content:center;cursor:pointer;margin-bottom:12px;flex-direction:column;gap:5px;" onclick="this.innerHTML='<img src=https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=400 style=width:100%;height:140px;object-fit:cover;border-radius:14px; />'">
+          <div style="font-size:26px;">📷</div>
+          <div style="font-size:11px;color:#c08060;font-weight:500;">Tap to add photo</div>
+        </div>
+        <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c08060;margin-bottom:5px;">What's happening?</div>
+        <textarea style="border-radius:10px;border:1.5px solid #f0d0b0;background:#fff8f3;padding:9px 11px;font-family:'Caveat',cursive;font-size:17px;color:#3a1800;resize:none;outline:none;margin-bottom:10px;line-height:1.5;" rows="4" placeholder="Just a few words..."></textarea>
+        <div style="display:flex;gap:7px;margin-bottom:12px;">
+          <button style="flex:1;border-radius:10px;padding:8px;background:#fde8d0;border:none;font-size:11px;font-weight:500;color:#8a4010;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="this.style.background='#f5b080';this.textContent='📍 Destin, FL'">📍 Location</button>
+          <button style="flex:1;border-radius:10px;padding:8px;background:#fde8d0;border:none;font-size:11px;font-weight:500;color:#8a4010;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="this.style.background='#f5b080';this.textContent='🎙 Recording…'">🎙 Voice</button>
+        </div>
+        <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c08060;margin-bottom:6px;">Rate this moment</div>
+        <div style="display:flex;gap:6px;margin-bottom:auto;" id="qstars"></div>
+        <button style="margin-top:14px;padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#D85A30;color:white;" onclick="goTo('s-home')">Save ⚡</button>
+      </div>
+    </div>
+
+    <!-- SCRAPBOOK SCREEN -->
+    <div class="screen" id="s-scrap" style="display:none;background:#f0faf2;">
+      <div style="padding:34px 16px 16px;flex:1;display:flex;flex-direction:column;">
+        <button class="back-btn" style="color:#2a6a30;" onclick="goTo('s-home')">‹ Back</button>
+        <div style="font-family:'Playfair Display',serif;font-size:19px;color:#1a4020;margin-bottom:3px;">Scrapbook page</div>
+        <div style="font-size:11px;color:#609050;margin-bottom:14px;">Design a beautiful page to print or keep</div>
+        <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#609050;margin-bottom:8px;">Choose a layout</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:7px;margin-bottom:14px;" id="layout-opts"></div>
+        <div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#609050;margin-bottom:8px;">Add to memory book</div>
+        <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:auto;">
+          <div style="border-radius:10px;background:#d0f0d8;border:1.5px solid #90d0a0;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">📚</span>
+            <div><div style="font-size:12px;font-weight:500;color:#1a5020;">Summer Vacation 2024</div><div style="font-size:10px;color:#4a8050;">12 pages</div></div>
+          </div>
+          <div style="border-radius:10px;background:white;border:1.5px dashed #90d0a0;padding:9px 12px;cursor:pointer;display:flex;align-items:center;gap:8px;">
+            <span style="font-size:16px;">➕</span>
+            <div style="font-size:12px;color:#4a8050;font-weight:500;">Start a new memory book</div>
+          </div>
+        </div>
+        <button style="margin-top:14px;padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#3a8040;color:white;" onclick="goTo('s-home')">Open page builder 🎨</button>
+      </div>
+    </div>
+
+    <!-- FULL MEMORY SCREEN -->
+    <div class="screen" id="s-full" style="display:none;background:#fdf0ff;">
+      <div style="padding:34px 16px 16px;flex:1;display:flex;flex-direction:column;">
+        <button class="back-btn" style="color:#7040b0;" onclick="goTo('s-home')">‹ Back</button>
+        <div style="font-family:'Playfair Display',serif;font-size:19px;color:#3a1060;margin-bottom:3px;">Full memory</div>
+        <div style="font-size:11px;color:#9060c0;margin-bottom:16px;">The complete experience — design + story together</div>
+        <div style="display:flex;flex-direction:column;gap:9px;flex:1;">
+          <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;cursor:pointer;" onclick="this.style.borderColor='#9040e0';this.style.borderWidth='2px';">
+            <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 1</div>
+            <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">🎨 Build your scrapbook page</div>
+            <div style="font-size:11px;color:#7050a0;">Add photos, stickers, frames, captions</div>
+          </div>
+          <div style="text-align:center;font-size:18px;color:#c090e0;">↓</div>
+          <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;cursor:pointer;" onclick="this.style.borderColor='#9040e0';this.style.borderWidth='2px';">
+            <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 2</div>
+            <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">📖 Write your journal entry</div>
+            <div style="font-size:11px;color:#7050a0;">Choose a template and tell the story</div>
+          </div>
+          <div style="text-align:center;font-size:18px;color:#c090e0;">↓</div>
+          <div style="border-radius:14px;background:#f0e4ff;border:1.5px solid #d0a8f0;padding:13px;">
+            <div style="font-size:11px;font-weight:500;color:#7030c0;margin-bottom:3px;">STEP 3</div>
+            <div style="font-size:14px;font-weight:500;color:#3a1060;margin-bottom:2px;">✨ Save to your memory book</div>
+            <div style="font-size:11px;color:#7050a0;">Export, print, or share with family</div>
+          </div>
+        </div>
+        <button style="margin-top:14px;padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#8040d0;color:white;" onclick="goTo('s-home')">Let's create ✨</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="margin-top:8px;text-align:center;">
+    <div style="font-size:10px;color:var(--color-text-tertiary);letter-spacing:0.5px;">Tap any card to explore that screen</div>
+  </div>
+</div>
+
+<div style="max-width:280px;">
+  <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.7;">
+    <strong style="font-size:14px;color:var(--color-text-primary);display:block;margin-bottom:8px;">What you're seeing</strong>
+    Tap each card on the home screen to navigate to that experience. The <em>Journal / Diary</em> screen shows the full template picker — try toggling "With photos" vs "Words only" and selecting different templates, then tap "Start writing" to see the entry screen open up with section prompts already filled in.
+  </div>
+</div>
+
+<script>
+const TEMPLATES={
+  'Travel day':{badge:'✈️ Travel day',badgebg:'#fff3e0',badgec:'#8a4010',sections:['Where we were','What we did','Favorite memory of the day','Who was there','I never want to forget']},
+  'Daily reflection':{badge:'🌙 Daily reflection',badgebg:'#eef0ff',badgec:'#2a3880',sections:['How today felt','Three things I\'m grateful for','Something that surprised me','Tomorrow I want to']},
+  'Big milestone':{badge:'🏆 Big milestone',badgebg:'#f0ffe8',badgec:'#1a5010',sections:['What happened','How I felt in that moment','Why this matters to me','What comes next']},
+  'Family moment':{badge:'👨‍👩‍👧‍👦 Family moment',badgebg:'#fff0f8',badgec:'#701040',sections:['Who was there','What we did together','The moment I want to remember','What I love about these people']},
+  'Just a thought':{badge:'💭 Free write',badgebg:'#f8f0ff',badgec:'#3a1070',sections:['Whatever\'s on your mind...']},
+  'Gratitude':{badge:'🙏 Gratitude',badgebg:'#fff8f0',badgec:'#5a3010',sections:['I\'m grateful for...','Something small I noticed today','A person I appreciate right now']},
+};
+
+let selTpl='Travel day';
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+  document.getElementById(id).style.display='flex';
+}
+
+function setWW(mode){
+  document.getElementById('ww-photo').classList.toggle('on',mode==='photo');
+  document.getElementById('ww-words').classList.toggle('on',mode==='words');
+}
+
+function selectTpl(el,name){
+  document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('on'));
+  el.classList.add('on');
+  selTpl=name;
+}
+
+function startEntry(){
+  const t=TEMPLATES[selTpl]||TEMPLATES['Travel day'];
+  document.getElementById('etpl-badge').textContent=t.badge;
+  document.getElementById('etpl-badge').style.background=t.badgebg;
+  document.getElementById('etpl-badge').style.color=t.badgec;
+  document.getElementById('etitle').value='';
+  const now=new Date();
+  document.getElementById('edate').textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
+  const ps=document.getElementById('prompt-sections');
+  ps.innerHTML='';
+  t.sections.forEach(sec=>{
+    const b=document.createElement('div');
+    b.className='ps-block';
+    b.innerHTML=`<div class="ps-dot-row"><div class="ps-dot"></div><div class="ps-lbl">${sec}</div></div><textarea class="ps-ta" rows="2" placeholder="Write here..."></textarea>`;
+    ps.appendChild(b);
+  });
+  goTo('s-entry');
+}
+
+function buildLayouts(){
+  const SHAPES=[
+    [[1,'1/1','1/1']],
+    [[1,'1/2','1/1'],[1,'2/3','1/1']],
+    [[1,'1/3','1/1'],[1,'1/2','2/3'],[1,'2/3','2/3']],
+  ];
+  const cont=document.getElementById('layout-opts');
+  SHAPES.forEach((shape,i)=>{
+    const wrap=document.createElement('div');
+    wrap.style.cssText='border-radius:8px;border:1.5px solid #b0d8b8;background:white;padding:5px;cursor:pointer;transition:border-color 0.15s;aspect-ratio:1;';
+    wrap.onclick=()=>{document.querySelectorAll('#layout-opts > div').forEach(d=>d.style.borderColor='#b0d8b8');wrap.style.borderColor='#3a8040';};
+    const grid=document.createElement('div');
+    grid.style.cssText='display:grid;grid-template-columns:1fr 1fr 1fr;gap:2px;height:100%;';
+    shape.forEach(([_,col,row])=>{
+      const c=document.createElement('div');
+      c.style.cssText=`background:#a0d8b0;border-radius:3px;grid-column:${col};grid-row:${row};`;
+      grid.appendChild(c);
+    });
+    wrap.appendChild(grid);cont.appendChild(wrap);
+  });
+}
+
+function buildQStars(){
+  const row=document.getElementById('qstars');
+  let r=0;
+  for(let i=1;i<=5;i++){
+    const s=document.createElement('span');
+    s.textContent='⭐';s.style.cssText='font-size:22px;cursor:pointer;opacity:0.3;transition:all 0.15s;';
+    s.onclick=(v=>()=>{r=v;document.querySelectorAll('#qstars span').forEach((x,j)=>x.style.opacity=j<v?'1':'0.3');})(i);
+    row.appendChild(s);
+  }
+}
+
+buildLayouts();buildQStars();
+</script>

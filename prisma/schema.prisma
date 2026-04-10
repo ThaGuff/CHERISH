@@ -1,0 +1,375 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── USERS & AUTH ──────────────────────────────────────
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  avatarUrl     String?
+  theme         Theme    @default(MINIMAL)
+  useCases      String[] @default([])
+  role          Role     @default(USER)
+  tier          Tier     @default(FREE)
+  stripeId      String?  @unique
+  streakCount   Int      @default(0)
+  streakLastAt  DateTime?
+  onboarded     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  memoryBooks       MemoryBook[]
+  memories          Memory[]
+  voiceMemos        VoiceMemo[]
+  familyCircles     FamilyCircleMember[]
+  sharedMemories    SharedMemory[]
+  reactions         Reaction[]
+  subscriptions     Subscription[]
+
+  @@map("users")
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum Tier {
+  FREE
+  PRO_MONTHLY
+  PRO_ANNUAL
+  FAMILY_ANNUAL
+  FOUNDING
+}
+
+enum Theme {
+  MINIMAL
+  JOURNAL
+  PLAYFUL
+  PREMIUM
+}
+
+// ─── MEMORY BOOKS ──────────────────────────────────────
+
+model MemoryBook {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  coverColor  String   @default("#c84820")
+  theme       Theme    @default(MINIMAL)
+  isDefault   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memories Memory[]
+
+  @@index([userId])
+  @@map("memory_books")
+}
+
+// ─── MEMORIES (polymorphic parent) ─────────────────────
+
+model Memory {
+  id           String       @id @default(uuid())
+  userId       String
+  bookId       String?
+  type         MemoryType
+  title        String?
+  privacy      Privacy      @default(PRIVATE)
+  starred      Boolean      @default(false)
+  location     String?
+  date         DateTime     @default(now())
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  book         MemoryBook?  @relation(fields: [bookId], references: [id], onDelete: SetNull)
+
+  quickSnap    QuickSnap?
+  journalEntry JournalEntry?
+  scrapPage    ScrapbookPage?
+  visionBoard  VisionBoard?
+  creativePost CreativePost?
+
+  photos       Photo[]
+  voiceMemos   VoiceMemo[]
+  tags         Tag[]
+  sharedIn     SharedMemory[]
+  reactions    Reaction[]
+
+  @@index([userId, type])
+  @@index([bookId])
+  @@index([date])
+  @@map("memories")
+}
+
+enum MemoryType {
+  QUICK_SNAP
+  JOURNAL
+  SCRAPBOOK
+  FULL_MEMORY
+  VISION_BOARD
+  CREATIVE
+}
+
+enum Privacy {
+  PRIVATE
+  FAMILY_CIRCLE
+  LINK_ONLY
+  PUBLIC
+}
+
+// ─── QUICK SNAP ────────────────────────────────────────
+
+model QuickSnap {
+  id         String   @id @default(uuid())
+  memoryId   String   @unique
+  note       String?
+  whoWasThere String[] @default([])
+  starRating Int      @default(0)
+  mood       String?
+
+  memory     Memory   @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@map("quick_snaps")
+}
+
+// ─── JOURNAL ENTRY ─────────────────────────────────────
+
+model JournalEntry {
+  id          String          @id @default(uuid())
+  memoryId    String          @unique
+  template    JournalTemplate @default(FREE_WRITE)
+  content     Json            // Rich text / structured sections
+  mood        String?
+  withPhotos  Boolean         @default(false)
+
+  memory      Memory          @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@map("journal_entries")
+}
+
+enum JournalTemplate {
+  TRAVEL_DAY
+  DAILY_REFLECTION
+  BIG_MILESTONE
+  FAMILY_MOMENT
+  GRATITUDE
+  FREE_WRITE
+}
+
+// ─── SCRAPBOOK PAGE ────────────────────────────────────
+
+model ScrapbookPage {
+  id          String  @id @default(uuid())
+  memoryId    String  @unique
+  layout      String  @default("grid-2x2")
+  canvasData  Json    // Full canvas state: elements, positions, sizes, stickers, frames, ribbons, captions
+  bgColor     String  @default("#ffffff")
+  template    String? // Pre-built template ID if used
+
+  memory      Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@map("scrapbook_pages")
+}
+
+// ─── VISION BOARD ──────────────────────────────────────
+
+model VisionBoard {
+  id          String  @id @default(uuid())
+  memoryId    String  @unique
+  canvasType  String  @default("free_canvas")  // free_canvas, vision_board, magazine_collage, photo_collage, goal_board
+  canvasData  Json
+  
+  memory      Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@map("vision_boards")
+}
+
+// ─── CREATIVE POST ─────────────────────────────────────
+
+model CreativePost {
+  id          String  @id @default(uuid())
+  memoryId    String  @unique
+  subType     String  @default("blog_post")  // blog_post, short_story, song_lyrics, idea_dump, content_calendar, voice_to_text
+  content     Json
+  
+  memory      Memory  @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@map("creative_posts")
+}
+
+// ─── PHOTOS ────────────────────────────────────────────
+
+model Photo {
+  id        String   @id @default(uuid())
+  memoryId  String
+  url       String
+  thumbUrl  String?
+  caption   String?
+  width     Int?
+  height    Int?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  memory    Memory   @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@index([memoryId])
+  @@map("photos")
+}
+
+// ─── VOICE MEMOS ───────────────────────────────────────
+
+model VoiceMemo {
+  id           String   @id @default(uuid())
+  userId       String
+  memoryId     String?
+  audioUrl     String
+  transcript   String?
+  duration     Int?     // seconds
+  mode         String   @default("memory_note") // memory_note, song_idea, journal_entry, quick_thought
+  createdAt    DateTime @default(now())
+
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memory       Memory?  @relation(fields: [memoryId], references: [id], onDelete: SetNull)
+
+  @@index([userId])
+  @@map("voice_memos")
+}
+
+// ─── TAGS ──────────────────────────────────────────────
+
+model Tag {
+  id        String   @id @default(uuid())
+  name      String
+  memoryId  String
+
+  memory    Memory   @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@unique([memoryId, name])
+  @@map("tags")
+}
+
+// ─── FAMILY CIRCLES ────────────────────────────────────
+
+model FamilyCircle {
+  id        String   @id @default(uuid())
+  name      String
+  ownerId   String
+  createdAt DateTime @default(now())
+
+  members   FamilyCircleMember[]
+  shared    SharedMemory[]
+
+  @@map("family_circles")
+}
+
+model FamilyCircleMember {
+  id        String   @id @default(uuid())
+  circleId  String
+  userId    String
+  role      String   @default("member") // owner, admin, member
+  joinedAt  DateTime @default(now())
+
+  circle    FamilyCircle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([circleId, userId])
+  @@map("family_circle_members")
+}
+
+model SharedMemory {
+  id        String   @id @default(uuid())
+  memoryId  String
+  circleId  String
+  sharedBy  String
+  sharedAt  DateTime @default(now())
+
+  memory    Memory       @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  circle    FamilyCircle @relation(fields: [circleId], references: [id], onDelete: Cascade)
+  user      User         @relation(fields: [sharedBy], references: [id], onDelete: Cascade)
+
+  @@unique([memoryId, circleId])
+  @@map("shared_memories")
+}
+
+model Reaction {
+  id        String   @id @default(uuid())
+  memoryId  String
+  userId    String
+  type      String   @default("love") // love, comment
+  comment   String?
+  createdAt DateTime @default(now())
+
+  memory    Memory   @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reactions")
+}
+
+// ─── SUBSCRIPTIONS ─────────────────────────────────────
+
+model Subscription {
+  id                String   @id @default(uuid())
+  userId            String
+  stripeSubId       String   @unique
+  stripePriceId     String
+  status            String   @default("active")
+  currentPeriodEnd  DateTime
+  cancelAtPeriodEnd Boolean  @default(false)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("subscriptions")
+}
+
+// ─── PRE-BUILT TEMPLATES (admin-managed) ───────────────
+
+model ScrapbookTemplate {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // vacation, birthday, holiday, baby, wedding, everyday
+  thumbnail   String?
+  canvasData  Json
+  isPremium   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  @@map("scrapbook_templates")
+}
+
+model StickerPack {
+  id          String   @id @default(uuid())
+  name        String
+  category    String   // travel, holiday, baby, wedding, seasonal, everyday
+  isPremium   Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  stickers    Sticker[]
+
+  @@map("sticker_packs")
+}
+
+model Sticker {
+  id        String  @id @default(uuid())
+  packId    String
+  name      String
+  url       String
+  category  String?
+
+  pack      StickerPack @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@map("stickers")
+}

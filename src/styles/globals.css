@@ -1,0 +1,123 @@
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Caveat:wght@400;500;600&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --cherish-primary: #c84820;
+  --cherish-primary-dark: #993c1d;
+  --cherish-primary-light: #fff3ef;
+  --cherish-bg: #fffaf7;
+  --cherish-text: #2c1a0a;
+  --cherish-text-secondary: #9a7060;
+  --cherish-border: #f0ddd0;
+  --cherish-accent: #e8d0c0;
+}
+
+@layer base {
+  body {
+    @apply bg-cherish-50 text-cherish-900 font-body antialiased;
+  }
+
+  ::selection {
+    background-color: rgba(200, 72, 32, 0.15);
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-cherish-500 hover:bg-cherish-600 text-white font-medium 
+           rounded-[14px] px-6 py-3 transition-all duration-150 
+           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .btn-outline {
+    @apply border-2 border-cherish-300 text-cherish-500 font-medium 
+           rounded-[14px] px-6 py-3 transition-all duration-150 
+           hover:bg-cherish-100 active:scale-[0.98];
+  }
+
+  .btn-ghost {
+    @apply text-cherish-500 font-medium rounded-[14px] px-4 py-2 
+           transition-all duration-150 hover:bg-cherish-100;
+  }
+
+  .card {
+    @apply bg-white border border-cherish-300/50 rounded-card p-4 
+           shadow-sm transition-all duration-150;
+  }
+
+  .card-hover {
+    @apply card hover:shadow-md hover:-translate-y-0.5 cursor-pointer;
+  }
+
+  .input-field {
+    @apply w-full border-[1.5px] border-cherish-300 rounded-[10px] 
+           px-3 py-2.5 text-sm font-body text-cherish-900 bg-white 
+           outline-none transition-colors duration-150 
+           focus:border-cherish-500 placeholder:text-cherish-400/60;
+  }
+
+  .label-upper {
+    @apply text-[10px] font-medium tracking-wider uppercase text-cherish-400;
+  }
+
+  .mode-card {
+    @apply rounded-card p-3 cursor-pointer border-[1.5px] border-transparent 
+           transition-all duration-150 flex items-center gap-3 
+           active:scale-[0.98] hover:-translate-y-0.5;
+  }
+
+  .page-container {
+    @apply max-w-lg mx-auto px-4 pb-24;
+  }
+
+  .bottom-nav-spacer {
+    @apply h-20;
+  }
+}
+
+/* Smooth page transitions */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-in {
+  animation: fadeInUp 0.35s ease-out;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--cherish-accent);
+  border-radius: 3px;
+}
+
+/* Toast animations */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.toast-enter {
+  animation: slideUp 0.3s ease-out;
+}

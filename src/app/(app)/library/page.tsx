@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/supabase-server";
 import { redirect } from "next/navigation";

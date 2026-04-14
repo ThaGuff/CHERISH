@@ -1,123 +1,170 @@
-@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Caveat:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,500&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700&family=Caveat:wght@400;500;600;700&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --cherish-primary: #c84820;
-  --cherish-primary-dark: #993c1d;
-  --cherish-primary-light: #fff3ef;
-  --cherish-bg: #fffaf7;
-  --cherish-text: #2c1a0a;
-  --cherish-text-secondary: #9a7060;
-  --cherish-border: #f0ddd0;
-  --cherish-accent: #e8d0c0;
+  --c-primary: #c84820;
+  --c-primary-dark: #993c1d;
+  --c-primary-light: #fff3ef;
+  --c-bg: #fffaf7;
+  --c-text: #2c1a0a;
+  --c-text-secondary: #9a7060;
+  --c-border: #f0ddd0;
+  --c-accent: #e8d0c0;
+  --c-gold: #d4a04a;
+  --c-shadow: rgba(200, 72, 32, 0.08);
 }
 
 @layer base {
   body {
     @apply bg-cherish-50 text-cherish-900 font-body antialiased;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
-
-  ::selection {
-    background-color: rgba(200, 72, 32, 0.15);
-  }
+  ::selection { background-color: rgba(200, 72, 32, 0.12); }
+  * { @apply scroll-smooth; }
 }
 
 @layer components {
   .btn-primary {
-    @apply bg-cherish-500 hover:bg-cherish-600 text-white font-medium 
-           rounded-[14px] px-6 py-3 transition-all duration-150 
-           active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-cherish-500 hover:bg-cherish-600 text-white font-semibold
+           rounded-2xl px-6 py-3.5 transition-all duration-200
+           active:scale-[0.97] disabled:opacity-50 disabled:cursor-not-allowed
+           shadow-md shadow-cherish-500/15 hover:shadow-lg hover:shadow-cherish-500/20
+           hover:-translate-y-0.5;
   }
-
   .btn-outline {
-    @apply border-2 border-cherish-300 text-cherish-500 font-medium 
-           rounded-[14px] px-6 py-3 transition-all duration-150 
-           hover:bg-cherish-100 active:scale-[0.98];
+    @apply border-2 border-cherish-300 text-cherish-600 font-semibold
+           rounded-2xl px-6 py-3.5 transition-all duration-200
+           hover:bg-cherish-100 hover:border-cherish-400 active:scale-[0.97];
   }
-
   .btn-ghost {
-    @apply text-cherish-500 font-medium rounded-[14px] px-4 py-2 
-           transition-all duration-150 hover:bg-cherish-100;
+    @apply text-cherish-600 font-medium rounded-xl px-4 py-2
+           transition-all duration-200 hover:bg-cherish-100;
   }
-
   .card {
-    @apply bg-white border border-cherish-300/50 rounded-card p-4 
-           shadow-sm transition-all duration-150;
+    @apply bg-white border border-cherish-300/40 rounded-2xl p-5
+           shadow-sm transition-all duration-200;
   }
-
   .card-hover {
-    @apply card hover:shadow-md hover:-translate-y-0.5 cursor-pointer;
+    @apply card hover:shadow-lg hover:shadow-cherish-500/5 hover:-translate-y-1
+           cursor-pointer active:scale-[0.98];
   }
-
+  .card-glass {
+    @apply bg-white/70 backdrop-blur-xl border border-white/50 rounded-2xl p-5
+           shadow-lg shadow-black/5;
+  }
   .input-field {
-    @apply w-full border-[1.5px] border-cherish-300 rounded-[10px] 
-           px-3 py-2.5 text-sm font-body text-cherish-900 bg-white 
-           outline-none transition-colors duration-150 
-           focus:border-cherish-500 placeholder:text-cherish-400/60;
+    @apply w-full border-[1.5px] border-cherish-300/70 rounded-xl
+           px-4 py-3 text-sm font-body text-cherish-900 bg-white/80
+           outline-none transition-all duration-200
+           focus:border-cherish-500 focus:ring-4 focus:ring-cherish-500/10
+           placeholder:text-cherish-400/50;
   }
-
   .label-upper {
-    @apply text-[10px] font-medium tracking-wider uppercase text-cherish-400;
+    @apply text-[10px] font-semibold tracking-[0.12em] uppercase text-cherish-400;
   }
-
   .mode-card {
-    @apply rounded-card p-3 cursor-pointer border-[1.5px] border-transparent 
-           transition-all duration-150 flex items-center gap-3 
-           active:scale-[0.98] hover:-translate-y-0.5;
+    @apply rounded-2xl p-4 cursor-pointer border-[1.5px] border-transparent
+           transition-all duration-200 flex items-center gap-4
+           active:scale-[0.97] hover:-translate-y-1 hover:shadow-lg;
   }
-
   .page-container {
-    @apply max-w-lg mx-auto px-4 pb-24;
+    @apply max-w-lg mx-auto px-5 pb-24;
   }
-
   .bottom-nav-spacer {
-    @apply h-20;
+    @apply h-24;
+  }
+  .section-title {
+    @apply font-display text-3xl md:text-4xl font-bold text-cherish-900 leading-[1.15];
+  }
+  .badge {
+    @apply text-[9px] font-bold px-2 py-0.5 rounded-full tracking-wide;
+  }
+  .stat-card {
+    @apply card text-center !p-4;
+  }
+  .glass-nav {
+    @apply bg-white/80 backdrop-blur-2xl border-b border-cherish-300/20;
   }
 }
 
-/* Smooth page transitions */
+/* Animations */
 @keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(12px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-
-.animate-in {
-  animation: fadeInUp 0.35s ease-out;
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
-
-/* Scrollbar styling */
-::-webkit-scrollbar {
-  width: 6px;
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
 }
-::-webkit-scrollbar-track {
-  background: transparent;
-}
-::-webkit-scrollbar-thumb {
-  background: var(--cherish-accent);
-  border-radius: 3px;
-}
-
-/* Toast animations */
 @keyframes slideUp {
-  from {
-    opacity: 0;
-    transform: translateY(100%);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  from { opacity: 0; transform: translateY(100%); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(200, 72, 32, 0.2); }
+  50% { box-shadow: 0 0 0 12px rgba(200, 72, 32, 0); }
 }
 
-.toast-enter {
-  animation: slideUp 0.3s ease-out;
+.animate-in { animation: fadeInUp 0.4s ease-out; }
+.animate-fade { animation: fadeIn 0.3s ease-out; }
+.animate-scale { animation: scaleIn 0.3s ease-out; }
+.animate-float { animation: float 3s ease-in-out infinite; }
+.animate-pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+
+/* Stagger children */
+.stagger-in > * {
+  animation: fadeInUp 0.4s ease-out both;
+}
+.stagger-in > *:nth-child(1) { animation-delay: 0ms; }
+.stagger-in > *:nth-child(2) { animation-delay: 60ms; }
+.stagger-in > *:nth-child(3) { animation-delay: 120ms; }
+.stagger-in > *:nth-child(4) { animation-delay: 180ms; }
+.stagger-in > *:nth-child(5) { animation-delay: 240ms; }
+.stagger-in > *:nth-child(6) { animation-delay: 300ms; }
+.stagger-in > *:nth-child(7) { animation-delay: 360ms; }
+.stagger-in > *:nth-child(8) { animation-delay: 420ms; }
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--c-accent); border-radius: 3px; }
+
+/* Toast */
+.toast-enter { animation: slideUp 0.3s ease-out; }
+
+/* Grain texture overlay */
+.grain::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.03;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Focus ring for accessibility */
+*:focus-visible {
+  @apply outline-none ring-2 ring-cherish-500 ring-offset-2;
 }

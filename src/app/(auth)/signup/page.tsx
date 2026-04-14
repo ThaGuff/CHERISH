@@ -16,31 +16,51 @@ export default function SignupPage() {
     setError("");
     setLoading(true);
 
-    const supabase = createSupabaseBrowser();
+    try {
+      const supabase = createSupabaseBrowser();
 
-    const { error: authError } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { name },
-        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
+      // 1. Create Supabase auth user
+      const { data, error: authError } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          data: { name },
+        },
+      });
 
-    if (authError) {
-      setError(authError.message);
+      if (authError) {
+        setError(authError.message);
+        setLoading(false);
+        return;
+      }
+
+      if (!data.user) {
+        setError("Signup failed. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // 2. Create user record in our database
+      const dbRes = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email }),
+      });
+
+      if (!dbRes.ok) {
+        const errData = await dbRes.json();
+        setError(errData.error || "Failed to create profile. Please try again.");
+        setLoading(false);
+        return;
+      }
+
+      // 3. Redirect to onboarding
+      window.location.href = "/onboarding";
+    } catch (err) {
+      console.error("Signup error:", err);
+      setError("Something went wrong. Please try again.");
       setLoading(false);
-      return;
     }
-
-    // Create user record via API
-    await fetch("/api/auth/signup", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name, email }),
-    });
-
-    window.location.href = "/onboarding";
   }
 
   return (
@@ -90,21 +110,17 @@ export default function SignupPage() {
         </div>
 
         {error && (
-          <p className="text-red-500 text-sm bg-red-50 p-3 rounded-xl">
-            {error}
-          </p>
+          <p className="text-red-600 text-sm bg-red-50 p-3 rounded-xl">{error}</p>
         )}
 
         <button type="submit" className="btn-primary w-full" disabled={loading}>
-          {loading ? "Creating account..." : "Continue →"}
+          {loading ? "Creating account..." : "Create Free Account →"}
         </button>
       </form>
 
       <p className="text-center text-sm text-cherish-900/50 mt-6">
         Already have an account?{" "}
-        <Link href="/login" className="text-cherish-500 font-medium">
-          Sign in
-        </Link>
+        <Link href="/login" className="text-cherish-500 font-medium">Sign in</Link>
       </p>
     </div>
   );

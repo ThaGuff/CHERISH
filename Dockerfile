@@ -30,6 +30,7 @@ RUN npm run build
 
 # Production image
 FROM base AS runner
+RUN apk add --no-cache openssl
 WORKDIR /app
 
 ENV NODE_ENV=production

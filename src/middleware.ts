@@ -2,7 +2,7 @@ import { type NextRequest, NextResponse } from "next/server";
 import { updateSession } from "@/lib/supabase-middleware";
 
 export async function middleware(request: NextRequest) {
-  // Skip middleware entirely if Supabase isn't configured yet
+  // Skip middleware if Supabase isn't configured
   if (
     !process.env.NEXT_PUBLIC_SUPABASE_URL ||
     !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
@@ -10,18 +10,21 @@ export async function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  return await updateSession(request);
+  // Skip for the landing page
+  if (request.nextUrl.pathname === "/") {
+    return NextResponse.next();
+  }
+
+  try {
+    return await updateSession(request);
+  } catch (error) {
+    console.error("Middleware error:", error);
+    return NextResponse.next();
+  }
 }
 
 export const config = {
   matcher: [
-    /*
-     * Match all routes EXCEPT:
-     * - / (landing page)
-     * - /api/health
-     * - /api/stripe-webhook
-     * - static files and images
-     */
     "/((?!_next/static|_next/image|favicon.ico|icon.svg|robots.txt|images|stickers|api/health|api/stripe-webhook|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
   ],
 };

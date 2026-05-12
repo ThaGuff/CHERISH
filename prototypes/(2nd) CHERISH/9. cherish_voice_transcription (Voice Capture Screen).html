@@ -1,0 +1,439 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;gap:28px;justify-content:center;align-items:flex-start;padding:1rem 0 2rem;flex-wrap:wrap;font-family:'DM Sans',sans-serif;}
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;background:#fffaf7;flex-shrink:0;position:relative;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;}
+
+.screen{min-height:600px;background:#fffaf7;display:flex;flex-direction:column;padding:34px 16px 20px;}
+.back-btn{display:flex;align-items:center;gap:4px;font-size:12px;color:#b07050;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:12px;}
+.screen-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#2c1a0a;margin-bottom:2px;}
+.screen-sub{font-size:11px;color:#a07050;margin-bottom:16px;line-height:1.5;}
+
+/* MODE PILLS */
+.mode-row{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap;}
+.mpill{padding:5px 12px;border-radius:20px;border:1px solid #e8d0c0;background:white;font-size:11px;color:#8a6050;cursor:pointer;font-weight:500;transition:all 0.15s;font-family:'DM Sans',sans-serif;}
+.mpill.on{background:#c84820;color:white;border-color:#c84820;}
+
+/* VOICE RECORDER */
+.recorder{border-radius:16px;padding:16px;margin-bottom:12px;transition:background 0.3s;}
+.rec-idle{background:#fff0e8;border:1.5px solid #f5d0b8;}
+.rec-active{background:#fdf0ff;border:1.5px solid #d090f0;}
+.rec-done{background:#f0fff5;border:1.5px solid #90d8b0;}
+
+.rec-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.rec-label{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;}
+.rec-label.active{color:#9040c0;}
+.rec-label.done{color:#1a7a40;}
+.rec-timer{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#c84820;}
+.rec-timer.active{color:#9040c0;}
+
+/* WAVEFORM */
+.waveform{display:flex;align-items:center;justify-content:center;gap:2px;height:36px;margin-bottom:12px;}
+.wave-bar{width:3px;border-radius:2px;background:#e8c0a8;transition:height 0.1s;}
+.waveform.active .wave-bar{background:#c060e0;}
+.waveform.done .wave-bar{background:#40b870;}
+
+/* MIC BUTTON */
+.mic-row{display:flex;align-items:center;gap:10px;}
+.mic-btn{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;border:none;transition:all 0.2s;flex-shrink:0;}
+.mic-idle{background:#c84820;color:white;}
+.mic-idle:hover{background:#993c1d;}
+.mic-active{background:#9040c0;color:white;animation:pulse 1s infinite;}
+.mic-done{background:#2a8a50;color:white;}
+@keyframes pulse{0%,100%{transform:scale(1);}50%{transform:scale(1.08);}}
+.mic-hint{font-size:12px;color:#a07050;line-height:1.5;}
+.mic-hint.active{color:#7030a0;}
+.mic-hint.done{color:#1a6a30;}
+
+/* TRANSCRIPTION */
+.transcription-box{border-radius:12px;background:white;border:1px solid #e8d0c0;padding:11px 13px;margin-bottom:10px;min-height:70px;transition:border-color 0.2s;}
+.transcription-box.active{border-color:#c060e0;}
+.transcription-box.done{border-color:#40b870;}
+.trans-label{font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:5px;display:flex;align-items:center;gap:5px;}
+.trans-label.active{color:#9040c0;}
+.trans-label.done{color:#1a7a40;}
+.trans-dot{width:6px;height:6px;border-radius:50%;background:#c84820;}
+.trans-dot.active{background:#9040c0;animation:blink 1s infinite;}
+.trans-dot.done{background:#2a8a50;animation:none;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0.3;}}
+.trans-text{font-family:'Caveat',cursive;font-size:16px;color:#3a2010;line-height:1.6;min-height:36px;}
+.trans-placeholder{font-family:'Caveat',cursive;font-size:15px;color:#c0a890;font-style:italic;}
+.cursor{display:inline-block;width:2px;height:16px;background:#9040c0;margin-left:2px;vertical-align:middle;animation:blink 0.7s infinite;}
+
+/* AUDIO SAVED */
+.audio-saved{display:flex;align-items:center;gap:8px;background:#f0fff5;border:0.5px solid #90d8b0;border-radius:10px;padding:8px 10px;margin-bottom:10px;}
+.audio-play{width:28px;height:28px;border-radius:50%;background:#2a8a50;color:white;display:flex;align-items:center;justify-content:center;font-size:12px;cursor:pointer;border:none;flex-shrink:0;}
+.audio-info{flex:1;}
+.audio-title{font-size:11px;font-weight:500;color:#1a5a30;}
+.audio-dur{font-size:10px;color:#4a8a60;}
+.audio-wave{display:flex;align-items:center;gap:1.5px;height:16px;}
+.aw-bar{width:2px;border-radius:1px;background:#70c890;}
+
+/* SEGMENTS */
+.segments{display:flex;flex-direction:column;gap:6px;margin-bottom:12px;}
+.seg{border-radius:10px;padding:8px 10px;border:0.5px solid #e8d0c0;background:white;display:flex;gap:8px;align-items:flex-start;}
+.seg-time{font-size:9px;color:#c0a090;margin-top:2px;white-space:nowrap;}
+.seg-text{font-family:'Caveat',cursive;font-size:14px;color:#3a2010;line-height:1.5;flex:1;}
+.seg-tag{font-size:9px;padding:2px 6px;border-radius:6px;margin-top:2px;white-space:nowrap;}
+
+/* AVAILABLE IN */
+.available-in{background:#f5f0ff;border-radius:12px;padding:10px 12px;margin-bottom:12px;}
+.ai-label{font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#7050c0;margin-bottom:7px;}
+.ai-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.ai-chip{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;}
+
+/* SAVE BTN */
+.save-btn{padding:13px;border-radius:14px;font-size:14px;font-weight:600;cursor:pointer;border:none;width:100%;font-family:'DM Sans',sans-serif;background:#c84820;color:white;transition:all 0.2s;}
+.save-btn:hover{background:#993c1d;}
+.save-btn:active{transform:scale(0.98);}
+</style>
+
+<div class="wrap">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="main-screen">
+      <div class="screen-title">Voice capture</div>
+      <div class="screen-sub">Speak freely. Cherish listens, records, and transcribes every word — even your hummed melodies.</div>
+
+      <div class="mode-row" id="mode-row"></div>
+
+      <div class="recorder rec-idle" id="recorder">
+        <div class="rec-top">
+          <div class="rec-label" id="rec-label">Ready to record</div>
+          <div class="rec-timer" id="rec-timer">0:00</div>
+        </div>
+        <div class="waveform" id="waveform"></div>
+        <div class="mic-row">
+          <button class="mic-btn mic-idle" id="mic-btn" onclick="toggleRec()">🎙</button>
+          <div class="mic-hint" id="mic-hint">Tap to start recording. Speak naturally — Cherish will transcribe as you go.</div>
+        </div>
+      </div>
+
+      <div class="transcription-box" id="trans-box">
+        <div class="trans-label" id="trans-label">
+          <div class="trans-dot" id="trans-dot"></div>
+          <span id="trans-label-txt">Transcription</span>
+        </div>
+        <div id="trans-content"><div class="trans-placeholder">Your words will appear here as you speak...</div></div>
+      </div>
+
+      <div id="audio-saved-area"></div>
+      <div id="segments-area"></div>
+
+      <div class="available-in">
+        <div class="ai-label">Available in these modes</div>
+        <div class="ai-chips" id="ai-chips"></div>
+      </div>
+
+      <button class="save-btn" id="save-btn" onclick="handleSave()">Start recording first</button>
+    </div>
+  </div>
+
+  <div style="max-width:240px;">
+    <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.8;">
+      <strong style="font-size:14px;color:var(--color-text-primary);display:block;margin-bottom:10px;">How it works</strong>
+      Tap the microphone to start. As you speak, your words appear in real time in the transcription box below — just like live captions.<br><br>
+      When you stop, Cherish saves <strong style="font-weight:500;">both</strong> the original audio recording AND the full text transcript. You can play back the audio anytime or read the transcript like a journal entry.<br><br>
+      Switch between <span style="color:#c84820;font-weight:500;">Memory</span>, <span style="color:#9040c0;font-weight:500;">Song idea</span>, and <span style="color:#1a7a40;font-weight:500;">Journal</span> mode at the top to see how it adapts.<br><br>
+      The technology behind this is <strong style="font-weight:500;">OpenAI Whisper</strong> — it handles any accent, background noise, babies crying, and even hummed melodies with timestamps.
+    </div>
+  </div>
+</div>
+
+<script>
+const MODES=[
+  {key:'memory',label:'Memory note',color:'#c84820',lightbg:'#fff0e8',lightbc:'#f5d0b8'},
+  {key:'song',label:'Song idea / hum',color:'#9040c0',lightbg:'#fdf0ff',lightbc:'#d090f0'},
+  {key:'journal',label:'Journal entry',color:'#1a7a40',lightbg:'#f0fff5',lightbc:'#90d8b0'},
+  {key:'quick',label:'Quick thought',color:'#1a5aa0',lightbg:'#f0f5ff',lightbc:'#90b8f0'},
+];
+
+const SAMPLE_TRANSCRIPTS={
+  memory:[
+    "Okay so we just got to the aquarium and the kids are completely losing their minds —",
+    " Lily literally grabbed my arm when the whale shark swam over.",
+    " It was huge, like bigger than I imagined.",
+    " Jordan said it looked like a bus and honestly that's about right.",
+    " The light in here is incredible too, everything is this deep blue.",
+    " I want to remember this exact moment. The look on their faces."
+  ],
+  song:[
+    "Okay I've got this melody stuck in my head —",
+    " ♪ da da dum da da da ♪ kind of like a slow build,",
+    " reminds me of that drive home in the rain last week.",
+    " The chorus would go something like... when the lights go down",
+    " and there's nobody left to call...",
+    " ♪ hmm hmm hmm ♪ yeah that bridge needs work but the hook is there."
+  ],
+  journal:[
+    "It's been six months since my diagnosis and I want to document this properly.",
+    " My hands are still not back to full strength but my voice is clear.",
+    " I couldn't write any of this down when it was happening —",
+    " I just want to say that to my future self: you got through it.",
+    " The days in the hospital when I couldn't hold a pen.",
+    " Now I'm speaking it instead. That feels like enough."
+  ],
+  quick:[
+    "Random idea — what if the app had a daily prompt feature?",
+    " Like one question every morning, something simple.",
+    " How did yesterday feel? What are you looking forward to?",
+    " Could be really powerful for people who don't know where to start.",
+    " Add this to the ideas list."
+  ],
+};
+
+const SEGMENT_TAGS={
+  memory:{bg:'#fff0e8',c:'#993c1d',label:'memory'},
+  song:{bg:'#f5f0ff',c:'#5a20a0',label:'melody'},
+  journal:{bg:'#f0fff5',c:'#1a5a30',label:'journal'},
+  quick:{bg:'#f0f5ff',c:'#1a4a80',label:'note'},
+};
+
+const AVAILABLE=[
+  {label:'Quick snap',bg:'#fff3ef',c:'#993c1d'},
+  {label:'Journal',bg:'#f0f0ff',c:'#2a3880'},
+  {label:'Creative studio',bg:'#f5f0ff',c:'#5a1880'},
+  {label:'Full memory',bg:'#fdf0ff',c:'#5a1880'},
+  {label:'Vision board',bg:'#fff8e8',c:'#6a4a00'},
+];
+
+let curMode='memory';
+let isRecording=false;
+let recTimer=null;
+let transTimer=null;
+let secs=0;
+let transIdx=0;
+let transText='';
+let hasSaved=false;
+
+function buildModes(){
+  const row=document.getElementById('mode-row');
+  MODES.forEach(m=>{
+    const p=document.createElement('button');
+    p.className='mpill'+(m.key===curMode?' on':'');
+    p.textContent=m.label;
+    p.style.setProperty('--mc',m.color);
+    p.onclick=()=>{
+      if(isRecording)return;
+      curMode=m.key;
+      transText='';transIdx=0;hasSaved=false;
+      document.querySelectorAll('.mpill').forEach((x,i)=>{
+        x.classList.toggle('on',MODES[i].key===m.key);
+        if(MODES[i].key===m.key){x.style.background=m.color;x.style.borderColor=m.color;}
+        else{x.style.background='';x.style.borderColor='';}
+      });
+      resetRecorder();
+    };
+    if(m.key===curMode){p.style.background=m.color;p.style.borderColor=m.color;}
+    row.appendChild(p);
+  });
+}
+
+function buildWaveform(){
+  const wf=document.getElementById('waveform');
+  wf.innerHTML='';
+  for(let i=0;i<28;i++){
+    const b=document.createElement('div');
+    b.className='wave-bar';
+    b.style.height='4px';
+    wf.appendChild(b);
+  }
+}
+
+function animateWave(){
+  if(!isRecording)return;
+  const bars=document.querySelectorAll('.wave-bar');
+  bars.forEach(b=>{
+    const h=4+Math.random()*28;
+    b.style.height=h+'px';
+  });
+}
+
+function buildAvailable(){
+  const c=document.getElementById('ai-chips');
+  AVAILABLE.forEach(a=>{
+    const ch=document.createElement('div');
+    ch.className='ai-chip';
+    ch.textContent=a.label;
+    ch.style.background=a.bg;
+    ch.style.color=a.c;
+    c.appendChild(ch);
+  });
+}
+
+function getMode(){return MODES.find(m=>m.key===curMode);}
+
+function toggleRec(){
+  if(!isRecording) startRec();
+  else stopRec();
+}
+
+function startRec(){
+  isRecording=true;secs=0;transIdx=0;transText='';
+  const m=getMode();
+
+  document.getElementById('recorder').className='recorder rec-active';
+  document.getElementById('rec-label').textContent='Recording...';
+  document.getElementById('rec-label').className='rec-label active';
+  document.getElementById('rec-timer').className='rec-timer active';
+  document.getElementById('waveform').className='waveform active';
+
+  const btn=document.getElementById('mic-btn');
+  btn.className='mic-btn mic-active';
+  btn.textContent='⏹';
+  btn.style.background=m.color;
+
+  document.getElementById('mic-hint').textContent='Tap to stop. Transcribing in real time...';
+  document.getElementById('mic-hint').className='mic-hint active';
+  document.getElementById('mic-hint').style.color=m.color;
+
+  document.getElementById('trans-box').className='transcription-box active';
+  document.getElementById('trans-dot').className='trans-dot active';
+  document.getElementById('trans-dot').style.background=m.color;
+  document.getElementById('trans-label-txt').textContent='Transcribing live...';
+  document.getElementById('trans-label').className='trans-label active';
+  document.getElementById('trans-label').style.color=m.color;
+  document.getElementById('trans-content').innerHTML='<div class="trans-text"><span class="cursor" style="background:'+m.color+'"></span></div>';
+
+  document.getElementById('save-btn').textContent='Recording...';
+  document.getElementById('save-btn').style.background=m.color;
+
+  recTimer=setInterval(()=>{
+    secs++;
+    const mm=Math.floor(secs/60);
+    const ss=secs%60;
+    document.getElementById('rec-timer').textContent=mm+':'+(ss<10?'0':'')+ss;
+    animateWave();
+  },1000);
+
+  const lines=SAMPLE_TRANSCRIPTS[curMode];
+  let charIdx=0;
+  let lineIdx=0;
+
+  function typeNext(){
+    if(!isRecording)return;
+    if(lineIdx>=lines.length)return;
+    const line=lines[lineIdx];
+    if(charIdx<line.length){
+      transText+=line[charIdx];
+      charIdx++;
+      const m2=getMode();
+      document.getElementById('trans-content').innerHTML=
+        '<div class="trans-text">'+transText+'<span class="cursor" style="background:'+m2.color+'"></span></div>';
+      setTimeout(typeNext,30+Math.random()*40);
+    } else {
+      lineIdx++;charIdx=0;
+      setTimeout(typeNext,400+Math.random()*300);
+    }
+  }
+  setTimeout(typeNext,600);
+}
+
+function stopRec(){
+  isRecording=false;
+  clearInterval(recTimer);
+  const m=getMode();
+  const dur=secs;
+
+  document.getElementById('recorder').className='recorder rec-done';
+  document.getElementById('rec-label').textContent='Recording saved';
+  document.getElementById('rec-label').className='rec-label done';
+  document.getElementById('rec-timer').className='rec-timer';
+  document.getElementById('rec-timer').style.color='#2a8a50';
+  document.getElementById('waveform').className='waveform done';
+
+  const btn=document.getElementById('mic-btn');
+  btn.className='mic-btn mic-done';
+  btn.textContent='▶';
+  btn.style.background='#2a8a50';
+
+  document.getElementById('mic-hint').textContent='Recording saved! Audio + transcript both stored.';
+  document.getElementById('mic-hint').className='mic-hint done';
+  document.getElementById('mic-hint').style.color='#1a6a30';
+
+  document.getElementById('trans-box').className='transcription-box done';
+  document.getElementById('trans-dot').className='trans-dot done';
+  document.getElementById('trans-label-txt').textContent='Transcript complete';
+  document.getElementById('trans-label').className='trans-label done';
+  document.getElementById('trans-label').style.color='#1a7a40';
+  document.getElementById('trans-content').innerHTML='<div class="trans-text">'+transText+'</div>';
+
+  const mm=Math.floor(dur/60);
+  const ss=dur%60;
+  const durStr=mm+':'+(ss<10?'0':'')+ss;
+
+  const savedArea=document.getElementById('audio-saved-area');
+  savedArea.innerHTML=`
+    <div class="audio-saved">
+      <button class="audio-play">▶</button>
+      <div class="audio-info">
+        <div class="audio-title">${m.label} — ${new Date().toLocaleDateString('en-US',{month:'short',day:'numeric'})}</div>
+        <div class="audio-dur">${durStr} · Audio + transcript saved</div>
+      </div>
+      <div class="audio-wave">${Array.from({length:16},(_,i)=>`<div class="aw-bar" style="height:${4+Math.random()*12}px"></div>`).join('')}</div>
+    </div>`;
+
+  const segsArea=document.getElementById('segments-area');
+  const tag=SEGMENT_TAGS[curMode];
+  const lines=SAMPLE_TRANSCRIPTS[curMode];
+  if(lines.length>1){
+    segsArea.innerHTML='<div style="font-size:9px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:7px;">Timestamped segments</div>';
+    const segDiv=document.createElement('div');
+    segDiv.className='segments';
+    lines.slice(0,3).forEach((line,i)=>{
+      const s=document.createElement('div');
+      s.className='seg';
+      const ts=`0:${String(i*Math.floor(dur/lines.length)).padStart(2,'0')}`;
+      s.innerHTML=`<div class="seg-time">${ts}<br><span class="seg-tag" style="background:${tag.bg};color:${tag.c};">${tag.label}</span></div><div class="seg-text">${line.trim()}</div>`;
+      segDiv.appendChild(s);
+    });
+    segsArea.appendChild(segDiv);
+  }
+
+  document.getElementById('save-btn').textContent='Save voice memory →';
+  document.getElementById('save-btn').style.background='#c84820';
+  hasSaved=true;
+}
+
+function handleSave(){
+  if(!hasSaved)return;
+  document.getElementById('save-btn').textContent='Saved! ✓';
+  document.getElementById('save-btn').style.background='#2a8a50';
+  setTimeout(()=>{
+    document.getElementById('save-btn').textContent='Save voice memory →';
+    document.getElementById('save-btn').style.background='#c84820';
+  },2000);
+}
+
+function resetRecorder(){
+  clearInterval(recTimer);
+  isRecording=false;secs=0;
+  document.getElementById('recorder').className='recorder rec-idle';
+  document.getElementById('rec-label').textContent='Ready to record';
+  document.getElementById('rec-label').className='rec-label';
+  document.getElementById('rec-label').style.color='';
+  document.getElementById('rec-timer').textContent='0:00';
+  document.getElementById('rec-timer').className='rec-timer';
+  document.getElementById('rec-timer').style.color='';
+  document.getElementById('waveform').className='waveform';
+  const btn=document.getElementById('mic-btn');
+  btn.className='mic-btn mic-idle';btn.textContent='🎙';btn.style.background='';
+  document.getElementById('mic-hint').textContent='Tap to start recording. Speak naturally — Cherish will transcribe as you go.';
+  document.getElementById('mic-hint').className='mic-hint';document.getElementById('mic-hint').style.color='';
+  document.getElementById('trans-box').className='transcription-box';
+  document.getElementById('trans-dot').className='trans-dot';document.getElementById('trans-dot').style.background='';
+  document.getElementById('trans-label-txt').textContent='Transcription';
+  document.getElementById('trans-label').className='trans-label';document.getElementById('trans-label').style.color='';
+  document.getElementById('trans-content').innerHTML='<div class="trans-placeholder">Your words will appear here as you speak...</div>';
+  document.getElementById('audio-saved-area').innerHTML='';
+  document.getElementById('segments-area').innerHTML='';
+  document.getElementById('save-btn').textContent='Start recording first';
+  document.getElementById('save-btn').style.background='#c84820';
+  hasSaved=false;
+  buildWaveform();
+}
+
+buildModes();buildWaveform();buildAvailable();
+</script>

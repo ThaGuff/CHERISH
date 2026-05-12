@@ -1,0 +1,287 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{display:flex;flex-direction:column;align-items:center;padding:1rem 0 2rem;font-family:'DM Sans',sans-serif;}
+.step-indicator{display:flex;align-items:center;gap:6px;margin-bottom:20px;}
+.sdot{width:8px;height:8px;border-radius:50%;background:#e8d0c0;transition:all 0.3s;}
+.sdot.on{background:#c84820;width:22px;border-radius:4px;}
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;position:relative;background:#fffaf7;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;}
+.screen{min-height:580px;display:flex;flex-direction:column;transition:background 0.4s;}
+
+.s-splash{background:#c84820;padding:34px 24px 28px;justify-content:center;align-items:center;text-align:center;}
+.splash-logo{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:white;margin-bottom:6px;margin-top:24px;}
+.splash-tag{font-family:'Playfair Display',serif;font-size:16px;font-style:italic;color:rgba(255,255,255,0.8);margin-bottom:48px;}
+.splash-sub{font-size:12px;color:rgba(255,255,255,0.6);margin-bottom:24px;}
+.splash-btn{width:100%;padding:14px;background:white;color:#c84820;border-radius:14px;font-size:15px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:10px;transition:opacity 0.15s;}
+.splash-btn:hover{opacity:0.92;}
+.splash-btn.outline{background:rgba(255,255,255,0.15);color:white;border:1.5px solid rgba(255,255,255,0.4);}
+.splash-fine{font-size:11px;color:rgba(255,255,255,0.45);margin-top:8px;}
+
+.s-slide{background:#fffaf7;padding:34px 20px 24px;align-items:center;text-align:center;}
+.slide-illus{width:200px;height:160px;border-radius:16px;margin:16px auto 20px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;}
+.slide-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2c1a0a;margin-bottom:8px;line-height:1.2;}
+.slide-body{font-size:13px;color:#9a7060;line-height:1.65;margin-bottom:auto;padding:0 4px;}
+.slide-nav{display:flex;gap:10px;width:100%;margin-top:24px;}
+.slide-back{flex:0 0 44px;height:44px;border-radius:12px;border:1.5px solid #e8d0c0;background:none;cursor:pointer;font-size:18px;color:#c84820;display:flex;align-items:center;justify-content:center;}
+.slide-next{flex:1;padding:13px;background:#c84820;color:white;border-radius:12px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s;}
+.slide-next:hover{background:#993c1d;}
+
+.s-setup{background:#fffaf7;padding:34px 20px 24px;}
+.setup-back{display:flex;align-items:center;gap:5px;font-size:12px;color:#b07050;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;margin-bottom:16px;}
+.setup-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#2c1a0a;margin-bottom:4px;}
+.setup-sub{font-size:12px;color:#a07050;margin-bottom:20px;}
+.setup-label{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:6px;margin-top:14px;}
+.setup-input{width:100%;border:1.5px solid #e8d0c0;border-radius:10px;padding:10px 13px;font-size:14px;font-family:'DM Sans',sans-serif;color:#2c1a0a;background:white;outline:none;transition:border-color 0.15s;}
+.setup-input:focus{border-color:#c84820;}
+.theme-row{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:4px;}
+.theme-opt{border:1.5px solid #e8d0c0;border-radius:10px;padding:10px 10px 8px;cursor:pointer;transition:all 0.15s;text-align:center;}
+.theme-opt.on{border-color:#c84820;border-width:2px;background:#fff3ef;}
+.theme-dot{width:28px;height:28px;border-radius:8px;margin:0 auto 5px;display:flex;align-items:center;justify-content:center;font-size:14px;}
+.theme-name{font-size:11px;font-weight:500;color:#5a3020;}
+.theme-hint{font-size:10px;color:#b09080;margin-top:1px;}
+.use-for-lbl{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:6px;margin-top:14px;}
+.use-chips{display:flex;flex-wrap:wrap;gap:5px;}
+.use-chip{padding:5px 11px;border-radius:20px;font-size:11px;font-weight:500;border:1.5px solid #e8d0c0;background:white;color:#8a6050;cursor:pointer;transition:all 0.15s;}
+.use-chip.on{background:#faece7;border-color:#c84820;color:#712b13;}
+.setup-btn{width:100%;padding:13px;background:#c84820;color:white;border-radius:14px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-top:18px;transition:background 0.15s;}
+.setup-btn:hover{background:#993c1d;}
+
+.s-ready{background:#fffaf7;padding:34px 20px 24px;align-items:center;text-align:center;justify-content:center;}
+.ready-check{width:64px;height:64px;border-radius:50%;background:#eaf3de;display:flex;align-items:center;justify-content:center;font-size:28px;margin:16px auto 18px;}
+.ready-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#2c1a0a;margin-bottom:8px;}
+.ready-name{color:#c84820;font-style:italic;}
+.ready-sub{font-size:13px;color:#9a7060;line-height:1.65;margin-bottom:28px;}
+.ready-book{background:white;border:1.5px solid #f0ddd0;border-radius:14px;padding:14px;width:100%;text-align:left;margin-bottom:16px;}
+.ready-book-label{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:6px;}
+.ready-book-name{font-family:'Playfair Display',serif;font-size:16px;color:#3a1a0a;font-style:italic;}
+.ready-book-hint{font-size:11px;color:#b09080;margin-top:2px;}
+.ready-btn{width:100%;padding:13px;background:#c84820;color:white;border-radius:14px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:8px;}
+.ready-skip{font-size:12px;color:#b09080;cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;}
+</style>
+
+<div class="wrap">
+  <div class="step-indicator" id="step-dots"></div>
+  <div class="phone">
+    <div class="notch"></div>
+
+    <div class="screen s-splash" id="sc-splash" style="display:flex;">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;">
+        <div style="font-size:48px;margin-bottom:8px;">📖</div>
+        <div class="splash-logo">Cherish.</div>
+        <div class="splash-tag">The moments pass.<br>The memories don't have to.</div>
+      </div>
+      <div style="width:100%;">
+        <div class="splash-sub">Join thousands preserving their family stories</div>
+        <button class="splash-btn" onclick="goTo('sc-signup')">Create a free account</button>
+        <button class="splash-btn outline" onclick="goTo('sc-signin')">Sign in</button>
+        <div class="splash-fine">Free forever · No credit card required</div>
+      </div>
+    </div>
+
+    <div class="screen s-setup" id="sc-signup" style="display:none;">
+      <button class="setup-back" onclick="goTo('sc-splash')">‹ Back</button>
+      <div class="setup-title">Create your account</div>
+      <div class="setup-sub">Free forever. Takes 30 seconds.</div>
+      <div class="setup-label">Your name</div>
+      <input class="setup-input" id="inp-name" placeholder="First name" />
+      <div class="setup-label">Email address</div>
+      <input class="setup-input" id="inp-email" type="email" placeholder="you@email.com" />
+      <div class="setup-label">Password</div>
+      <input class="setup-input" id="inp-pass" type="password" placeholder="At least 8 characters" />
+      <button class="setup-btn" onclick="doSignup()">Continue →</button>
+      <div style="font-size:11px;color:#b09080;text-align:center;margin-top:10px;">Already have an account? <span style="color:#c84820;cursor:pointer;" onclick="goTo('sc-signin')">Sign in</span></div>
+    </div>
+
+    <div class="screen s-setup" id="sc-signin" style="display:none;">
+      <button class="setup-back" onclick="goTo('sc-splash')">‹ Back</button>
+      <div class="setup-title">Welcome back</div>
+      <div class="setup-sub">Sign in to your Cherish account</div>
+      <div class="setup-label">Email address</div>
+      <input class="setup-input" placeholder="you@email.com" type="email"/>
+      <div class="setup-label">Password</div>
+      <input class="setup-input" type="password" placeholder="Your password" />
+      <div style="text-align:right;margin-top:6px;"><span style="font-size:11px;color:#c84820;cursor:pointer;">Forgot password?</span></div>
+      <button class="setup-btn" style="margin-top:14px;" onclick="goTo('sc-slide1')">Sign in →</button>
+      <div style="font-size:11px;color:#b09080;text-align:center;margin-top:10px;">New to Cherish? <span style="color:#c84820;cursor:pointer;" onclick="goTo('sc-signup')">Create account</span></div>
+    </div>
+
+    <div class="screen s-slide" id="sc-slide1" style="display:none;">
+      <div class="slide-illus" style="background:#fff0e8;">
+        <div style="text-align:center;">
+          <div style="font-size:40px;margin-bottom:6px;">⚡</div>
+          <div style="font-size:11px;font-weight:500;color:#993c1d;">60 seconds</div>
+          <div style="font-family:'Caveat',cursive;font-size:16px;color:#5a2010;margin-top:4px;">Atlanta Zoo · Spring Break</div>
+          <div style="display:flex;justify-content:center;gap:4px;margin-top:8px;">
+            <div style="width:32px;height:32px;border-radius:4px;background:#f5c4b3;"></div>
+            <div style="width:32px;height:32px;border-radius:4px;background:#f0997b;"></div>
+            <div style="width:32px;height:32px;border-radius:4px;background:#e8b090;"></div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-title">Capture before<br>the moment fades</div>
+      <div class="slide-body">Open Cherish, snap a photo, jot a note, tag who was there. Your memory is safe in under 60 seconds — even at the zoo, the aquarium, or the middle of a Vampire Diaries tour.</div>
+      <div class="slide-nav">
+        <button class="slide-back" onclick="goTo('sc-signup')">‹</button>
+        <button class="slide-next" onclick="goTo('sc-slide2')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen s-slide" id="sc-slide2" style="display:none;background:#f5f0ff;">
+      <div class="slide-illus" style="background:#ede8ff;">
+        <div style="text-align:center;padding:0 12px;">
+          <div style="background:white;border-radius:10px;padding:8px 12px;border:1px solid #d0c0f0;margin-bottom:6px;">
+            <div style="font-size:9px;font-weight:500;color:#7050c0;letter-spacing:0.6px;text-transform:uppercase;margin-bottom:3px;">Favorite memory</div>
+            <div style="font-family:'Caveat',cursive;font-size:13px;color:#3a1060;">The kids' faces at the aquarium when the whale shark swam over...</div>
+          </div>
+          <div style="display:flex;gap:4px;justify-content:center;">
+            <div style="font-size:18px;">🌊</div><div style="font-size:18px;">🐠</div><div style="font-size:18px;">⭐</div>
+          </div>
+        </div>
+      </div>
+      <div class="slide-title">Design it<br>beautifully later</div>
+      <div class="slide-body">At home when you have time, turn your quick captures into stunning scrapbook pages. Layouts, stickers, journal entries, caption boxes — the scrapbook you always meant to make.</div>
+      <div class="slide-nav">
+        <button class="slide-back" onclick="goTo('sc-slide1')">‹</button>
+        <button class="slide-next" onclick="goTo('sc-slide3')">Next →</button>
+      </div>
+    </div>
+
+    <div class="screen s-slide" id="sc-slide3" style="display:none;background:#f0fff5;">
+      <div class="slide-illus" style="background:#e0f5e8;">
+        <div style="text-align:center;">
+          <div style="font-size:13px;font-weight:500;color:#1a5a30;margin-bottom:8px;">Keep it · Print it · Share it</div>
+          <div style="display:flex;gap:6px;justify-content:center;margin-bottom:8px;">
+            <div style="width:44px;height:56px;border-radius:6px;background:#b0dfc0;border:1.5px solid #70c090;display:flex;align-items:center;justify-content:center;font-size:20px;">📚</div>
+            <div style="width:44px;height:56px;border-radius:6px;background:#c0e8d0;border:1.5px solid #70c090;display:flex;align-items:center;justify-content:center;font-size:20px;">🖨️</div>
+            <div style="width:44px;height:56px;border-radius:6px;background:#d0f0e0;border:1.5px solid #70c090;display:flex;align-items:center;justify-content:center;font-size:20px;">👨‍👩‍👧</div>
+          </div>
+          <div style="font-size:10px;color:#2a6a40;">Cloud backup · Print book · Family circle</div>
+        </div>
+      </div>
+      <div class="slide-title">Your story,<br>kept forever</div>
+      <div class="slide-body">Everything auto-saves to the cloud. Export as a print-ready PDF or order a real hardcover book. Share with your family circle — or keep it completely private. Always your choice.</div>
+      <div class="slide-nav">
+        <button class="slide-back" onclick="goTo('sc-slide2')">‹</button>
+        <button class="slide-next" onclick="goTo('sc-setup')">Let's set up →</button>
+      </div>
+    </div>
+
+    <div class="screen s-setup" id="sc-setup" style="display:none;">
+      <button class="setup-back" onclick="goTo('sc-slide3')">‹ Back</button>
+      <div class="setup-title">Make it yours</div>
+      <div class="setup-sub">Takes 30 seconds. You can change everything later.</div>
+      <div class="setup-label">Choose your theme</div>
+      <div class="theme-row" id="theme-row"></div>
+      <div class="use-for-lbl">I'm here to...</div>
+      <div class="use-chips" id="use-chips"></div>
+      <button class="setup-btn" onclick="doSetup()">Create my Cherish →</button>
+    </div>
+
+    <div class="screen s-ready" id="sc-ready" style="display:none;flex-direction:column;">
+      <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;">
+        <div class="ready-check">✓</div>
+        <div class="ready-title">Welcome to Cherish,<br><span class="ready-name" id="ready-name">Ashtin</span>!</div>
+        <div class="ready-sub">Your account is ready. We've created your first memory book to get you started.</div>
+        <div class="ready-book" style="text-align:left;">
+          <div class="ready-book-label">Your first memory book</div>
+          <div class="ready-book-name" id="ready-book">My First Memory Book</div>
+          <div class="ready-book-hint">Add your first memory whenever you're ready</div>
+        </div>
+      </div>
+      <button class="ready-btn" onclick="sendPrompt('Let\\'s build the My Library screen next — the shelf where users see all their memory books')">Go to my library →</button>
+      <button class="ready-skip" onclick="sendPrompt('Let\\'s build the My Library screen next — the shelf where users see all their memory books')">Start with a quick snap instead</button>
+    </div>
+
+  </div>
+  <div style="margin-top:12px;font-size:11px;color:var(--color-text-tertiary);text-align:center;">Tap through each screen to experience the full onboarding flow</div>
+</div>
+
+<script>
+const THEMES=[
+  {key:'journal',name:'Journal',hint:'Warm & personal',icon:'📔',bg:'#fff8f0',bc:'#f5d5b0'},
+  {key:'minimal',name:'Minimal',hint:'Clean & simple',icon:'◻',bg:'#f7f7f7',bc:'#e0e0e0'},
+  {key:'playful',name:'Playful',hint:'Fun & colorful',icon:'🎨',bg:'#fef0fd',bc:'#f0a0e8'},
+  {key:'premium',name:'Premium',hint:'Dark & elegant',icon:'✦',bg:'#1c1810',bc:'#6a5030'},
+];
+const USE_FORS=['Preserve family memories','Document travels','Daily journaling','Creative writing','Blogging','Scrapbooking'];
+let selTheme='journal';
+let selUse=new Set(['Preserve family memories','Document travels']);
+
+const STEPS=['sc-splash','sc-signup','sc-slide1','sc-slide2','sc-slide3','sc-setup','sc-ready'];
+const DOT_STEPS=['sc-slide1','sc-slide2','sc-slide3','sc-setup','sc-ready'];
+
+function buildDots(){
+  const c=document.getElementById('step-dots');
+  DOT_STEPS.forEach((_,i)=>{
+    const d=document.createElement('div');
+    d.className='sdot';d.id='dot-'+i;
+    c.appendChild(d);
+  });
+}
+
+function updateDots(screenId){
+  const idx=DOT_STEPS.indexOf(screenId);
+  document.querySelectorAll('.sdot').forEach((d,i)=>{
+    d.classList.toggle('on',i===idx);
+  });
+  document.getElementById('step-dots').style.opacity=idx>=0?'1':'0';
+}
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.style.display='none');
+  const sc=document.getElementById(id);
+  sc.style.display='flex';
+  updateDots(id);
+}
+
+function doSignup(){
+  const name=document.getElementById('inp-name').value.trim()||'Ashtin';
+  document.getElementById('ready-name').textContent=name;
+  const bookName=name+"'s Memory Book";
+  document.getElementById('ready-book').textContent=bookName;
+  goTo('sc-slide1');
+}
+
+function buildThemes(){
+  const row=document.getElementById('theme-row');
+  THEMES.forEach(t=>{
+    const el=document.createElement('div');
+    el.className='theme-opt'+(t.key===selTheme?' on':'');
+    el.style.background=t.bg;
+    el.style.borderColor=t.key===selTheme?'#c84820':t.bc;
+    el.innerHTML=`<div class="theme-dot" style="background:${t.bc};font-size:14px;">${t.icon}</div><div class="theme-name">${t.name}</div><div class="theme-hint">${t.hint}</div>`;
+    el.onclick=()=>{
+      selTheme=t.key;
+      document.querySelectorAll('.theme-opt').forEach((x,i)=>{
+        x.classList.toggle('on',THEMES[i].key===t.key);
+        x.style.borderColor=THEMES[i].key===t.key?'#c84820':THEMES[i].bc;
+      });
+    };
+    row.appendChild(el);
+  });
+}
+
+function buildUseChips(){
+  const c=document.getElementById('use-chips');
+  USE_FORS.forEach(u=>{
+    const ch=document.createElement('div');
+    ch.className='use-chip'+(selUse.has(u)?' on':'');
+    ch.textContent=u;
+    ch.onclick=()=>{
+      if(selUse.has(u))selUse.delete(u);
+      else selUse.add(u);
+      ch.classList.toggle('on',selUse.has(u));
+    };
+    c.appendChild(ch);
+  });
+}
+
+function doSetup(){
+  goTo('sc-ready');
+}
+
+buildDots();buildThemes();buildUseChips();
+updateDots('');
+</script>

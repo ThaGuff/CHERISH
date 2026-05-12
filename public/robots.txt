@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://cherish.app/sitemap.xml

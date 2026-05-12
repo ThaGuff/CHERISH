@@ -1,0 +1,427 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.app{font-family:'DM Sans',sans-serif;display:flex;height:700px;background:var(--color-background-tertiary);border-radius:12px;overflow:hidden;border:0.5px solid var(--color-border-tertiary);}
+
+/* SIDEBAR */
+.sb{width:190px;min-width:190px;background:var(--color-background-primary);border-right:0.5px solid var(--color-border-tertiary);display:flex;flex-direction:column;overflow:hidden;}
+.sb-top{padding:12px 14px;border-bottom:0.5px solid var(--color-border-tertiary);}
+.sb-logo{font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:#c84820;}
+.sb-mode{font-size:10px;color:var(--color-text-tertiary);margin-top:1px;}
+.tabs{display:flex;border-bottom:0.5px solid var(--color-border-tertiary);}
+.tab{flex:1;padding:7px 2px;font-size:10px;font-family:'DM Sans',sans-serif;background:none;border:none;cursor:pointer;color:var(--color-text-secondary);border-bottom:2px solid transparent;transition:all 0.15s;}
+.tab.on{color:#c84820;border-bottom-color:#c84820;font-weight:500;}
+.panel{display:none;padding:10px;overflow-y:auto;flex:1;}
+.panel.on{display:block;}
+.plabel{font-size:10px;font-weight:500;letter-spacing:0.7px;text-transform:uppercase;color:var(--color-text-tertiary);margin:10px 0 6px;}
+.plabel:first-child{margin-top:0;}
+
+/* STICKER / WORD GRIDS */
+.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin-bottom:4px;}
+.sc{aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:20px;cursor:pointer;border-radius:7px;background:var(--color-background-secondary);border:0.5px solid var(--color-border-tertiary);transition:transform 0.1s,background 0.1s;user-select:none;}
+.sc:hover{background:#faece7;transform:scale(1.15);}
+.sc:active{transform:scale(0.95);}
+
+/* WORD CHIPS */
+.wgrid{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:6px;}
+.wchip{padding:4px 9px;border-radius:20px;font-size:11px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);transition:all 0.12s;font-weight:500;}
+.wchip:hover{background:#faece7;border-color:#c84820;color:#993c1d;}
+
+/* COLOR SWATCHES */
+.bgs{display:grid;grid-template-columns:repeat(5,1fr);gap:5px;}
+.bgsw{aspect-ratio:1;border-radius:6px;cursor:pointer;border:2px solid transparent;transition:all 0.15s;}
+.bgsw:hover{transform:scale(1.1);}
+.bgsw.on{border-color:#c84820;}
+
+/* ADD BUTTONS */
+.abtn{width:100%;padding:7px;background:none;border:0.5px dashed var(--color-border-secondary);border-radius:7px;color:var(--color-text-secondary);font-size:11px;cursor:pointer;font-family:'DM Sans',sans-serif;margin-bottom:5px;transition:background 0.1s;}
+.abtn:hover{background:var(--color-background-secondary);}
+
+/* MAIN CANVAS AREA */
+.canvas-wrap{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+.toolbar{height:44px;background:var(--color-background-primary);border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;padding:0 12px;gap:6px;}
+.tbtn{padding:5px 11px;border-radius:6px;font-size:11px;font-family:'DM Sans',sans-serif;cursor:pointer;border:0.5px solid var(--color-border-secondary);background:none;color:var(--color-text-secondary);transition:all 0.1s;}
+.tbtn:hover{background:var(--color-background-secondary);}
+.tbtn.pri{background:#c84820;color:white;border-color:#c84820;font-weight:500;}
+.tbtn.pri:hover{background:#993c1d;}
+.tbtn.danger{color:#a32d2d;}
+.tsep{width:0.5px;height:20px;background:var(--color-border-tertiary);margin:0 2px;}
+.mode-badge{padding:3px 10px;border-radius:20px;font-size:10px;font-weight:500;}
+
+.cscroll{flex:1;overflow:auto;padding:20px;display:flex;align-items:flex-start;justify-content:center;}
+.canvas{width:620px;min-height:460px;position:relative;overflow:hidden;transition:background 0.3s;border-radius:3px;}
+
+/* CANVAS ELEMENTS */
+.cel{position:absolute;cursor:move;user-select:none;}
+.cel:hover .ctrls{opacity:1;}
+.cel.selected{outline:1.5px dashed #c84820;outline-offset:3px;}
+.ctrls{position:absolute;top:-24px;right:0;display:flex;gap:2px;opacity:0;transition:opacity 0.15s;z-index:10;}
+.cbtn{width:18px;height:18px;border-radius:4px;background:#c84820;color:white;border:none;cursor:pointer;font-size:10px;display:flex;align-items:center;justify-content:center;}
+.cbtn.rot{background:#5a3080;}
+.cbtn.scale{background:#205a80;}
+
+.stk-el{font-size:42px;line-height:1;display:block;}
+.img-el{border-radius:2px;display:block;}
+.txt-el{font-family:'Caveat',cursive;font-size:26px;color:#c84820;background:none;border:none;outline:none;min-width:80px;padding:2px 4px;cursor:text;white-space:nowrap;}
+.word-el{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;padding:4px 12px;border-radius:3px;white-space:nowrap;cursor:move;}
+.shape-el{border-radius:2px;}
+.img-frame{overflow:hidden;position:relative;}
+.img-frame img{width:100%;height:100%;object-fit:cover;}
+
+/* TOAST */
+.toast{position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:#3B6D11;color:white;padding:6px 14px;border-radius:20px;font-size:11px;opacity:0;transition:opacity 0.3s;pointer-events:none;white-space:nowrap;z-index:100;}
+.toast.show{opacity:1;}
+
+/* MODE SELECTOR */
+.mode-sel{display:flex;flex-direction:column;gap:5px;padding:10px;}
+.mopt{border-radius:10px;padding:10px 12px;cursor:pointer;border:1.5px solid var(--color-border-tertiary);transition:all 0.15s;background:var(--color-background-secondary);}
+.mopt:hover{border-color:#c84820;}
+.mopt.on{border-color:#c84820;border-width:2px;background:#fff3ef;}
+.mopt-name{font-size:13px;font-weight:500;color:var(--color-text-primary);margin-bottom:2px;}
+.mopt-desc{font-size:10px;color:var(--color-text-secondary);line-height:1.4;}
+</style>
+
+<div class="app">
+  <div class="sb">
+    <div class="sb-top">
+      <div class="sb-logo">Cherish.</div>
+      <div class="sb-mode" id="sb-mode">Vision board mode</div>
+    </div>
+    <div class="tabs">
+      <button class="tab on" onclick="switchTab('mode')">Mode</button>
+      <button class="tab" onclick="switchTab('add')">Add</button>
+      <button class="tab" onclick="switchTab('words')">Words</button>
+      <button class="tab" onclick="switchTab('bg')">BG</button>
+    </div>
+
+    <div id="p-mode" class="panel on">
+      <div class="plabel">Canvas type</div>
+      <div class="mode-sel" id="mode-sel"></div>
+    </div>
+
+    <div id="p-add" class="panel">
+      <div class="plabel">Stickers</div>
+      <div class="sgrid" id="sg1"></div>
+      <div class="plabel">Nature & travel</div>
+      <div class="sgrid" id="sg2"></div>
+      <div class="plabel">Add elements</div>
+      <button class="abtn" onclick="addPhoto()">+ Photo / image</button>
+      <button class="abtn" onclick="addHandwritten()">+ Handwritten text</button>
+      <button class="abtn" onclick="addShape('circle')">+ Circle shape</button>
+      <button class="abtn" onclick="addShape('rect')">+ Rectangle shape</button>
+      <button class="abtn" onclick="addWashi()">+ Washi tape strip</button>
+    </div>
+
+    <div id="p-words" class="panel">
+      <div class="plabel">Power words</div>
+      <div class="wgrid" id="wg-power"></div>
+      <div class="plabel">Feelings</div>
+      <div class="wgrid" id="wg-feel"></div>
+      <div class="plabel">Goals & dreams</div>
+      <div class="wgrid" id="wg-goals"></div>
+      <div class="plabel">Magazine style</div>
+      <div class="wgrid" id="wg-mag"></div>
+    </div>
+
+    <div id="p-bg" class="panel">
+      <div class="plabel">Background</div>
+      <div class="bgs" id="bgs"></div>
+      <div class="plabel">Texture feel</div>
+      <div class="bgs" id="tex"></div>
+    </div>
+  </div>
+
+  <div class="canvas-wrap">
+    <div class="toolbar">
+      <span class="mode-badge" id="mode-badge" style="background:#faece7;color:#712b13;">Free canvas</span>
+      <div class="tsep"></div>
+      <button class="tbtn danger" id="undobtn" onclick="undoLast()" style="display:none;">Undo</button>
+      <button class="tbtn" onclick="scramble()">Scramble</button>
+      <button class="tbtn" onclick="shuffle()">Shuffle chaos</button>
+      <div style="flex:1"></div>
+      <button class="tbtn" onclick="sendPrompt('What other creative features should we add to Cherish? I love the vision board idea!')">Ideas ↗</button>
+      <button class="tbtn pri" onclick="showToast('Saved to your library!')">Save</button>
+    </div>
+    <div class="cscroll">
+      <div class="canvas" id="canvas">
+        <div class="toast" id="toast"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const MODES=[
+  {key:'free',name:'Free canvas',desc:'No grid, no rules. Drop anything anywhere. Pure chaos — just like cutting from magazines.',badge:'Free canvas',bg:'#faece7',tc:'#712b13'},
+  {key:'vision',name:'Vision board',desc:'Goals, dreams, words, images. A window into where you want to go.',badge:'Vision board',bg:'#f0f0ff',tc:'#2a3880'},
+  {key:'collage',name:'Photo collage',desc:'Overlapping photos at different angles. Messy, layered, alive.',badge:'Photo collage',bg:'#f0fff5',tc:'#1a5a30'},
+  {key:'scrap',name:'Scrapbook page',desc:'Organized layouts with captions and journal entries.',badge:'Scrapbook',bg:'#fff3ef',tc:'#993c1d'},
+];
+
+const S1=['✨','💫','⭐','🌟','💕','❤️','🦋','🌸','🌺','🌻','🌈','🎯'];
+const S2=['🌊','🏔','🌴','🌅','✈️','🗺','🎨','📷','🎵','🍃','🌙','☀️'];
+
+const POWER=['Dream','Create','Believe','Manifest','Thrive','Grow','Rise','Shine','Bold','Free','Wild','Brave'];
+const FEEL=['Joy','Peace','Love','Magic','Alive','Grateful','Inspired','Radiant','Fierce','Soft','Strong','Warm'];
+const GOALS=['Travel more','Be present','Create daily','Love deeply','Stay curious','Dream bigger','Slow down','Say yes','Let go','Trust yourself'];
+const MAG=['YES','WOW','NEW','NOW','GO','DO IT','WHY NOT','LIVE','FEEL','GOOD VIBES'];
+
+const BGS=['#fffaf7','#fff8f5','#f5f0ff','#f0f8ff','#f5fff5','#fff5f0','#fdf5ff','#f0fff8','#fffde8','#f5f5f5'];
+const TEX=['#faebd7','#f5deb3','#ffe4e1','#e6e6fa','#f0fff0','#fff0f5','#f0f8e8','#ede8ff','#e8f0ff','#f8f0e8'];
+
+const PHOTOS=[
+  'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=200&q=70',
+  'https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?w=200&q=70',
+  'https://images.unsplash.com/photo-1519046904884-53103b34b206?w=200&q=70',
+  'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?w=200&q=70',
+  'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=200&q=70',
+  'https://images.unsplash.com/photo-1501854140801-50d01698950b?w=200&q=70',
+];
+
+const WORD_COLORS=[
+  {bg:'#c84820',c:'white'},{bg:'#3c3489',c:'white'},{bg:'#1a5a30',c:'white'},
+  {bg:'#2c1a0a',c:'white'},{bg:'#faece7',c:'#712b13'},{bg:'#eeedfe',c:'#3c3489'},
+  {bg:'#f0fff5',c:'#1a5a30'},{bg:'#fff3ef',c:'#993c1d'},
+];
+
+let curMode='free', selBg=0, dragging=null, dox=0,doy=0, history=[], photoIdx=0, toastTimer=null;
+
+function r(min,max){return min+Math.random()*(max-min);}
+function ri(min,max){return Math.floor(r(min,max+1));}
+
+function buildModes(){
+  const c=document.getElementById('mode-sel');
+  MODES.forEach(m=>{
+    const el=document.createElement('div');
+    el.className='mopt'+(m.key===curMode?' on':'');
+    el.innerHTML=`<div class="mopt-name">${m.name}</div><div class="mopt-desc">${m.desc}</div>`;
+    el.onclick=()=>{
+      curMode=m.key;
+      document.querySelectorAll('.mopt').forEach((x,i)=>x.classList.toggle('on',MODES[i].key===m.key));
+      const b=document.getElementById('mode-badge');
+      b.textContent=m.badge;b.style.background=m.bg;b.style.color=m.tc;
+      document.getElementById('sb-mode').textContent=m.name+' mode';
+      showToast('Switched to '+m.name);
+    };
+    c.appendChild(el);
+  });
+}
+
+function buildStickers(){
+  [['sg1',S1],['sg2',S2]].forEach(([id,arr])=>{
+    const g=document.getElementById(id);
+    arr.forEach(s=>{
+      const el=document.createElement('div');
+      el.className='sc';el.textContent=s;
+      el.onclick=()=>placeSticker(s);
+      g.appendChild(el);
+    });
+  });
+}
+
+function buildWords(){
+  [['wg-power',POWER],['wg-feel',FEEL],['wg-goals',GOALS],['wg-mag',MAG]].forEach(([id,arr])=>{
+    const g=document.getElementById(id);
+    arr.forEach(w=>{
+      const ch=document.createElement('div');
+      ch.className='wchip';ch.textContent=w;
+      ch.onclick=()=>placeWord(w);
+      g.appendChild(ch);
+    });
+  });
+}
+
+function buildBgs(){
+  [['bgs',BGS],['tex',TEX]].forEach(([id,arr])=>{
+    const g=document.getElementById(id);
+    arr.forEach((c,i)=>{
+      const sw=document.createElement('div');
+      sw.className='bgsw'+(i===0&&id==='bgs'?' on':'');
+      sw.style.background=c;
+      sw.onclick=()=>{
+        document.querySelectorAll('.bgsw').forEach(x=>x.classList.remove('on'));
+        sw.classList.add('on');
+        document.getElementById('canvas').style.background=c;
+      };
+      g.appendChild(sw);
+    });
+  });
+}
+
+function switchTab(name){
+  ['mode','add','words','bg'].forEach((t,i)=>{
+    document.querySelectorAll('.tab')[i].classList.toggle('on',t===name);
+    document.getElementById('p-'+t).classList.toggle('on',t===name);
+  });
+}
+
+function makeEl(inner,w,h,extraStyle){
+  const canvas=document.getElementById('canvas');
+  const cr=canvas.getBoundingClientRect();
+  const el=document.createElement('div');
+  el.className='cel';
+  const rot=curMode==='free'||curMode==='collage'?r(-18,18):r(-5,5);
+  el.style.left=r(20,Math.max(30,580-w))+'px';
+  el.style.top=r(20,Math.max(30,400-h))+'px';
+  el.style.transform=`rotate(${rot.toFixed(1)}deg)`;
+  if(extraStyle)Object.assign(el.style,extraStyle);
+  el.innerHTML=`<div class="ctrls">
+    <button class="cbtn rot" onclick="rotateEl(this)" title="Rotate">↻</button>
+    <button class="cbtn scale" onclick="growEl(this)" title="Bigger">+</button>
+    <button class="cbtn" onclick="removeEl(this)" title="Remove">×</button>
+  </div>${inner}`;
+  makeDraggable(el);
+  canvas.appendChild(el);
+  history.push(el);
+  document.getElementById('undobtn').style.display='';
+  return el;
+}
+
+function placeSticker(emoji){
+  makeEl(`<span class="stk-el">${emoji}</span>`,42,42);
+  showToast(emoji+' added!');
+}
+
+function placeWord(word){
+  const wc=WORD_COLORS[ri(0,WORD_COLORS.length-1)];
+  const size=curMode==='vision'?ri(18,28):ri(14,26);
+  const fonts=["'Playfair Display',serif","'DM Sans',sans-serif","'Caveat',cursive"];
+  const font=fonts[ri(0,fonts.length-1)];
+  makeEl(`<div class="word-el" style="background:${wc.bg};color:${wc.c};font-size:${size}px;font-family:${font};">${word}</div>`,100,36);
+  showToast('"'+word+'" added!');
+}
+
+function addPhoto(){
+  const url=PHOTOS[photoIdx%PHOTOS.length];photoIdx++;
+  const w=ri(100,180);const h=ri(100,160);
+  const rot=curMode==='free'||curMode==='collage'?r(-20,20):r(-6,6);
+  const el=makeEl(`<div class="img-frame" style="width:${w}px;height:${h}px;border:3px solid white;"><img src="${url}" /></div>`,w,h);
+  el.style.transform=`rotate(${rot.toFixed(1)}deg)`;
+  showToast('Photo added!');
+}
+
+function addHandwritten(){
+  makeEl(`<input class="txt-el" value="write anything..." onclick="this.select()" style="font-size:${ri(18,28)}px;" />`,120,36);
+  showToast('Text added — click to edit');
+}
+
+function addShape(type){
+  const colors=['#c84820','#3c3489','#1a5a30','#e8a020','#d4537e','#1d9e75'];
+  const col=colors[ri(0,colors.length-1)];
+  const size=ri(40,90);
+  if(type==='circle'){
+    makeEl(`<div style="width:${size}px;height:${size}px;border-radius:50%;background:${col};opacity:0.7;"></div>`,size,size);
+  } else {
+    const w=ri(60,140);const h=ri(20,60);
+    makeEl(`<div style="width:${w}px;height:${h}px;background:${col};opacity:0.7;border-radius:2px;"></div>`,w,h);
+  }
+  showToast('Shape added!');
+}
+
+function addWashi(){
+  const colors=['#f5c4b3','#c0dd97','#b5d4f4','#f4c0d1','#fac775','#9fe1cb'];
+  const col=colors[ri(0,colors.length-1)];
+  const w=ri(120,220);
+  makeEl(`<div style="width:${w}px;height:16px;background:${col};opacity:0.75;"></div>`,w,16);
+  showToast('Washi tape added!');
+}
+
+function rotateEl(btn){
+  const el=btn.closest('.cel');
+  const cur=parseFloat(el.style.transform.replace(/[^-\d.]/g,'')||'0');
+  el.style.transform=`rotate(${(cur+15).toFixed(1)}deg)`;
+}
+
+function growEl(btn){
+  const el=btn.closest('.cel');
+  const cur=parseFloat(el.style.transform.replace('scale(','').replace(')',''))||1;
+  const inner=el.querySelector('.stk-el,.word-el,.img-frame,.txt-el');
+  if(inner&&inner.classList.contains('stk-el')){
+    const fs=parseFloat(window.getComputedStyle(inner).fontSize)||42;
+    inner.style.fontSize=(fs+6)+'px';
+  } else if(inner&&inner.classList.contains('img-frame')){
+    inner.style.width=(inner.offsetWidth+20)+'px';
+    inner.style.height=(inner.offsetHeight+20)+'px';
+  }
+}
+
+function removeEl(btn){
+  const el=btn.closest('.cel');
+  const idx=history.indexOf(el);
+  if(idx>-1)history.splice(idx,1);
+  el.remove();
+  if(!history.length)document.getElementById('undobtn').style.display='none';
+}
+
+function undoLast(){
+  if(!history.length)return;
+  history.pop().remove();
+  if(!history.length)document.getElementById('undobtn').style.display='none';
+  showToast('Undone');
+}
+
+function scramble(){
+  document.querySelectorAll('.cel').forEach(el=>{
+    const canvas=document.getElementById('canvas');
+    el.style.left=r(10,520)+'px';
+    el.style.top=r(10,360)+'px';
+    const rot=curMode==='free'||curMode==='collage'?r(-25,25):r(-8,8);
+    el.style.transform=`rotate(${rot.toFixed(1)}deg)`;
+  });
+  showToast('Scrambled!');
+}
+
+function shuffle(){
+  const els=[...document.querySelectorAll('.cel')];
+  els.sort(()=>Math.random()-0.5);
+  els.forEach((el,i)=>{
+    el.style.zIndex=i+1;
+    el.style.left=r(10,500)+'px';
+    el.style.top=r(10,360)+'px';
+    el.style.transform=`rotate(${r(-30,30).toFixed(1)}deg)`;
+  });
+  showToast('Chaos shuffled!');
+}
+
+function makeDraggable(el){
+  el.addEventListener('mousedown',e=>{
+    if(e.target.tagName==='INPUT'||e.target.tagName==='BUTTON'||e.target.isContentEditable)return;
+    dragging=el;
+    el.style.zIndex=999;
+    const r2=el.getBoundingClientRect();
+    const cr=document.getElementById('canvas').getBoundingClientRect();
+    dox=e.clientX-r2.left;doy=e.clientY-r2.top;
+    e.preventDefault();
+  });
+}
+
+document.addEventListener('mousemove',e=>{
+  if(!dragging)return;
+  const cr=document.getElementById('canvas').getBoundingClientRect();
+  dragging.style.left=(e.clientX-cr.left-dox)+'px';
+  dragging.style.top=(e.clientY-cr.top-doy)+'px';
+});
+document.addEventListener('mouseup',()=>{if(dragging){dragging.style.zIndex='';dragging=null;}});
+
+let toastT=null;
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),1800);
+}
+
+function seedCanvas(){
+  setTimeout(()=>{
+    placeWord('Dream');placeWord('Create');placeWord('Manifest');
+    placeSticker('✨');placeSticker('🦋');placeSticker('🌸');placeSticker('💫');
+    addPhoto();addPhoto();
+    addShape('circle');addWashi();
+    placeWord('GOOD VIBES');placeWord('Believe');
+    scramble();
+  },300);
+}
+
+buildModes();buildStickers();buildWords();buildBgs();seedCanvas();
+</script>

@@ -1,0 +1,285 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{font-family:'DM Sans',sans-serif;max-width:720px;margin:0 auto;padding:1rem 0 2rem;}
+.top-bar{display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;flex-wrap:wrap;}
+.page-label{font-size:11px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:var(--color-text-tertiary);}
+.linked-badge{display:inline-flex;align-items:center;gap:5px;background:#FAECE7;color:#712B13;border:0.5px solid #F0997B;border-radius:20px;padding:4px 10px;font-size:11px;font-weight:500;}
+.linked-dot{width:7px;height:7px;border-radius:50%;background:#D85A30;flex-shrink:0;}
+.spacer{flex:1;}
+.save-btn{padding:7px 18px;background:#D85A30;color:white;border:none;border-radius:8px;font-size:13px;font-family:'DM Sans',sans-serif;font-weight:500;cursor:pointer;}
+.save-btn:hover{background:#993C1D;}
+
+.journal-card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);overflow:hidden;}
+
+.card-top{padding:18px 20px 0;border-bottom:0.5px solid var(--color-border-tertiary);padding-bottom:14px;}
+.date-mood-row{display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap;}
+.date-input{border:0.5px solid var(--color-border-tertiary);border-radius:6px;padding:5px 10px;font-size:13px;font-family:'DM Sans',sans-serif;color:var(--color-text-primary);background:var(--color-background-secondary);outline:none;}
+.date-input:focus{border-color:#D85A30;}
+.mood-label{font-size:12px;color:var(--color-text-secondary);margin-left:4px;}
+.mood-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.mood-chip{padding:4px 10px;border-radius:20px;font-size:12px;cursor:pointer;border:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary);color:var(--color-text-secondary);transition:all 0.12s;white-space:nowrap;}
+.mood-chip.active{background:#FAECE7;color:#712B13;border-color:#F0997B;}
+.title-input{width:100%;border:none;background:none;font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--color-text-primary);outline:none;padding:4px 0;}
+.title-input::placeholder{color:var(--color-text-tertiary);}
+
+.template-row{padding:12px 20px;border-bottom:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:8px;overflow-x:auto;}
+.template-label{font-size:11px;font-weight:500;color:var(--color-text-tertiary);letter-spacing:0.6px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
+.tpl-btn{padding:5px 12px;border:0.5px solid var(--color-border-tertiary);border-radius:20px;font-size:12px;background:var(--color-background-secondary);color:var(--color-text-secondary);cursor:pointer;white-space:nowrap;font-family:'DM Sans',sans-serif;transition:all 0.12s;flex-shrink:0;}
+.tpl-btn:hover{border-color:#D85A30;color:#D85A30;background:#FAECE7;}
+
+.writing-area{padding:20px;}
+.section-block{margin-bottom:18px;}
+.section-head{display:flex;align-items:center;gap:7px;margin-bottom:7px;}
+.section-dot{width:8px;height:8px;border-radius:50%;background:#D85A30;opacity:0.6;flex-shrink:0;}
+.section-title{font-size:11px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#D85A30;opacity:0.8;}
+.section-textarea{width:100%;border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:10px 12px;font-family:'Caveat',cursive;font-size:17px;color:var(--color-text-primary);background:var(--color-background-secondary);resize:none;outline:none;line-height:1.6;transition:border-color 0.15s;}
+.section-textarea:focus{border-color:#D85A30;background:var(--color-background-primary);}
+.section-textarea::placeholder{color:var(--color-text-tertiary);font-family:'Caveat',cursive;}
+
+.main-textarea{width:100%;border:0.5px solid var(--color-border-tertiary);border-radius:8px;padding:12px 14px;font-family:'Caveat',cursive;font-size:19px;color:var(--color-text-primary);background:var(--color-background-secondary);resize:none;outline:none;line-height:1.7;transition:border-color 0.15s;min-height:160px;}
+.main-textarea:focus{border-color:#D85A30;background:var(--color-background-primary);}
+.main-textarea::placeholder{color:var(--color-text-tertiary);font-family:'Caveat',cursive;}
+
+.prompt-helper{padding:0 20px 16px;}
+.ph-label{font-size:11px;color:var(--color-text-tertiary);margin-bottom:7px;letter-spacing:0.5px;}
+.ph-chips{display:flex;gap:5px;flex-wrap:wrap;}
+.ph-chip{padding:4px 11px;border:0.5px dashed var(--color-border-secondary);border-radius:20px;font-size:12px;color:var(--color-text-secondary);cursor:pointer;transition:all 0.1s;}
+.ph-chip:hover{background:#FAECE7;color:#993C1D;border-color:#D85A30;border-style:solid;}
+
+.card-bottom{padding:14px 20px;border-top:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.privacy-row{display:flex;align-items:center;gap:7px;}
+.toggle-wrap{position:relative;width:32px;height:18px;flex-shrink:0;}
+.toggle-wrap input{opacity:0;width:0;height:0;}
+.toggle-track{position:absolute;inset:0;background:var(--color-border-secondary);border-radius:9px;cursor:pointer;transition:background 0.2s;}
+.toggle-track:before{content:'';position:absolute;width:12px;height:12px;left:3px;top:3px;background:white;border-radius:50%;transition:transform 0.2s;}
+.toggle-wrap input:checked+.toggle-track{background:#D85A30;}
+.toggle-wrap input:checked+.toggle-track:before{transform:translateX(14px);}
+.privacy-text{font-size:12px;color:var(--color-text-secondary);}
+.wordcount{font-size:12px;color:var(--color-text-tertiary);margin-left:auto;}
+
+.success-bar{display:none;background:#EAF3DE;border:0.5px solid #97C459;border-radius:8px;padding:10px 14px;font-size:13px;color:#27500A;margin-top:12px;align-items:center;gap:8px;}
+.success-bar.show{display:flex;}
+.success-dot{width:8px;height:8px;border-radius:50%;background:#639922;flex-shrink:0;}
+</style>
+
+<div class="wrap">
+  <div class="top-bar">
+    <span class="page-label">Journal entry</span>
+    <div class="linked-badge"><div class="linked-dot"></div>Linked to: Summer Vacation 2024</div>
+    <div class="spacer"></div>
+    <button class="save-btn" onclick="saveEntry()">Save to page</button>
+  </div>
+
+  <div class="journal-card">
+    <div class="card-top">
+      <div class="date-mood-row">
+        <input class="date-input" type="date" id="entry-date" />
+        <span class="mood-label">Mood:</span>
+        <div class="mood-chips" id="mood-chips"></div>
+      </div>
+      <input class="title-input" id="entry-title" placeholder="Give this memory a title..." />
+    </div>
+
+    <div class="template-row">
+      <span class="template-label">Templates</span>
+      <button class="tpl-btn" onclick="loadTemplate('vacation')">Vacation day</button>
+      <button class="tpl-btn" onclick="loadTemplate('event')">Special event</button>
+      <button class="tpl-btn" onclick="loadTemplate('milestone')">Milestone</button>
+      <button class="tpl-btn" onclick="loadTemplate('everyday')">Everyday moment</button>
+      <button class="tpl-btn" onclick="loadTemplate('blank')">Blank</button>
+    </div>
+
+    <div class="writing-area" id="writing-area"></div>
+
+    <div class="prompt-helper" id="prompt-helper"></div>
+
+    <div class="card-bottom">
+      <div class="privacy-row">
+        <label class="toggle-wrap">
+          <input type="checkbox" id="priv-toggle" checked>
+          <div class="toggle-track"></div>
+        </label>
+        <span class="privacy-text" id="priv-text">Private entry</span>
+      </div>
+      <span class="wordcount" id="wordcount">0 words</span>
+    </div>
+  </div>
+
+  <div class="success-bar" id="success-bar">
+    <div class="success-dot"></div>
+    <span>Entry saved and attached to your scrapbook page!</span>
+    <button style="margin-left:auto;padding:4px 12px;border:0.5px solid #639922;border-radius:6px;background:none;color:#27500A;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;" onclick="sendPrompt('What should we build next for MemoryBook?')">Continue building ↗</button>
+  </div>
+</div>
+
+<script>
+const MOODS = [
+  {label:'Happy', emoji:''},
+  {label:'Grateful', emoji:''},
+  {label:'Excited', emoji:''},
+  {label:'Peaceful', emoji:''},
+  {label:'Nostalgic', emoji:''},
+  {label:'Adventurous', emoji:''},
+];
+
+const TEMPLATES = {
+  vacation: [
+    {title:'Where we were', placeholder:'The place, the setting, what it looked like...', rows:3},
+    {title:'What we did', placeholder:'Walk me through the day...', rows:5},
+    {title:'Favorite memory of the trip', placeholder:'The moment I never want to forget...', rows:3},
+    {title:'Who was there', placeholder:'Names, little details about each person...', rows:2},
+    {title:'I want to come back because', placeholder:'What made it special...', rows:2},
+  ],
+  event: [
+    {title:'The occasion', placeholder:'What were we celebrating?', rows:2},
+    {title:'How it felt', placeholder:'Describe the atmosphere, the feeling in the room...', rows:4},
+    {title:'The best moment', placeholder:'One scene I want to remember forever...', rows:3},
+    {title:'Who made it special', placeholder:'People, gestures, surprises...', rows:3},
+  ],
+  milestone: [
+    {title:'What happened', placeholder:'Describe the milestone...', rows:3},
+    {title:'How I felt in that moment', placeholder:'Emotions, thoughts, reactions...', rows:3},
+    {title:'Why this matters', placeholder:'What this means to me or our family...', rows:3},
+    {title:'What comes next', placeholder:'Dreams, hopes, what I\'m looking forward to...', rows:2},
+  ],
+  everyday: [
+    {title:'Just a regular day', placeholder:'What made today worth writing down?', rows:8},
+  ],
+  blank: [
+    {title:'Your entry', placeholder:'Write whatever comes to mind...', rows:10},
+  ],
+};
+
+const PROMPTS = {
+  vacation: ['We ate at...','The weather was...','Funniest moment...','Kids loved...','I was surprised by...','We got lost when...'],
+  event: ['The food was...','Everyone laughed when...','I cried when...','The highlight was...','I wish I had...'],
+  milestone: ['I used to think...','Now I know...','I\'m most proud of...','One day I\'ll tell this story...'],
+  everyday: ['The little thing I noticed...','I\'m grateful for...','Tomorrow I want to...'],
+  blank: ['Tell me about the people...','Describe what you saw...','How did it smell, sound, feel?','What do you want to remember?'],
+};
+
+let currentTemplate = 'vacation';
+let wordTimer = null;
+
+function buildMoods() {
+  const cont = document.getElementById('mood-chips');
+  MOODS.forEach(m => {
+    const chip = document.createElement('div');
+    chip.className = 'mood-chip';
+    chip.textContent = m.label;
+    chip.onclick = () => {
+      document.querySelectorAll('.mood-chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+    };
+    cont.appendChild(chip);
+  });
+  cont.children[0].classList.add('active');
+}
+
+function loadTemplate(name) {
+  currentTemplate = name;
+  const sections = TEMPLATES[name];
+  const area = document.getElementById('writing-area');
+  area.innerHTML = '';
+
+  if (sections.length === 1 && sections[0].rows >= 8) {
+    const block = document.createElement('div');
+    block.className = 'section-block';
+    const ta = document.createElement('textarea');
+    ta.className = 'main-textarea';
+    ta.rows = sections[0].rows;
+    ta.placeholder = sections[0].placeholder;
+    ta.id = 'main-entry';
+    ta.addEventListener('input', updateWordCount);
+    block.appendChild(ta);
+    area.appendChild(block);
+  } else {
+    sections.forEach((s, i) => {
+      const block = document.createElement('div');
+      block.className = 'section-block';
+      const head = document.createElement('div');
+      head.className = 'section-head';
+      head.innerHTML = `<div class="section-dot"></div><div class="section-title">${s.title}</div>`;
+      const ta = document.createElement('textarea');
+      ta.className = 'section-textarea';
+      ta.rows = s.rows;
+      ta.placeholder = s.placeholder;
+      ta.id = `section-${i}`;
+      ta.addEventListener('input', updateWordCount);
+      block.appendChild(head);
+      block.appendChild(ta);
+      area.appendChild(block);
+    });
+  }
+
+  buildPrompts(name);
+  updateWordCount();
+}
+
+function buildPrompts(name) {
+  const cont = document.getElementById('prompt-helper');
+  const chips = PROMPTS[name] || [];
+  cont.innerHTML = '';
+  if (!chips.length) return;
+  const label = document.createElement('div');
+  label.className = 'ph-label';
+  label.textContent = 'Need a nudge?';
+  cont.appendChild(label);
+  const row = document.createElement('div');
+  row.className = 'ph-chips';
+  chips.forEach(p => {
+    const c = document.createElement('div');
+    c.className = 'ph-chip';
+    c.textContent = p;
+    c.onclick = () => injectPrompt(p);
+    row.appendChild(c);
+  });
+  cont.appendChild(row);
+}
+
+function injectPrompt(text) {
+  const tas = document.querySelectorAll('.section-textarea, .main-textarea');
+  let target = null;
+  tas.forEach(ta => { if (document.activeElement === ta) target = ta; });
+  if (!target) target = tas[tas.length - 1];
+  if (!target) return;
+  if (target.value && !target.value.endsWith('\n')) target.value += '\n';
+  target.value += text + ' ';
+  target.focus();
+  updateWordCount();
+}
+
+function updateWordCount() {
+  const tas = document.querySelectorAll('.section-textarea, .main-textarea');
+  let total = 0;
+  tas.forEach(ta => {
+    const words = ta.value.trim().split(/\s+/).filter(w => w.length > 0);
+    total += words.length;
+  });
+  document.getElementById('wordcount').textContent = total + (total === 1 ? ' word' : ' words');
+}
+
+function saveEntry() {
+  const title = document.getElementById('entry-title').value.trim();
+  if (!title) {
+    document.getElementById('entry-title').focus();
+    document.getElementById('entry-title').placeholder = 'Please add a title first...';
+    return;
+  }
+  document.getElementById('success-bar').classList.add('show');
+  document.querySelector('.save-btn').textContent = 'Saved!';
+  document.querySelector('.save-btn').style.background = '#639922';
+}
+
+document.getElementById('priv-toggle').addEventListener('change', function() {
+  document.getElementById('priv-text').textContent = this.checked ? 'Private entry' : 'Shared with family';
+});
+
+const today = new Date().toISOString().split('T')[0];
+document.getElementById('entry-date').value = today;
+
+buildMoods();
+loadTemplate('vacation');
+</script>

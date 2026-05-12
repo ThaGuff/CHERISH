@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Cherish — The moments pass. The memories don't have to.</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500&family=Caveat:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  *{box-sizing:border-box;margin:0;padding:0;}
+  body{font-family:'DM Sans',sans-serif;background:#fffaf7;color:#2c1a0a;}
+  a{text-decoration:none;}
+
+  /* NAV */
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:18px 48px;border-bottom:1px solid rgba(216,90,48,0.12);background:#fffaf7;position:sticky;top:0;z-index:100;}
+  .nav-logo{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:#c84820;letter-spacing:-0.5px;}
+  .nav-links{display:flex;gap:28px;align-items:center;}
+  .nav-link{font-size:13px;color:#8a6050;cursor:pointer;transition:color 0.15s;}
+  .nav-link:hover{color:#c84820;}
+  .nav-cta{padding:9px 22px;background:#c84820;color:white;border-radius:22px;font-size:13px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;transition:background 0.15s;}
+  .nav-cta:hover{background:#993c1d;}
+
+  /* HERO */
+  .hero{padding:80px 48px 64px;text-align:center;max-width:780px;margin:0 auto;}
+  .badge{display:inline-block;background:#faece7;color:#993c1d;border:1px solid #f5c4b3;border-radius:22px;padding:6px 16px;font-size:12px;font-weight:500;margin-bottom:24px;letter-spacing:0.3px;}
+  .hero h1{font-family:'Playfair Display',serif;font-size:58px;font-weight:700;line-height:1.1;color:#2c1a0a;margin-bottom:12px;letter-spacing:-1.5px;}
+  .hero h1 em{color:#c84820;font-style:italic;}
+  .hero-tag{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#9a6040;margin-bottom:20px;font-weight:400;}
+  .hero-sub{font-size:17px;color:#7a5040;line-height:1.75;margin-bottom:36px;max-width:520px;margin-left:auto;margin-right:auto;}
+  .signup-row{display:flex;gap:10px;max-width:460px;margin:0 auto 14px;}
+  .signup-input{flex:1;padding:14px 18px;border-radius:12px;border:1.5px solid #e8c8b0;background:white;font-size:15px;font-family:'DM Sans',sans-serif;color:#2c1a0a;outline:none;transition:border-color 0.15s;}
+  .signup-input:focus{border-color:#c84820;}
+  .signup-input::placeholder{color:#c0a090;}
+  .signup-btn{padding:14px 26px;background:#c84820;color:white;border-radius:12px;font-size:15px;font-weight:500;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;white-space:nowrap;transition:background 0.15s;}
+  .signup-btn:hover{background:#993c1d;}
+  .hero-fine{font-size:12px;color:#b09080;text-align:center;}
+  .success-msg{display:none;background:#eaf3de;border:1px solid #97c459;border-radius:10px;padding:14px 20px;font-size:14px;color:#27500a;max-width:460px;margin:0 auto 12px;text-align:center;line-height:1.6;}
+  .success-msg.show{display:block;}
+
+  /* PROOF BAR */
+  .proof-bar{display:flex;align-items:center;justify-content:center;gap:40px;padding:22px 48px;background:#fff5f0;border-top:1px solid rgba(216,90,48,0.1);border-bottom:1px solid rgba(216,90,48,0.1);flex-wrap:wrap;}
+  .proof-item{text-align:center;}
+  .proof-num{font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:#c84820;}
+  .proof-lbl{font-size:12px;color:#9a7060;margin-top:2px;}
+  .proof-div{width:1px;height:36px;background:rgba(216,90,48,0.18);}
+
+  /* FEATURES */
+  .section{padding:72px 48px;max-width:960px;margin:0 auto;}
+  .section-label{font-size:11px;font-weight:500;letter-spacing:1.2px;text-transform:uppercase;color:#c84820;text-align:center;margin-bottom:12px;}
+  .section-title{font-family:'Playfair Display',serif;font-size:38px;font-weight:700;text-align:center;color:#2c1a0a;margin-bottom:10px;letter-spacing:-0.5px;}
+  .section-sub{font-size:16px;color:#8a6050;text-align:center;margin-bottom:48px;line-height:1.7;max-width:520px;margin-left:auto;margin-right:auto;}
+  .feat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px;}
+  .feat-card{background:white;border:1px solid #f0ddd0;border-radius:18px;padding:28px;transition:border-color 0.2s,transform 0.2s;}
+  .feat-card:hover{border-color:#c84820;transform:translateY(-2px);}
+  .feat-icon{width:48px;height:48px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:24px;margin-bottom:16px;}
+  .feat-name{font-size:16px;font-weight:500;color:#2c1a0a;margin-bottom:8px;}
+  .feat-desc{font-size:14px;color:#8a6050;line-height:1.65;}
+
+  /* HOW IT WORKS */
+  .how{padding:72px 48px;background:#fff5f0;text-align:center;}
+  .steps{display:flex;justify-content:center;gap:0;max-width:860px;margin:48px auto 0;flex-wrap:wrap;}
+  .step{flex:1;min-width:200px;padding:0 24px;position:relative;}
+  .step:not(:last-child):after{content:'→';position:absolute;right:-8px;top:22px;font-size:22px;color:#e0b0a0;}
+  .step-num{width:56px;height:56px;border-radius:50%;background:#c84820;color:white;font-family:'Playfair Display',serif;font-size:22px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px;}
+  .step-name{font-size:15px;font-weight:500;color:#2c1a0a;margin-bottom:8px;}
+  .step-desc{font-size:13px;color:#9a7060;line-height:1.65;}
+
+  /* QUOTE */
+  .quote-section{padding:72px 48px;max-width:720px;margin:0 auto;text-align:center;}
+  .quote-mark{font-family:'Playfair Display',serif;font-size:80px;color:#f5c4b3;line-height:0.5;margin-bottom:20px;display:block;}
+  .quote-text{font-family:'Playfair Display',serif;font-size:24px;font-style:italic;color:#3c2010;line-height:1.65;margin-bottom:22px;}
+  .quote-attr{font-size:14px;color:#9a7060;}
+  .quote-attr strong{color:#5a3020;font-weight:500;}
+
+  /* PRICING */
+  .pricing{padding:72px 48px;background:#2c1a0a;text-align:center;}
+  .pricing .section-title{color:white;}
+  .pricing .section-sub{color:#c0a090;}
+  .pricing .section-label{color:#e8a080;}
+  .price-cards{display:flex;gap:18px;justify-content:center;margin-top:40px;flex-wrap:wrap;}
+  .pcard{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:18px;padding:32px 26px;min-width:210px;max-width:260px;text-align:left;flex:1;}
+  .pcard.featured{background:rgba(200,72,32,0.2);border-color:rgba(200,72,32,0.6);}
+  .pcard-badge{display:inline-block;background:#c84820;color:white;border-radius:22px;padding:4px 12px;font-size:11px;font-weight:500;margin-bottom:14px;}
+  .pcard-name{font-size:13px;color:#c0a090;margin-bottom:6px;letter-spacing:0.5px;text-transform:uppercase;}
+  .pcard-price{font-family:'Playfair Display',serif;font-size:36px;font-weight:700;color:white;margin-bottom:4px;}
+  .pcard-per{font-size:12px;color:#9a8070;margin-bottom:16px;line-height:1.5;}
+  .pcard-div{height:1px;background:rgba(255,255,255,0.08);margin:16px 0;}
+  .pcard-feat{font-size:13px;color:#c0a090;line-height:1.9;}
+
+  /* FINAL CTA */
+  .final-cta{padding:88px 48px;text-align:center;max-width:640px;margin:0 auto;}
+  .final-cta h2{font-family:'Playfair Display',serif;font-size:42px;font-weight:700;color:#2c1a0a;margin-bottom:14px;letter-spacing:-0.5px;line-height:1.15;}
+  .final-cta h2 em{color:#c84820;font-style:italic;}
+  .final-cta p{font-size:17px;color:#7a5040;line-height:1.7;margin-bottom:32px;}
+
+  /* FOOTER */
+  .footer{padding:32px 48px;border-top:1px solid rgba(216,90,48,0.12);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;background:#fffaf7;}
+  .footer-logo{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#c84820;}
+  .footer-links{display:flex;gap:24px;}
+  .footer-link{font-size:13px;color:#b09080;cursor:pointer;}
+  .footer-copy{font-size:12px;color:#c0a890;}
+
+  @media(max-width:600px){
+    .nav{padding:14px 20px;}.nav-links{display:none;}
+    .hero{padding:48px 20px 40px;}.hero h1{font-size:36px;}
+    .signup-row{flex-direction:column;}
+    .proof-bar{gap:20px;padding:18px 20px;}.proof-div{display:none;}
+    .section{padding:48px 20px;}.how{padding:48px 20px;}
+    .steps{flex-direction:column;gap:32px;}.step:not(:last-child):after{display:none;}
+    .pricing{padding:48px 20px;}.price-cards{flex-direction:column;align-items:center;}
+    .final-cta{padding:56px 20px;}.final-cta h2{font-size:30px;}
+    .footer{padding:24px 20px;flex-direction:column;text-align:center;}.footer-links{justify-content:center;}
+  }
+</style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">Cherish.</div>
+    <div class="nav-links">
+      <a class="nav-link" href="#how">How it works</a>
+      <a class="nav-link" href="#features">Features</a>
+      <a class="nav-link" href="#pricing">Pricing</a>
+      <button class="nav-cta" onclick="document.getElementById('email-hero').focus();document.getElementById('email-hero').scrollIntoView({behavior:'smooth',block:'center'})">Join waitlist</button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="badge">Coming soon — join the founding waitlist</div>
+    <h1>The moments pass.<br><em>The memories don't have to.</em></h1>
+    <div class="hero-tag">Your family's story, beautifully kept.</div>
+    <p class="hero-sub">Cherish lets you capture a memory in 60 seconds on your phone, then transform it into a stunning scrapbook page with journal entries, stickers, and photos — all private, all yours, all printable.</p>
+    <div class="signup-row" id="hero-form">
+      <input class="signup-input" id="email-hero" type="email" placeholder="Enter your email address" />
+      <button class="signup-btn" onclick="joinList('email-hero','hero-form','success-hero','counter')">Join free</button>
+    </div>
+    <div class="success-msg" id="success-hero">You're on the list! We'll email you the moment Cherish is ready. Founding members get 40% off Pro — for life.</div>
+    <div class="hero-fine">Free to join &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Be first when we launch</div>
+  </div>
+
+  <!-- PROOF BAR -->
+  <div class="proof-bar">
+    <div class="proof-item"><div class="proof-num" id="counter">247</div><div class="proof-lbl">people on the waitlist</div></div>
+    <div class="proof-div"></div>
+    <div class="proof-item"><div class="proof-num">60s</div><div class="proof-lbl">to capture any moment</div></div>
+    <div class="proof-div"></div>
+    <div class="proof-item"><div class="proof-num">4</div><div class="proof-lbl">beautiful themes</div></div>
+    <div class="proof-div"></div>
+    <div class="proof-item"><div class="proof-num">100%</div><div class="proof-lbl">private by default</div></div>
+  </div>
+
+  <!-- FEATURES -->
+  <div class="section" id="features">
+    <div class="section-label">Everything you need</div>
+    <div class="section-title">One app. Every memory.</div>
+    <div class="section-sub">No more choosing between quick and beautiful. Cherish does both — from the beach to the bookshelf.</div>
+    <div class="feat-grid">
+      <div class="feat-card"><div class="feat-icon" style="background:#fff0e8;">⚡</div><div class="feat-name">Quick snap — 60 seconds</div><div class="feat-desc">You're at the beach and something magical happens. Open Cherish, snap a photo, write three words, tag who was there. The memory is saved before the wave even breaks.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#f0f0ff;">📖</div><div class="feat-name">Journal & diary templates</div><div class="feat-desc">Travel Day, Big Milestone, Gratitude, Family Moment. Pre-designed templates mean you never face a blank page — just beautiful prompts waiting for your words, with or without photos.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#f0fff5;">🎨</div><div class="feat-name">Scrapbook page builder</div><div class="feat-desc">Drag-and-drop photos into beautiful layouts. Add stickers, ribbons, frames, and caption boxes like "Favorite Memory." The scrapbook you always meant to make — without the craft store trip.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#fff5f0;">🔒</div><div class="feat-name">Private by default</div><div class="feat-desc">Your memories belong to you. Everything is private unless you decide to share — with your family circle, a specific person, or the world. You are always in control.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#fdf0ff;">📚</div><div class="feat-name">Print your memory book</div><div class="feat-desc">Export any memory book as a print-ready PDF, or order a real hardcover book delivered to your door. A physical keepsake your family will hold for generations.</div></div>
+      <div class="feat-card"><div class="feat-icon" style="background:#fffae8;">✨</div><div class="feat-name">Your vibe, your theme</div><div class="feat-desc">Four visual themes — Minimal, Journal, Playful, Premium. Change it per memory book. Your beach vacation can feel completely different from your baby's first year.</div></div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <div class="how" id="how">
+    <div class="section-label">So simple you'll actually use it</div>
+    <div class="section-title">How Cherish works</div>
+    <div class="section-sub">Three steps. Zero overwhelm. One beautiful memory at a time.</div>
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <div class="step-name">Capture the moment</div>
+        <div class="step-desc">On your phone in 60 seconds — photo, note, location, who was there. Even a voice memo. Before the moment fades.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <div class="step-name">Design your page</div>
+        <div class="step-desc">At home when you have time — photo layouts, stickers, journal entries, caption boxes. As simple or detailed as you want.</div>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <div class="step-name">Keep it forever</div>
+        <div class="step-desc">Cloud-saved, printable, shareable with family. Export as a PDF or order a real printed book. Your story, beautifully told.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUOTE -->
+  <div class="quote-section">
+    <span class="quote-mark">"</span>
+    <div class="quote-text">I went on a two-week family vacation and came home with hundreds of photos but no story. By the time I sat down to scrapbook, I'd already forgotten half the details. I needed something like this at the beach — not at my desk two weeks later.</div>
+    <div class="quote-attr"><strong>Sarah, mom of two</strong> — the person who inspired Cherish</div>
+  </div>
+
+  <!-- PRICING -->
+  <div class="pricing" id="pricing">
+    <div class="section-label">Simple, honest pricing</div>
+    <div class="section-title">Start free. Stay as long as you want.</div>
+    <div class="section-sub">Founding members who join the waitlist get 40% off Pro — forever. That price never goes up.</div>
+    <div class="price-cards">
+      <div class="pcard">
+        <div class="pcard-name">Free</div>
+        <div class="pcard-price">$0</div>
+        <div class="pcard-per">forever, no card required</div>
+        <div class="pcard-div"></div>
+        <div class="pcard-feat">10 pages per month<br>1 memory book<br>Basic sticker library<br>Private entries<br>Cloud backup</div>
+      </div>
+      <div class="pcard featured">
+        <div class="pcard-badge">Founding member — 40% off</div>
+        <div class="pcard-name">Pro</div>
+        <div class="pcard-price">$4.79</div>
+        <div class="pcard-per">/ month, locked in for life<br>(normally $7.99/month)</div>
+        <div class="pcard-div"></div>
+        <div class="pcard-feat">Unlimited pages &amp; books<br>All stickers &amp; themes<br>PDF export &amp; print ordering<br>Voice memos<br>Family sharing circle<br>On This Day reminders</div>
+      </div>
+      <div class="pcard">
+        <div class="pcard-name">Family</div>
+        <div class="pcard-price">$9.99</div>
+        <div class="pcard-per">/ month for up to 5 members</div>
+        <div class="pcard-div"></div>
+        <div class="pcard-feat">Everything in Pro<br>5 family accounts<br>Shared memory books<br>Collaborative pages<br>Family circle sharing</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL CTA -->
+  <div class="final-cta">
+    <div class="badge">Your family's story is waiting</div>
+    <h2>Don't let another vacation<br><em>fade from memory.</em></h2>
+    <p>Join hundreds of families already on the waitlist. Founding members lock in 40% off Pro — for life. No credit card, no commitment.</p>
+    <div class="signup-row" id="cta-form">
+      <input class="signup-input" id="email-cta" type="email" placeholder="Your email address" />
+      <button class="signup-btn" onclick="joinList('email-cta','cta-form','success-cta','counter')">Reserve my spot</button>
+    </div>
+    <div class="success-msg" id="success-cta">You're in! Watch your inbox — we'll be in touch soon.</div>
+    <div class="hero-fine">Free &nbsp;·&nbsp; No spam &nbsp;·&nbsp; Unsubscribe anytime</div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-logo">Cherish.</div>
+    <div class="footer-links">
+      <a class="footer-link" href="#">Privacy policy</a>
+      <a class="footer-link" href="#">Terms of service</a>
+      <a class="footer-link" href="#">Contact us</a>
+    </div>
+    <div class="footer-copy">© 2026 Cherish. Made with love for families everywhere.</div>
+  </footer>
+
+<script>
+  let count = 247;
+
+  function joinList(inputId, formId, successId, counterId) {
+    const input = document.getElementById(inputId);
+    const val = input.value.trim();
+    if (!val || !val.includes('@')) {
+      input.style.borderColor = '#e24b4a';
+      input.placeholder = 'Please enter a valid email';
+      setTimeout(() => { input.style.borderColor = '#e8c8b0'; input.placeholder = 'Enter your email address'; }, 2500);
+      return;
+    }
+    count++;
+    document.getElementById(counterId).textContent = count;
+    document.getElementById(formId).style.display = 'none';
+    document.getElementById(successId).classList.add('show');
+  }
+
+  setInterval(() => {
+    if (Math.random() < 0.25) {
+      count++;
+      const el = document.getElementById('counter');
+      if (el) el.textContent = count;
+    }
+  }, 9000);
+</script>
+</body>
+</html>

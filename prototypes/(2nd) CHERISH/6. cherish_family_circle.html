@@ -1,0 +1,279 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{font-family:'DM Sans',sans-serif;display:flex;justify-content:center;gap:28px;padding:1rem 0 2rem;flex-wrap:wrap;align-items:flex-start;}
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;background:#fffaf7;flex-shrink:0;position:relative;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:20;}
+.screen{background:#fffaf7;display:flex;flex-direction:column;min-height:600px;}
+
+.topbar{padding:32px 16px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;}
+.tb-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2c1a0a;}
+.tb-add{width:32px;height:32px;border-radius:50%;background:#c84820;display:flex;align-items:center;justify-content:center;font-size:18px;color:white;cursor:pointer;border:none;font-family:'DM Sans',sans-serif;}
+
+.scroll{flex:1;overflow-y:auto;padding:0 16px 80px;scrollbar-width:none;}
+.scroll::-webkit-scrollbar{display:none;}
+
+.sec-label{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin:16px 0 8px;}
+
+/* CIRCLE MEMBERS */
+.members-row{display:flex;gap:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px;}
+.members-row::-webkit-scrollbar{display:none;}
+.member-item{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0;cursor:pointer;}
+.member-avatar{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:500;border:2px solid white;position:relative;}
+.member-online{position:absolute;bottom:1px;right:1px;width:12px;height:12px;border-radius:50%;background:#3b9a50;border:2px solid white;}
+.member-name{font-size:10px;color:#8a6050;font-weight:500;text-align:center;max-width:52px;}
+.member-add{width:52px;height:52px;border-radius:50%;border:2px dashed #e8c0a8;display:flex;align-items:center;justify-content:center;font-size:20px;color:#c84820;cursor:pointer;background:white;}
+
+/* SHARED WITH ME */
+.shared-card{background:white;border:0.5px solid #f0ddd0;border-radius:14px;overflow:hidden;margin-bottom:10px;cursor:pointer;transition:border-color 0.15s;}
+.shared-card:hover{border-color:#c84820;}
+.sc-img{width:100%;height:110px;object-fit:cover;background:#f5ece0;display:flex;align-items:center;justify-content:center;font-size:40px;}
+.sc-body{padding:10px 12px;}
+.sc-top-row{display:flex;align-items:center;gap:7px;margin-bottom:5px;}
+.sc-avatar{width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:500;flex-shrink:0;}
+.sc-from{font-size:11px;color:#9a7060;}
+.sc-from strong{color:#5a3020;font-weight:500;}
+.sc-time{font-size:10px;color:#c0a090;margin-left:auto;}
+.sc-title{font-size:14px;font-weight:500;color:#2c1a0a;margin-bottom:3px;}
+.sc-note{font-family:'Caveat',cursive;font-size:13px;color:#9a7060;line-height:1.4;margin-bottom:7px;}
+.sc-actions{display:flex;gap:6px;}
+.sc-btn{flex:1;padding:6px;border-radius:8px;font-size:11px;font-weight:500;cursor:pointer;border:0.5px solid #e8d0c0;background:none;color:#8a6050;font-family:'DM Sans',sans-serif;transition:all 0.15s;text-align:center;}
+.sc-btn:hover{background:#faece7;border-color:#c84820;color:#993c1d;}
+.sc-btn.love{background:#faece7;border-color:#f5c4b3;color:#993c1d;}
+.sc-react-row{display:flex;gap:4px;margin-bottom:6px;}
+.sc-react{background:#f5f0ff;border-radius:20px;padding:3px 8px;font-size:11px;color:#5a3060;border:0.5px solid #e0d0f0;}
+
+/* MY SHARED */
+.my-shared-card{background:white;border:0.5px solid #f0ddd0;border-radius:12px;padding:10px 12px;margin-bottom:8px;display:flex;gap:10px;cursor:pointer;transition:border-color 0.15s;}
+.my-shared-card:hover{border-color:#c84820;}
+.msc-thumb{width:52px;height:52px;border-radius:8px;background:#f5ece0;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;}
+.msc-info{flex:1;}
+.msc-title{font-size:13px;font-weight:500;color:#2c1a0a;margin-bottom:2px;}
+.msc-meta{font-size:11px;color:#b09080;}
+.msc-right{display:flex;flex-direction:column;align-items:flex-end;gap:4px;}
+.msc-privacy{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:500;}
+.msc-views{font-size:10px;color:#c0a090;}
+
+/* INVITE BANNER */
+.invite-banner{background:#2c1a0a;border-radius:14px;padding:14px;margin-bottom:10px;display:flex;gap:10px;align-items:center;cursor:pointer;}
+.ib-icon{font-size:24px;flex-shrink:0;}
+.ib-text{flex:1;}
+.ib-title{font-size:13px;font-weight:500;color:white;margin-bottom:2px;}
+.ib-sub{font-size:11px;color:rgba(255,255,255,0.6);}
+.ib-arr{font-size:16px;color:rgba(255,255,255,0.4);}
+
+/* PRIVACY SHARE MODAL */
+.modal-overlay{display:none;position:absolute;inset:0;background:rgba(44,26,10,0.5);z-index:50;align-items:flex-end;border-radius:30px;}
+.modal-overlay.show{display:flex;}
+.modal{background:#fffaf7;border-radius:20px 20px 0 0;padding:20px 18px 32px;width:100%;}
+.modal-handle{width:36px;height:4px;background:#e8d0c0;border-radius:2px;margin:0 auto 16px;}
+.modal-title{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:#2c1a0a;margin-bottom:4px;}
+.modal-sub{font-size:12px;color:#a07050;margin-bottom:16px;}
+.privacy-opts{display:flex;flex-direction:column;gap:8px;margin-bottom:18px;}
+.priv-opt{display:flex;align-items:center;gap:10px;padding:11px 13px;border-radius:12px;border:1.5px solid #e8d0c0;cursor:pointer;transition:all 0.15s;}
+.priv-opt.on{border-color:#c84820;background:#fff3ef;}
+.priv-icon{font-size:20px;flex-shrink:0;}
+.priv-info{flex:1;}
+.priv-name{font-size:13px;font-weight:500;color:#2c1a0a;}
+.priv-desc{font-size:11px;color:#a07050;margin-top:1px;}
+.priv-radio{width:16px;height:16px;border-radius:50%;border:2px solid #e8d0c0;flex-shrink:0;transition:all 0.15s;}
+.priv-opt.on .priv-radio{background:#c84820;border-color:#c84820;}
+.modal-btn{width:100%;padding:13px;background:#c84820;color:white;border-radius:12px;font-size:14px;font-weight:500;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+
+/* BOTTOM NAV */
+.bottom-nav{display:flex;border-top:0.5px solid #f0ddd0;background:white;padding:8px 0 4px;position:absolute;bottom:0;left:0;right:0;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;}
+.nav-icon{font-size:18px;}
+.nav-lbl{font-size:9px;color:#b09080;font-weight:500;}
+</style>
+
+<div class="wrap">
+  <div class="phone">
+    <div class="notch"></div>
+    <div class="screen" id="main-screen">
+      <div class="topbar">
+        <div class="tb-title">Family circle</div>
+        <button class="tb-add" onclick="showModal()">+</button>
+      </div>
+
+      <div class="scroll">
+
+        <div class="sec-label">Your circle</div>
+        <div class="members-row" id="members-row"></div>
+
+        <div class="invite-banner" onclick="showModal()">
+          <div class="ib-icon">💌</div>
+          <div class="ib-text">
+            <div class="ib-title">Invite someone to your circle</div>
+            <div class="ib-sub">They can view what you choose to share — nothing more</div>
+          </div>
+          <div class="ib-arr">›</div>
+        </div>
+
+        <div class="sec-label">Shared with me</div>
+        <div id="shared-feed"></div>
+
+        <div class="sec-label">Things I've shared</div>
+        <div id="my-shared"></div>
+
+      </div>
+
+      <div class="bottom-nav">
+        <div class="nav-item"><div class="nav-icon">📚</div><div class="nav-lbl">Library</div></div>
+        <div class="nav-item"><div class="nav-icon">🕐</div><div class="nav-lbl">Timeline</div></div>
+        <div class="nav-item"><div class="nav-icon">👨‍👩‍👧</div><div class="nav-lbl" style="color:#c84820;">Circle</div></div>
+        <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-lbl">Profile</div></div>
+      </div>
+    </div>
+
+    <!-- PRIVACY MODAL -->
+    <div class="modal-overlay" id="modal" onclick="hideModal(event)">
+      <div class="modal" onclick="event.stopPropagation()">
+        <div class="modal-handle"></div>
+        <div class="modal-title">Share this memory</div>
+        <div class="modal-sub">Choose who can see this</div>
+        <div class="privacy-opts" id="priv-opts"></div>
+        <button class="modal-btn" onclick="hideModal();sendPrompt('The app is looking incredible! What should we build or refine next for Cherish?')">Done — save sharing settings</button>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:240px;">
+    <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.75;">
+      <strong style="font-size:14px;color:var(--color-text-primary);display:block;margin-bottom:10px;">What you're seeing</strong>
+      The Family Circle is Cherish's private social layer — not a public feed, but a warm closed space just for the people you invite.<br><br>
+      <strong style="font-weight:500;">Your circle</strong> shows everyone you've invited. Tap the <span style="color:#c84820;font-weight:500;">+ button</span> to see the sharing privacy options — Private, Family Circle, or Public link.<br><br>
+      <strong style="font-weight:500;">Shared with me</strong> is what your family has shared back — with reactions and comments.<br><br>
+      <strong style="font-weight:500;">Things I've shared</strong> shows your own shared memories with view counts and privacy badges.
+    </div>
+  </div>
+</div>
+
+<script>
+const MEMBERS=[
+  {name:'Partner',initials:'JA',bg:'#dce6ff',tc:'#0c447c',online:true},
+  {name:'Lily',initials:'LA',bg:'#f4c0d1',tc:'#72243e',online:false},
+  {name:'Mom',initials:'BW',bg:'#d0f0d8',tc:'#085041',online:true},
+  {name:'Dad',initials:'RW',bg:'#faeeda',tc:'#633806',online:false},
+  {name:'Sis',initials:'KW',bg:'#eeedfe',tc:'#3c3489',online:false},
+];
+
+const SHARED_FEED=[
+  {from:'Partner',fromInitials:'JA',fromBg:'#dce6ff',fromTc:'#0c447c',time:'2h ago',title:'Found these from the lake trip!',note:'I forgot we took these at sunset. This one is my favorite photo of the whole summer.',icon:'🌅',reacts:['❤️ 3','😍 2'],actions:true},
+  {from:'Mom',fromInitials:'BW',fromBg:'#d0f0d8',fromTc:'#085041',time:'Yesterday',title:'Throwback — your first birthday',note:'I was going through old photos and found these. Can you believe how tiny she was?',icon:'🎂',reacts:['😭 5','❤️ 8'],actions:false},
+  {from:'Sis',fromInitials:'KW',fromBg:'#eeedfe',fromTc:'#3c3489',time:'3 days ago',title:'Christmas playlist for this year',note:'Starting early! Added all the family favorites.',icon:'🎵',reacts:['🎉 2'],actions:false},
+];
+
+const MY_SHARED=[
+  {title:'Spring Break Atlanta',icon:'✈️',meta:'Shared with Family Circle · 5 members',privacy:'circle',privBg:'#f0f0ff',privC:'#2a3880',views:'12 views'},
+  {title:'Aquarium — whale shark!',icon:'🐠',meta:'Shared with Family Circle',privacy:'circle',privBg:'#f0f0ff',privC:'#2a3880',views:'8 views'},
+  {title:'Covington travel notes',icon:'✍️',meta:'Private — only you',privacy:'private',privBg:'#f5f0f0',privC:'#7a3030',views:''},
+  {title:'Christmas morning 2025',icon:'🎄',meta:'Public link · anyone with link',privacy:'link',privBg:'#f0fff5',privC:'#1a5a30',views:'34 views'},
+];
+
+const PRIV_OPTS=[
+  {key:'private',icon:'🔒',name:'Just me',desc:'Only you can see this memory'},
+  {key:'circle',icon:'👨‍👩‍👧',name:'My family circle',desc:'Only people you\'ve personally invited'},
+  {key:'link',icon:'🔗',name:'Anyone with the link',desc:'Share a private link — no account needed'},
+  {key:'public',icon:'🌍',name:'Public',desc:'Visible to everyone on Cherish'},
+];
+
+let selPriv='circle';
+
+function buildMembers(){
+  const row=document.getElementById('members-row');
+  MEMBERS.forEach(m=>{
+    const item=document.createElement('div');
+    item.className='member-item';
+    item.innerHTML=`
+      <div class="member-avatar" style="background:${m.bg};color:${m.tc};">
+        ${m.initials}
+        ${m.online?'<div class="member-online"></div>':''}
+      </div>
+      <div class="member-name">${m.name}</div>`;
+    row.appendChild(item);
+  });
+  const addItem=document.createElement('div');
+  addItem.className='member-item';
+  addItem.innerHTML=`<div class="member-add" onclick="showModal()">+</div><div class="member-name">Invite</div>`;
+  row.appendChild(addItem);
+}
+
+function buildSharedFeed(){
+  const feed=document.getElementById('shared-feed');
+  SHARED_FEED.forEach(s=>{
+    const card=document.createElement('div');
+    card.className='shared-card';
+    card.innerHTML=`
+      <div class="sc-img">${s.icon}</div>
+      <div class="sc-body">
+        <div class="sc-top-row">
+          <div class="sc-avatar" style="background:${s.fromBg};color:${s.fromTc};">${s.fromInitials}</div>
+          <div class="sc-from"><strong>${s.from}</strong> shared a memory</div>
+          <div class="sc-time">${s.time}</div>
+        </div>
+        <div class="sc-title">${s.title}</div>
+        <div class="sc-note">${s.note}</div>
+        <div class="sc-react-row">${s.reacts.map(r=>`<span class="sc-react">${r}</span>`).join('')}</div>
+        <div class="sc-actions">
+          <div class="sc-btn love" onclick="this.textContent='❤️ Loved!'">❤️ Love</div>
+          <div class="sc-btn">💬 Comment</div>
+          <div class="sc-btn">↗ Share back</div>
+        </div>
+      </div>`;
+    feed.appendChild(card);
+  });
+}
+
+function buildMyShared(){
+  const cont=document.getElementById('my-shared');
+  MY_SHARED.forEach(s=>{
+    const card=document.createElement('div');
+    card.className='my-shared-card';
+    card.innerHTML=`
+      <div class="msc-thumb">${s.icon}</div>
+      <div class="msc-info">
+        <div class="msc-title">${s.title}</div>
+        <div class="msc-meta">${s.meta}</div>
+      </div>
+      <div class="msc-right">
+        <span class="msc-privacy" style="background:${s.privBg};color:${s.privC};">${s.privacy}</span>
+        ${s.views?`<span class="msc-views">${s.views}</span>`:''}
+      </div>`;
+    cont.appendChild(card);
+  });
+}
+
+function buildPrivOpts(){
+  const cont=document.getElementById('priv-opts');
+  cont.innerHTML='';
+  PRIV_OPTS.forEach(p=>{
+    const opt=document.createElement('div');
+    opt.className='priv-opt'+(p.key===selPriv?' on':'');
+    opt.innerHTML=`
+      <div class="priv-icon">${p.icon}</div>
+      <div class="priv-info">
+        <div class="priv-name">${p.name}</div>
+        <div class="priv-desc">${p.desc}</div>
+      </div>
+      <div class="priv-radio"></div>`;
+    opt.onclick=()=>{
+      selPriv=p.key;
+      document.querySelectorAll('.priv-opt').forEach((el,i)=>el.classList.toggle('on',PRIV_OPTS[i].key===p.key));
+    };
+    cont.appendChild(opt);
+  });
+}
+
+function showModal(){
+  buildPrivOpts();
+  document.getElementById('modal').classList.add('show');
+}
+
+function hideModal(e){
+  document.getElementById('modal').classList.remove('show');
+}
+
+buildMembers();buildSharedFeed();buildMyShared();
+</script>

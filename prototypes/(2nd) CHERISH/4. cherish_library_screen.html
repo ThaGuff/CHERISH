@@ -1,0 +1,324 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500&family=Caveat:wght@500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+.wrap{font-family:'DM Sans',sans-serif;display:flex;justify-content:center;gap:28px;padding:1rem 0 2rem;flex-wrap:wrap;align-items:flex-start;}
+
+.phone{width:300px;border-radius:36px;border:7px solid #1a1a1a;overflow:hidden;background:#fffaf7;flex-shrink:0;}
+.notch{width:88px;height:22px;background:#1a1a1a;border-radius:0 0 14px 14px;position:absolute;top:0;left:50%;transform:translateX(-50%);z-index:10;}
+.phone-inner{position:relative;}
+
+.screen{min-height:600px;background:#fffaf7;display:flex;flex-direction:column;}
+
+/* TOP BAR */
+.topbar{padding:32px 16px 0;display:flex;align-items:center;justify-content:space-between;}
+.tb-logo{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:#c84820;}
+.tb-icons{display:flex;gap:10px;align-items:center;}
+.tb-icon{width:32px;height:32px;border-radius:50%;background:#fff3ef;border:0.5px solid #f5c4b3;display:flex;align-items:center;justify-content:center;font-size:14px;cursor:pointer;}
+
+/* GREETING */
+.greeting-row{padding:14px 16px 0;}
+.greeting-hi{font-size:12px;color:#b07050;font-weight:500;}
+.greeting-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#2c1a0a;line-height:1.2;}
+
+/* STREAK */
+.streak-pill{display:flex;align-items:center;gap:6px;background:#fff3ef;border:0.5px solid #f5c4b3;border-radius:20px;padding:5px 12px;margin:10px 16px 0;width:fit-content;}
+.streak-fire{font-size:14px;}
+.streak-txt{font-size:11px;color:#993c1d;font-weight:500;}
+
+/* SECTION HEADER */
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:18px 16px 10px;}
+.sec-title{font-size:13px;font-weight:500;color:#2c1a0a;}
+.sec-action{font-size:11px;color:#c84820;cursor:pointer;font-weight:500;}
+
+/* BOOK SHELF — horizontal scroll */
+.shelf{display:flex;gap:12px;padding:0 16px 4px;overflow-x:auto;scrollbar-width:none;}
+.shelf::-webkit-scrollbar{display:none;}
+
+.book-card{flex-shrink:0;width:130px;cursor:pointer;transition:transform 0.2s;}
+.book-card:hover{transform:translateY(-3px);}
+.book-cover{width:130px;height:160px;border-radius:10px;position:relative;overflow:hidden;border:0.5px solid rgba(0,0,0,0.06);}
+.book-cover img{width:100%;height:100%;object-fit:cover;}
+.book-cover-overlay{position:absolute;inset:0;background:rgba(44,26,10,0.25);}
+.book-cover-title{position:absolute;bottom:0;left:0;right:0;padding:8px 10px;}
+.bct-name{font-family:'Playfair Display',serif;font-size:12px;font-weight:700;color:white;line-height:1.2;}
+.bct-pages{font-size:10px;color:rgba(255,255,255,0.75);margin-top:1px;}
+.book-spine{position:absolute;left:0;top:0;bottom:0;width:5px;border-radius:10px 0 0 10px;opacity:0.7;}
+.book-meta{margin-top:6px;}
+.bm-date{font-size:10px;color:#b09080;}
+.bm-tag{display:inline-block;background:#faece7;color:#993c1d;border-radius:8px;padding:1px 6px;font-size:9px;font-weight:500;margin-top:2px;}
+
+/* NEW BOOK CARD */
+.new-book-card{flex-shrink:0;width:130px;cursor:pointer;}
+.new-book-cover{width:130px;height:160px;border-radius:10px;border:2px dashed #f0c0a8;background:#fffaf7;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;transition:border-color 0.2s,background 0.2s;}
+.new-book-cover:hover{border-color:#c84820;background:#fff3ef;}
+.new-book-plus{width:32px;height:32px;border-radius:50%;background:#faece7;display:flex;align-items:center;justify-content:center;font-size:18px;color:#c84820;}
+.new-book-lbl{font-size:10px;color:#c09070;font-weight:500;text-align:center;padding:0 8px;}
+
+/* RECENT CAPTURES — vertical list */
+.capture-list{display:flex;flex-direction:column;gap:8px;padding:0 16px;}
+.cap-card{background:white;border:0.5px solid #f0ddd0;border-radius:12px;padding:10px 12px;display:flex;gap:10px;cursor:pointer;transition:border-color 0.15s;}
+.cap-card:hover{border-color:#c84820;}
+.cap-thumb{width:52px;height:52px;border-radius:8px;object-fit:cover;flex-shrink:0;background:#f5ece0;}
+.cap-thumb-placeholder{width:52px;height:52px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:22px;}
+.cap-info{flex:1;min-width:0;}
+.cap-title{font-size:13px;font-weight:500;color:#2c1a0a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cap-meta{font-size:11px;color:#b09080;margin-top:1px;}
+.cap-note{font-family:'Caveat',cursive;font-size:13px;color:#7a5040;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cap-type{flex-shrink:0;display:flex;align-items:flex-start;padding-top:2px;}
+.cap-badge{padding:2px 7px;border-radius:8px;font-size:9px;font-weight:500;}
+
+/* FAB */
+.fab{width:52px;height:52px;border-radius:50%;background:#c84820;display:flex;align-items:center;justify-content:center;font-size:24px;cursor:pointer;border:none;margin:16px auto;transition:background 0.15s;}
+.fab:hover{background:#993c1d;}
+
+/* BOTTOM NAV */
+.bottom-nav{display:flex;border-top:0.5px solid #f0ddd0;background:white;padding:8px 0 4px;}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0;}
+.nav-icon{font-size:18px;}
+.nav-lbl{font-size:9px;color:#b09080;font-weight:500;}
+.nav-item.on .nav-lbl{color:#c84820;}
+.nav-item.on .nav-icon{filter:none;}
+
+/* BOOK DETAIL SCREEN */
+.detail-screen{min-height:600px;background:#fffaf7;display:none;flex-direction:column;}
+.detail-top{background:#c84820;padding:32px 16px 20px;position:relative;}
+.detail-back{display:flex;align-items:center;gap:4px;font-size:12px;color:rgba(255,255,255,0.8);cursor:pointer;background:none;border:none;font-family:'DM Sans',sans-serif;margin-bottom:14px;}
+.detail-title{font-family:'Playfair Display',serif;font-size:24px;font-weight:700;color:white;margin-bottom:2px;}
+.detail-sub{font-size:12px;color:rgba(255,255,255,0.7);}
+.detail-stats{display:flex;gap:16px;margin-top:14px;}
+.ds-item{text-align:center;}
+.ds-num{font-family:'Playfair Display',serif;font-size:18px;font-weight:700;color:white;}
+.ds-lbl{font-size:10px;color:rgba(255,255,255,0.6);margin-top:1px;}
+.detail-actions{display:flex;gap:8px;margin-top:14px;}
+.da-btn{flex:1;padding:8px;border-radius:10px;background:rgba(255,255,255,0.2);border:0.5px solid rgba(255,255,255,0.3);font-size:11px;font-weight:500;color:white;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background 0.15s;}
+.da-btn:hover{background:rgba(255,255,255,0.3);}
+.detail-pages{padding:14px 16px;flex:1;overflow-y:auto;}
+.dp-label{font-size:10px;font-weight:500;letter-spacing:0.8px;text-transform:uppercase;color:#c09070;margin-bottom:10px;}
+.page-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
+.page-thumb{border-radius:10px;overflow:hidden;cursor:pointer;position:relative;aspect-ratio:3/4;background:#f5ece0;transition:transform 0.15s;}
+.page-thumb:hover{transform:scale(1.02);}
+.page-thumb img{width:100%;height:100%;object-fit:cover;}
+.page-thumb-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:4px;}
+.pt-type{font-size:22px;}
+.pt-lbl{font-size:9px;color:#b09080;font-weight:500;}
+.page-date-badge{position:absolute;bottom:5px;left:5px;background:rgba(44,26,10,0.6);color:white;font-size:9px;padding:2px 6px;border-radius:6px;}
+</style>
+
+<div class="wrap">
+  <div class="phone">
+    <div class="phone-inner">
+      <div class="notch"></div>
+
+      <!-- LIBRARY MAIN SCREEN -->
+      <div class="screen" id="sc-library">
+        <div class="topbar">
+          <div class="tb-logo">Cherish.</div>
+          <div class="tb-icons">
+            <div class="tb-icon">🔍</div>
+            <div class="tb-icon">🔔</div>
+          </div>
+        </div>
+
+        <div class="greeting-row">
+          <div class="greeting-hi">Good morning,</div>
+          <div class="greeting-name">Ashtin's library</div>
+        </div>
+
+        <div class="streak-pill">
+          <span class="streak-fire" style="font-size:14px;">🔥</span>
+          <span class="streak-txt">7-day streak — you're on a roll!</span>
+        </div>
+
+        <div class="sec-head">
+          <div class="sec-title">Your memory books</div>
+          <div class="sec-action" onclick="showDetail()">See all</div>
+        </div>
+
+        <div class="shelf" id="shelf"></div>
+
+        <div class="sec-head">
+          <div class="sec-title">Recent captures</div>
+          <div class="sec-action">See all</div>
+        </div>
+
+        <div class="capture-list" id="capture-list"></div>
+
+        <button class="fab" onclick="sendPrompt('Let\\'s build the Timeline view next — the chronological scroll of all memories across all books')">+</button>
+
+        <div class="bottom-nav">
+          <div class="nav-item on">
+            <div class="nav-icon">📚</div>
+            <div class="nav-lbl" style="color:#c84820;">Library</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🕐</div>
+            <div class="nav-lbl">Timeline</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">🔍</div>
+            <div class="nav-lbl">Explore</div>
+          </div>
+          <div class="nav-item">
+            <div class="nav-icon">👤</div>
+            <div class="nav-lbl">Profile</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- BOOK DETAIL SCREEN -->
+      <div class="detail-screen" id="sc-detail">
+        <div class="detail-top">
+          <button class="detail-back" onclick="showLibrary()">‹ Library</button>
+          <div class="detail-title" id="detail-title">Spring Break Atlanta</div>
+          <div class="detail-sub" id="detail-sub">March 2026 · 3 days · Georgia</div>
+          <div class="detail-stats">
+            <div class="ds-item"><div class="ds-num" id="ds-pages">8</div><div class="ds-lbl">Pages</div></div>
+            <div class="ds-item"><div class="ds-num" id="ds-photos">34</div><div class="ds-lbl">Photos</div></div>
+            <div class="ds-item"><div class="ds-num" id="ds-entries">5</div><div class="ds-lbl">Entries</div></div>
+          </div>
+          <div class="detail-actions">
+            <button class="da-btn">+ Add page</button>
+            <button class="da-btn">Export PDF</button>
+            <button class="da-btn">Share</button>
+          </div>
+        </div>
+        <div class="detail-pages">
+          <div class="dp-label">Pages in this book</div>
+          <div class="page-grid" id="page-grid"></div>
+        </div>
+        <div class="bottom-nav">
+          <div class="nav-item on">
+            <div class="nav-icon">📚</div>
+            <div class="nav-lbl" style="color:#c84820;">Library</div>
+          </div>
+          <div class="nav-item"><div class="nav-icon">🕐</div><div class="nav-lbl">Timeline</div></div>
+          <div class="nav-item"><div class="nav-icon">🔍</div><div class="nav-lbl">Explore</div></div>
+          <div class="nav-item"><div class="nav-icon">👤</div><div class="nav-lbl">Profile</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div style="max-width:240px;">
+    <div style="font-size:13px;color:var(--color-text-secondary);line-height:1.75;">
+      <strong style="font-size:14px;color:var(--color-text-primary);display:block;margin-bottom:10px;">What you're seeing</strong>
+      Your library shelf shows all memory books as beautiful covers you can swipe through. Tap any book to open its detail view — pages, photos, entries, and actions like Export PDF and Share.<br><br>
+      The <strong style="font-weight:500;">+ button</strong> at the bottom opens the creation flow. The bottom nav connects to Timeline, Explore, and Profile — all screens we'll build next.<br><br>
+      Tap <span style="color:#c84820;font-weight:500;">See all</span> next to Memory books to open the Spring Break Atlanta book detail.
+    </div>
+  </div>
+</div>
+
+<script>
+const BOOKS=[
+  {title:'Spring Break Atlanta',sub:'March 2026 · Georgia',pages:8,photos:34,entries:5,color:'#c84820',color2:'#7a3010',tag:'Vacation',date:'Mar 28',imgs:['https://images.unsplash.com/photo-1575330933415-b2ce5a2f4751?w=260&q=70','https://images.unsplash.com/photo-1576502200916-3808e07386a5?w=260&q=70']},
+  {title:'Christmas 2025',sub:'December 2025 · Home',pages:12,photos:58,entries:8,color:'#1a5a30',color2:'#0a3018',tag:'Holiday',date:'Dec 25',imgs:['https://images.unsplash.com/photo-1543589077-47d81606c1bf?w=260&q=70']},
+  {title:'Summer Lake Trip',sub:'July 2025 · Tennessee',pages:6,photos:22,entries:4,color:'#185fa5',color2:'#0a3060',tag:'Vacation',date:'Jul 12',imgs:['https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=260&q=70']},
+  {title:'Daily Journal',sub:'Ongoing · Personal',pages:24,photos:18,entries:24,color:'#5a1880',color2:'#2a0840',tag:'Journal',date:'Today',imgs:[]},
+];
+
+const CAPTURES=[
+  {icon:'⚡',title:'Atlanta Aquarium',meta:'Today · Quick snap',note:'The whale shark swam right over us!',type:'snap',typebg:'#fff3ef',typec:'#993c1d'},
+  {icon:'📖',title:'Day 2 — Fernbank & Coke',meta:'Yesterday · Journal entry',note:'Kids loved the dinosaurs more than anything...',type:'journal',typebg:'#f0f0ff',typec:'#2a3880'},
+  {icon:'🎨',title:'Stranger Things Tour',meta:'2 days ago · Scrapbook page',note:'',type:'scrapbook',typebg:'#f0fff5',typec:'#1a5a30'},
+  {icon:'✍️',title:'Covington — Vampire Diaries',meta:'3 days ago · Creative note',note:'Covington is the most charming little town...',type:'creative',typebg:'#f5f0ff',typec:'#5a1880'},
+];
+
+const PAGE_ITEMS=[
+  {type:'scrap',label:'Scrapbook',date:'Mar 25',bg:'#f5ece0'},
+  {type:'journal',label:'Journal',date:'Mar 25',bg:'#f0f0ff'},
+  {type:'snap',label:'Quick snap',date:'Mar 26',bg:'#fff0e8'},
+  {type:'scrap',label:'Scrapbook',date:'Mar 26',bg:'#f5ece0'},
+  {type:'full',label:'Full memory',date:'Mar 27',bg:'#fdf0ff'},
+  {type:'journal',label:'Journal',date:'Mar 27',bg:'#f0f0ff'},
+  {type:'snap',label:'Quick snap',date:'Mar 28',bg:'#fff0e8'},
+  {type:'scrap',label:'Scrapbook',date:'Mar 28',bg:'#f5ece0'},
+];
+
+const TYPE_ICONS={scrap:'🎨',journal:'📖',snap:'⚡',full:'✨',creative:'✍️'};
+
+function buildShelf(){
+  const shelf=document.getElementById('shelf');
+  BOOKS.forEach((b,i)=>{
+    const card=document.createElement('div');
+    card.className='book-card';
+    card.onclick=()=>showDetail(i);
+    const imgHtml=b.imgs.length?`<img src="${b.imgs[0]}" onerror="this.style.display='none'" />`:'';
+    card.innerHTML=`
+      <div class="book-cover" style="background:${b.color};">
+        ${imgHtml}
+        <div class="book-cover-overlay"></div>
+        <div class="book-spine" style="background:${b.color2};"></div>
+        <div class="book-cover-title">
+          <div class="bct-name">${b.title}</div>
+          <div class="bct-pages">${b.pages} pages</div>
+        </div>
+      </div>
+      <div class="book-meta">
+        <div class="bm-date">${b.date}</div>
+        <div class="bm-tag">${b.tag}</div>
+      </div>`;
+    shelf.appendChild(card);
+  });
+  const newCard=document.createElement('div');
+  newCard.className='new-book-card';
+  newCard.innerHTML=`<div class="new-book-cover"><div class="new-book-plus">+</div><div class="new-book-lbl">New memory book</div></div>`;
+  shelf.appendChild(newCard);
+}
+
+function buildCaptures(){
+  const list=document.getElementById('capture-list');
+  CAPTURES.forEach(c=>{
+    const card=document.createElement('div');
+    card.className='cap-card';
+    card.innerHTML=`
+      <div class="cap-thumb-placeholder" style="background:${c.typebg};">${c.icon}</div>
+      <div class="cap-info">
+        <div class="cap-title">${c.title}</div>
+        <div class="cap-meta">${c.meta}</div>
+        ${c.note?`<div class="cap-note">${c.note}</div>`:''}
+      </div>
+      <div class="cap-type"><span class="cap-badge" style="background:${c.typebg};color:${c.typec};">${c.type}</span></div>`;
+    list.appendChild(card);
+  });
+}
+
+function buildPageGrid(){
+  const grid=document.getElementById('page-grid');
+  grid.innerHTML='';
+  PAGE_ITEMS.forEach((p,i)=>{
+    const thumb=document.createElement('div');
+    thumb.className='page-thumb';
+    thumb.style.background=p.bg;
+    thumb.innerHTML=`
+      <div class="page-thumb-placeholder">
+        <div class="pt-type">${TYPE_ICONS[p.type]||'📄'}</div>
+        <div class="pt-lbl">${p.label}</div>
+      </div>
+      <div class="page-date-badge">${p.date}</div>`;
+    grid.appendChild(thumb);
+  });
+}
+
+function showDetail(idx){
+  const b=BOOKS[idx||0];
+  document.getElementById('detail-title').textContent=b.title;
+  document.getElementById('detail-sub').textContent=b.sub;
+  document.getElementById('ds-pages').textContent=b.pages;
+  document.getElementById('ds-photos').textContent=b.photos;
+  document.getElementById('ds-entries').textContent=b.entries;
+  buildPageGrid();
+  document.getElementById('sc-library').style.display='none';
+  const ds=document.getElementById('sc-detail');
+  ds.style.display='flex';ds.style.flexDirection='column';
+}
+
+function showLibrary(){
+  document.getElementById('sc-detail').style.display='none';
+  document.getElementById('sc-library').style.display='flex';
+  document.getElementById('sc-library').style.flexDirection='column';
+}
+
+buildShelf();buildCaptures();
+</script>

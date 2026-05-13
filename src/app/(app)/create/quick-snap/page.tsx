@@ -94,7 +94,7 @@ export default function QuickSnapPage() {
       }
 
       router.push("/library");
-    } catch (err) {
+    } catch (err: unknown) {
       console.error(err);
       alert("Something went wrong");
     } finally {

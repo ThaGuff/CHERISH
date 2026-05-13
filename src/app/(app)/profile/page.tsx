@@ -4,7 +4,6 @@ import { prisma } from "@/lib/prisma";
 import { getUser } from "@/lib/supabase-server";
 import { redirect } from "next/navigation";
 import { PLANS } from "@/lib/stripe";
-import Link from "next/link";
 import ProfileClient from "./ProfileClient";
 
 export default async function ProfilePage() {

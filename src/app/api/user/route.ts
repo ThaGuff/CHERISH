@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { getUser, createSupabaseServer } from "@/lib/supabase-server";
+import { getUser } from "@/lib/supabase-server";
 import { NextResponse } from "next/server";
 
 // GET /api/user — get current user profile

@@ -1,5 +1,4 @@
 import { prisma } from "@/lib/prisma";
-import { getUser } from "@/lib/supabase-server";
 import { NextResponse } from "next/server";
 
 // GET /api/stickers — list all sticker packs

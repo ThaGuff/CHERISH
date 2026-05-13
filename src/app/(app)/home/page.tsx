@@ -141,6 +141,26 @@ export default async function HomePage() {
         ))}
       </div>
 
+      {/* Quick Actions */}
+      <div className="flex gap-2 mb-6 overflow-x-auto -mx-5 px-5">
+        <Link href="/sticker-shop" className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-cherish-300/40 shadow-sm hover:shadow-md transition-shadow">
+          <span className="text-sm">⭐</span>
+          <span className="text-xs font-medium text-cherish-900">Sticker Shop</span>
+        </Link>
+        <Link href="/export" className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-cherish-300/40 shadow-sm hover:shadow-md transition-shadow">
+          <span className="text-sm">📚</span>
+          <span className="text-xs font-medium text-cherish-900">Print a Book</span>
+        </Link>
+        <Link href="/calendar" className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-cherish-300/40 shadow-sm hover:shadow-md transition-shadow">
+          <span className="text-sm">📅</span>
+          <span className="text-xs font-medium text-cherish-900">Calendar</span>
+        </Link>
+        <Link href="/circle" className="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-cherish-300/40 shadow-sm hover:shadow-md transition-shadow">
+          <span className="text-sm">👨‍👩‍👧</span>
+          <span className="text-xs font-medium text-cherish-900">Family Circle</span>
+        </Link>
+      </div>
+
       {/* Recent Activity */}
       {user.memories.length > 0 && (
         <div className="mb-5">

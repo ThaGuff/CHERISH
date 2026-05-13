@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  output: "standalone",
   images: {
     remotePatterns: [
       {
@@ -9,11 +8,6 @@ const nextConfig = {
         hostname: "**.supabase.co",
       },
     ],
-  },
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
   },
 };
 

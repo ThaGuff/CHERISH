@@ -12,6 +12,9 @@ RUN npm ci --legacy-peer-deps
 FROM base AS builder
 WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
+
+# Cache buster - forces rebuild on every deploy
+ARG CACHEBUST=1
 COPY . .
 
 # These must be available at build time for Next.js to inline them into client JS
@@ -26,7 +29,7 @@ ENV NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=$NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 ENV NEXT_PUBLIC_APP_URL=$NEXT_PUBLIC_APP_URL
 
 RUN npx prisma generate
-RUN npm run build
+RUN echo "Build timestamp: $(date)" && npm run build
 
 # Production image
 FROM base AS runner

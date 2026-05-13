@@ -39,6 +39,14 @@ model User {
   subscriptions     Subscription[]
   followers         Follow[]  @relation("following")
   following         Follow[]  @relation("followers")
+  hostedChains      Chain[]   @relation("hostedChains")
+  chainEntries      ChainEntry[] @relation("chainEntries")
+  timeCapsules      TimeCapsule[]
+  notifications     Notification[]
+  stickerWallet     StickerWallet[]
+  stickerGiftsSent  StickerGift[] @relation("stickerGiftsSent")
+  stickerGiftsReceived StickerGift[] @relation("stickerGiftsReceived")
+  savedMemories     SavedMemory[]
 
   @@map("users")
 }
@@ -111,6 +119,8 @@ model Memory {
   tags         Tag[]
   sharedIn     SharedMemory[]
   reactions    Reaction[]
+  chainEntries ChainEntry[]
+  savedBy      SavedMemory[]
 
   @@index([userId, type])
   @@index([bookId])
@@ -275,6 +285,7 @@ model FamilyCircle {
 
   members   FamilyCircleMember[]
   shared    SharedMemory[]
+  chains    Chain[]
 
   @@map("family_circles")
 }
@@ -365,6 +376,7 @@ model StickerPack {
   createdAt   DateTime @default(now())
 
   stickers    Sticker[]
+  wallets     StickerWallet[]
 
   @@map("sticker_packs")
 }
@@ -394,4 +406,135 @@ model Follow {
 
   @@unique([followerId, followingId])
   @@map("follows")
+}
+
+// ─── MEMORY CHAINS ─────────────────────────────────────
+
+model Chain {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  hostId      String
+  circleId    String?
+  coverUrl    String?
+  deadline    DateTime?
+  maxSlots    Int      @default(20)
+  isOpen      Boolean  @default(true)
+  privacy     Privacy  @default(FAMILY_CIRCLE)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  host        User          @relation("hostedChains", fields: [hostId], references: [id], onDelete: Cascade)
+  circle      FamilyCircle? @relation(fields: [circleId], references: [id], onDelete: SetNull)
+  entries     ChainEntry[]
+
+  @@index([hostId])
+  @@map("chains")
+}
+
+model ChainEntry {
+  id        String   @id @default(uuid())
+  chainId   String
+  userId    String
+  memoryId  String?
+  note      String?
+  photoUrl  String?
+  audioUrl  String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+
+  chain     Chain    @relation(fields: [chainId], references: [id], onDelete: Cascade)
+  user      User     @relation("chainEntries", fields: [userId], references: [id], onDelete: Cascade)
+  memory    Memory?  @relation(fields: [memoryId], references: [id], onDelete: SetNull)
+
+  @@index([chainId])
+  @@map("chain_entries")
+}
+
+// ─── TIME CAPSULES ─────────────────────────────────────
+
+model TimeCapsule {
+  id          String   @id @default(uuid())
+  userId      String
+  title       String
+  recipient   String   // "me, 2030" or "Theo, age 18"
+  message     String?
+  photoUrls   String[] @default([])
+  unlocksAt   DateTime
+  isUnlocked  Boolean  @default(false)
+  unlockedAt  DateTime?
+  createdAt   DateTime @default(now())
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([unlocksAt])
+  @@map("time_capsules")
+}
+
+// ─── NOTIFICATIONS ─────────────────────────────────────
+
+model Notification {
+  id        String   @id @default(uuid())
+  userId    String
+  type      String   // react, comment, chain_invite, chain_add, capsule_unlock, otd, follow, sticker_gift
+  title     String
+  body      String?
+  fromId    String?
+  linkType  String?  // memory, chain, capsule, profile
+  linkId    String?
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, read])
+  @@index([createdAt])
+  @@map("notifications")
+}
+
+// ─── STICKER WALLET ────────────────────────────────────
+
+model StickerWallet {
+  id          String   @id @default(uuid())
+  userId      String
+  packId      String
+  purchasedAt DateTime @default(now())
+
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pack        StickerPack @relation(fields: [packId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, packId])
+  @@map("sticker_wallets")
+}
+
+model StickerGift {
+  id         String   @id @default(uuid())
+  fromId     String
+  toId       String
+  stickerId  String
+  memoryId   String?
+  message    String?
+  createdAt  DateTime @default(now())
+
+  from       User     @relation("stickerGiftsSent", fields: [fromId], references: [id], onDelete: Cascade)
+  to         User     @relation("stickerGiftsReceived", fields: [toId], references: [id], onDelete: Cascade)
+
+  @@map("sticker_gifts")
+}
+
+// ─── SAVED / BOOKMARKS ─────────────────────────────────
+
+model SavedMemory {
+  id        String   @id @default(uuid())
+  userId    String
+  memoryId  String
+  boardName String   @default("Saved")
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  memory    Memory   @relation(fields: [memoryId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, memoryId])
+  @@map("saved_memories")
 }

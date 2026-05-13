@@ -140,8 +140,11 @@ export default async function HomePage() {
             { href: "/create/quick-snap", label: "Quick Snap", icon: "⚡" },
             { href: "/create/journal", label: "Journal", icon: "📖" },
             { href: "/create/scrapbook", label: "Scrapbook", icon: "🎨" },
+            { href: "/chains", label: "Chains", icon: "🔗" },
+            { href: "/capsules", label: "Capsules", icon: "⏳" },
             { href: "/sticker-shop", label: "Stickers", icon: "⭐" },
             { href: "/export", label: "Print", icon: "📚" },
+            { href: "/notifications", label: "Alerts", icon: "🔔" },
           ].map((a) => (
             <Link key={a.href} href={a.href} style={{
               flexShrink: 0, padding: "8px 14px", borderRadius: "var(--r-sm)",
